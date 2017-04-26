@@ -19,16 +19,29 @@ using btdef::util::tm;
 using btdef::util::date;
 using btdef::util::time_zone;
 
-using btdef::num::itoa;
+
+namespace num {
+
+using btdef::num::detail::itoa2zf;
+using btdef::num::detail::itoa3zf;
+using btdef::num::detail::itoa4zf;
 using btdef::num::int32toa;
 using btdef::num::int64toa;
 using btdef::num::uint32toa;
 using btdef::num::uint64toa;
 
+} // namespace num
+
+using btdef::num::itoa;
+
+namespace conv {
+
 using btdef::conv::antout;
 using btdef::conv::antoutp;
 using btdef::conv::antou;
-using btdef::conv::to_string;
 
+} // namespace conv
+
+using btdef::conv::to_string;
 
 } // namespace utility

@@ -35,6 +35,15 @@ static inline const char* ch_arr() noexcept
 
 static inline char* itoa4zf(std::uint32_t value, char *ptr) noexcept
 {
+    if (!value)
+    {
+        *ptr++ = '0';
+        *ptr++ = '0';
+        *ptr++ = '0';
+        *ptr++ = '0';
+        return ptr;
+    }
+
     auto carr = ch_arr();
 
     const std::uint32_t d1 = (value / 100) << 1;
@@ -62,6 +71,14 @@ static inline char* itoa4zf(std::uint32_t value, char *ptr) noexcept
 
 static inline char* itoa3zf(std::uint32_t value, char *ptr) noexcept
 {
+    if (!value)
+    {
+        *ptr++ = '0';
+        *ptr++ = '0';
+        *ptr++ = '0';
+        return ptr;
+    }
+
     auto carr = ch_arr();
 
     const std::uint32_t d1 = (value / 100) << 1;
@@ -84,6 +101,13 @@ static inline char* itoa3zf(std::uint32_t value, char *ptr) noexcept
 
 static inline char* itoa2zf(std::uint32_t value, char *ptr) noexcept
 {
+    if (!value)
+    {
+        *ptr++ = '0';
+        *ptr++ = '0';
+        return ptr;
+    }
+
     auto carr = ch_arr();
     const std::uint32_t d2 = (value % 100) << 1;
 
@@ -100,6 +124,12 @@ static inline char* itoa2zf(std::uint32_t value, char *ptr) noexcept
 
 static inline char* itoa(std::uint32_t value, char *ptr) noexcept
 {
+    if (!value)
+    {
+        *ptr++ = '0';
+        return ptr;
+    }
+
     auto carr = ch_arr();
 
     if (value < 10000)
@@ -190,6 +220,12 @@ static inline char* itoa(std::int32_t value, char *ptr) noexcept
 
 static inline char* itoa(std::uint64_t value, char* ptr) noexcept
 {
+    if (!value)
+    {
+        *ptr++ = '0';
+        return ptr;
+    }
+
     auto carr = ch_arr();
 
     static constexpr uint64_t kTen8 = 100000000;

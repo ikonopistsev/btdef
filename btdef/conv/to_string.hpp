@@ -6,7 +6,7 @@
 #pragma once
 
 #include "btdef/num/itoa.hpp"
-#include "btdef/num/ionum.hpp"
+#include "btdef/num/dtoap.hpp"
 #include "btdef/num/fpconv.hpp"
 
 namespace btdef {
@@ -32,13 +32,16 @@ inline std::string to_string(double value)
     return dtofp(value).str();
 }
 
-template <typename T>
-inline std::string to_string(T val, std::size_t precision)
+inline std::string to_string(float val, std::size_t exp)
 {
-    using num::ionum::to_real;
-    auto r = to_real(val, precision);
-    std::string str{r.begin(), r.end()};
-    return str;
+    using num::dtoap::make_real;
+    return make_real(static_cast<double>(val), exp).str();
+}
+
+inline std::string to_string(double val, std::size_t exp)
+{
+    using num::dtoap::make_real;
+    return make_real(val, exp).str();
 }
 
 template <typename CharT>

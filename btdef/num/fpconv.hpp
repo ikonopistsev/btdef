@@ -408,11 +408,9 @@ static inline int filter_special(double fp, char* dest) noexcept
     return 3;
 }
 
-typedef char type[24];
-
 struct fp
 {
-    type str_;
+    char str_[24];
     std::size_t size_;
 
     fp() = default;
@@ -423,7 +421,7 @@ struct fp
     }
 };
 
-static inline std::size_t dtoa(double d, type dest)
+static inline std::size_t dtoa(double d, char *dest)
 {
     char digits[18];
 

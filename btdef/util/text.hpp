@@ -39,15 +39,13 @@ public:
     text() = default;
 
     text(const text& other) noexcept
-    {
-        assign(other);
-    }
+        : text(other.begin(), other.size())
+    {   }
 
     template<size_type N>
     text(const text<value_type, N>& other) noexcept
-    {
-        assign(other);
-    }
+        : text(other.begin(), other.size())
+    {   }
 
     text(const_pointer value, size_type len) noexcept
     {
@@ -66,17 +64,12 @@ public:
 
     template<size_type N>
     text(std::reference_wrapper<const value_type[N]> ref) noexcept
-    {
-        assign(std::move(ref));
-    }
+        : text(ref.get(), N - 1)
+    {   }
 
     size_type assign(const text& other) noexcept
     {
-        size_type len = other.size();
-        if (len)
-            std::memcpy(begin(), other.begin(), len);
-        size_ = len;
-        return len;
+        return assign(other.data(), other.size());
     }
 
     template<value_type N>
@@ -89,9 +82,14 @@ public:
     {
         if (len < cache_size)
         {
-            if (len)
-                std::memcpy(begin(), value, len);
             size_ = len;
+            if (len)
+            {
+                if (len == 1)
+                    *data_ = *value;
+                else
+                    std::memcpy(data_, value, len);
+            }
             return len;
         }
         return 0;
@@ -106,9 +104,14 @@ public:
     {
         if (n < cache_size)
         {
-            if (n)
-                std::memset(begin(), value, n);
             size_ = n;
+            if (n)
+            {
+                if (n == 1)
+                    *data_ = value;
+                else
+                    std::memset(data_, value, n);
+            }
             return size_;
         }
         return 0;
@@ -139,7 +142,7 @@ public:
     template<std::size_t N>
     size_type operator=(std::reference_wrapper<const value_type[N]> r) noexcept
     {
-        return append(std::move(r));
+        return assign(r.get(), N - 1);
     }
 
     long compare(const text& other) const noexcept
@@ -222,7 +225,7 @@ public:
         return data_[size_ - 1];
     }
 
-    pointer begin() noexcept
+    iterator begin() noexcept
     {
         return data_;
     }
@@ -237,7 +240,7 @@ public:
         return data_;
     }
 
-    pointer end() noexcept
+    iterator end() noexcept
     {
         return data_ + size_;
     }
@@ -361,8 +364,15 @@ public:
         {
             if (n)
             {
-                std::memset(end(), value, n);
-                size_ += n;
+                if (n == 1)
+                {
+                    data_[size_++] = value;
+                }
+                else
+                {
+                    std::memset(end(), value, n);
+                    size_ += n;
+                }
             }
             return size_;
         }
@@ -375,8 +385,15 @@ public:
         {
             if (len)
             {
-                std::memcpy(end(), value, len);
-                size_ += len;
+                if (len == 1)
+                {
+                    data_[size_++] = value;
+                }
+                else
+                {
+                    std::memcpy(end(), value, len);
+                    size_ += len;
+                }
             }
             return size_;
         }
@@ -418,7 +435,7 @@ public:
     template<size_type N>
     size_type operator+=(std::reference_wrapper<const value_type[N]> r) noexcept
     {
-        return append(std::move(r));
+        return append(r.get(), N - 1);
     }
 
     void swap(text& other) noexcept

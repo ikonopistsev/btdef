@@ -118,9 +118,9 @@ public:
     }
 
     template<value_type N>
-    size_type assign(std::reference_wrapper<const value_type[N]> ref) noexcept
+    size_type assign(std::reference_wrapper<const value_type[N]> r) noexcept
     {
-        return assign(ref.get(), N - 1);
+        return assign(r.get(), N - 1);
     }
 
     size_type operator=(const text& other) noexcept

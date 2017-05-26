@@ -411,13 +411,18 @@ static inline int filter_special(double fp, char* dest) noexcept
 struct fp
 {
     char str_[24];
-    std::size_t size_;
+    std::size_t size_{0};
 
     fp() = default;
 
-    std::string str() const
+    const char* cbegin() const noexcept
     {
-        return std::string(str_, size_);
+        return str_;
+    }
+
+    const char* cend() const noexcept
+    {
+        return str_ + size_;
     }
 };
 

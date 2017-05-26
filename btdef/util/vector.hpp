@@ -1,18 +1,15 @@
 #pragma once
 
+#include "btdef/allocator/basic.hpp"
+
 #include <iterator>
-#include <cstddef>
 #include <cstring>
-#include <cstdlib>
 
 namespace btdef {
 namespace util {
 
 template<class T>
 class vector;
-
-template<class T, std::size_t N>
-class vector_cache;
 
 template<>
 class vector<char>
@@ -66,7 +63,7 @@ public:
 
     ~vector() noexcept
     {
-        free(data_);
+        std::free(data_);
     }
 
     size_type size() const noexcept
@@ -86,15 +83,11 @@ public:
 
     pointer data() noexcept
     {
-        if (data_)
-            data_[size_] = '\0';
         return data_;
     }
 
     const_pointer data() const noexcept
     {
-        if (data_)
-            data_[size_] = '\0';
         return data_;
     }
 

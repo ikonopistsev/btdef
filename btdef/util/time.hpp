@@ -76,7 +76,7 @@ static inline std::tm create_tm() noexcept
 
 static inline std::tm empty_tm() noexcept
 {
-    static auto empty = create_tm();
+    static std::tm empty = create_tm();
     return empty;
 }
 

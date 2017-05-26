@@ -6,6 +6,7 @@
 #pragma once
 
 #include "btdef/num/itoa.hpp"
+#include "btdef/util/string.hpp"
 
 #include <stdexcept>
 
@@ -113,9 +114,14 @@ public:
         : real_(val, exp)
     {   }
 
-    std::string str() const
+    const char* cbegin() const noexcept
     {
-        return { real_.cbegin(), real_.cend() };
+        return real_.cbegin();
+    }
+
+    const char* cend() const noexcept
+    {
+        return real_.cend();
     }
 
     template<typename T, typename P>
@@ -137,12 +143,6 @@ template<typename T>
 real<T> make_real(T num, std::size_t exp)
 {
     return real<T>(num, exp);
-}
-
-template<typename T>
-std::string to_string(T num, std::size_t exp)
-{
-    return make_real(num, exp).str();
 }
 
 } // namespace dtoap

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "btdef/util/text.hpp"
+
 #include <string>
 #include <algorithm>
 #include <cstdint>
@@ -162,7 +164,8 @@ static inline void normalize(Fp* fp) noexcept
     fp->exp -= shift;
 }
 
-static inline void get_normalized_boundaries(Fp* fp, Fp* lower, Fp* upper) noexcept
+static inline void get_normalized_boundaries(Fp* fp,
+    Fp* lower, Fp* upper) noexcept
 {
     upper->frac = (fp->frac << 1) + 1;
     upper->exp = fp->exp - 1;
@@ -408,24 +411,6 @@ static inline int filter_special(double fp, char* dest) noexcept
     return 3;
 }
 
-struct fp
-{
-    char str_[24];
-    std::size_t size_{0};
-
-    fp() = default;
-
-    const char* cbegin() const noexcept
-    {
-        return str_;
-    }
-
-    const char* cend() const noexcept
-    {
-        return str_ + size_;
-    }
-};
-
 static inline std::size_t dtoa(double d, char *dest)
 {
     char digits[18];
@@ -451,13 +436,6 @@ static inline std::size_t dtoa(double d, char *dest)
     str_len += emit_digits(digits, ndigits, dest + str_len, K, neg);
 
     return str_len;
-}
-
-static inline fp dtofp(double d) noexcept
-{
-    fp result;
-    result.size_ = static_cast<decltype(fp::size_)>(dtoa(d, result.str_));
-    return result;
 }
 
 } // namespace fpconv

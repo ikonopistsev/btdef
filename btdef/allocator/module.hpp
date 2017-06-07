@@ -7,6 +7,10 @@
 namespace btdef {
 namespace allocator {
 
+/*
+ *  from rapidjson (http://rapidjson.org/)
+ */
+
 #ifndef BTDEF_ALLOCATOR_64BIT
 #if defined(__LP64__) || (defined(__x86_64__) && \
     defined(__ILP32__)) || defined(_WIN64)

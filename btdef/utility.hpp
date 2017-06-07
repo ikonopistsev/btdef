@@ -6,6 +6,7 @@
 #pragma once
 
 #include "btdef/util/date.hpp"
+#include "btdef/conv/to_text.hpp"
 #include "btdef/conv/to_string.hpp"
 #include "btdef/util/time_zone.hpp"
 
@@ -19,6 +20,8 @@ using btdef::util::tm;
 using btdef::util::date;
 using btdef::util::time_zone;
 
+using btdef::util::string;
+using btdef::util::text;
 
 namespace num {
 
@@ -42,6 +45,13 @@ using btdef::conv::antou;
 
 } // namespace conv
 
+using btdef::conv::to_text;
 using btdef::conv::to_string;
 
 } // namespace utility
+
+namespace std {
+
+//using btdef::conv::stdex::to_string;
+
+} // namespace std

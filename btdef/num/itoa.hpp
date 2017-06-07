@@ -8,7 +8,7 @@ namespace detail {
 
 static inline const char* ch_arr() noexcept
 {
-    static constexpr char res[200] = {
+    static const char res[200] = {
         '0','0','0','1','0','2','0','3','0','4',
         '0','5','0','6','0','7','0','8','0','9',
         '1','0','1','1','1','2','1','3','1','4',
@@ -44,7 +44,7 @@ static inline char* itoa4zf(std::uint32_t value, char *ptr) noexcept
         return ptr;
     }
 
-    auto carr = ch_arr();
+    const char* carr = ch_arr();
 
     const std::uint32_t d1 = (value / 100) << 1;
     const std::uint32_t d2 = (value % 100) << 1;
@@ -79,7 +79,7 @@ static inline char* itoa3zf(std::uint32_t value, char *ptr) noexcept
         return ptr;
     }
 
-    auto carr = ch_arr();
+    const char* carr = ch_arr();
 
     const std::uint32_t d1 = (value / 100) << 1;
     const std::uint32_t d2 = (value % 100) << 1;
@@ -108,7 +108,7 @@ static inline char* itoa2zf(std::uint32_t value, char *ptr) noexcept
         return ptr;
     }
 
-    auto carr = ch_arr();
+    const char* carr = ch_arr();
     const std::uint32_t d2 = (value % 100) << 1;
 
     if (value >= 10)
@@ -121,7 +121,6 @@ static inline char* itoa2zf(std::uint32_t value, char *ptr) noexcept
     return ptr;
 }
 
-
 static inline char* itoa(std::uint32_t value, char *ptr) noexcept
 {
     if (!value)
@@ -130,7 +129,7 @@ static inline char* itoa(std::uint32_t value, char *ptr) noexcept
         return ptr;
     }
 
-    auto carr = ch_arr();
+    const char* carr = ch_arr();
 
     if (value < 10000)
     {
@@ -208,7 +207,7 @@ static inline char* itoa(std::uint32_t value, char *ptr) noexcept
 
 static inline char* itoa(std::int32_t value, char *ptr) noexcept
 {
-    auto u = static_cast<std::uint32_t>(value);
+    std::uint32_t u = static_cast<std::uint32_t>(value);
     if (value < 0)
     {
         *ptr++ = '-';
@@ -226,21 +225,21 @@ static inline char* itoa(std::uint64_t value, char* ptr) noexcept
         return ptr;
     }
 
-    auto carr = ch_arr();
+    const char* carr = ch_arr();
 
-    static constexpr uint64_t kTen8 = 100000000;
-    static constexpr uint64_t kTen9 = kTen8 * 10;
-    static constexpr uint64_t kTen10 = kTen8 * 100;
-    static constexpr uint64_t kTen11 = kTen8 * 1000;
-    static constexpr uint64_t kTen12 = kTen8 * 10000;
-    static constexpr uint64_t kTen13 = kTen8 * 100000;
-    static constexpr uint64_t kTen14 = kTen8 * 1000000;
-    static constexpr uint64_t kTen15 = kTen8 * 10000000;
-    static constexpr uint64_t kTen16 = kTen8 * kTen8;
+    static const uint64_t kTen8 = 100000000;
+    static const uint64_t kTen9 = kTen8 * 10;
+    static const uint64_t kTen10 = kTen8 * 100;
+    static const uint64_t kTen11 = kTen8 * 1000;
+    static const uint64_t kTen12 = kTen8 * 10000;
+    static const uint64_t kTen13 = kTen8 * 100000;
+    static const uint64_t kTen14 = kTen8 * 1000000;
+    static const uint64_t kTen15 = kTen8 * 10000000;
+    static const uint64_t kTen16 = kTen8 * kTen8;
 
     if (value < kTen8)
     {
-        std::uint32_t v = static_cast<std::uint32_t>(value);
+        const std::uint32_t v = static_cast<std::uint32_t>(value);
         if (v < 10000)
         {
             const std::uint32_t d1 = (v / 100) << 1;
@@ -404,7 +403,7 @@ static inline char* itoa(std::uint64_t value, char* ptr) noexcept
 
 static inline char* itoa(std::int64_t value, char *ptr) noexcept
 {
-    uint64_t u = static_cast<std::uint64_t>(value);
+    std::uint64_t u = static_cast<std::uint64_t>(value);
     if (value < 0)
     {
         *ptr++ = '-';

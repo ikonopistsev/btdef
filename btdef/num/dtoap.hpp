@@ -88,14 +88,19 @@ public:
         , end_(print(val, exp, str_))
     {   }
 
-    const char* cbegin() const noexcept
+    const char* begin() const noexcept
     {
         return str_;
     }
 
-    const char* cend() const noexcept
+    const char* end() const noexcept
     {
         return end_;
+    }
+
+    std::size_t size() const noexcept
+    {
+        return std::distance(begin(), end());
     }
 };
 
@@ -114,14 +119,24 @@ public:
         : real_(val, exp)
     {   }
 
-    const char* cbegin() const noexcept
+    const char* begin() const noexcept
     {
-        return real_.cbegin();
+        return real_.begin();
     }
 
-    const char* cend() const noexcept
+    const char* end() const noexcept
     {
-        return real_.cend();
+        return real_.end();
+    }
+
+    const char* data() const noexcept
+    {
+        return begin();
+    }
+
+    std::size_t size() const noexcept
+    {
+        return real_.size();
     }
 
     template<typename T, typename P>

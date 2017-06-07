@@ -7,6 +7,10 @@
 namespace btdef {
 namespace allocator {
 
+/*
+ *  from rapidjson (http://rapidjson.org/)
+ */
+
 template<typename T>
 class basic_pool_allocator
 {

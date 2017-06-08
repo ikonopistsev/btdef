@@ -18,39 +18,47 @@ namespace conv {
 template<typename T>
 util::string to_string(T val)
 {
-    char buf[24];
     using num::itoa;
-    return util::string(std::begin(buf), std::distance(buf, itoa(val, buf)));
+    util::string result;
+    result.reserve(32);
+    result.increase(std::distance(result.data(), itoa(val, result.data())));
+    return result;
 }
 
 static inline util::string to_string(float value)
 {
-    util::string result;
-    result.reserve(24);
     using num::fpconv::dtoa;
+    util::string result;
+    result.reserve(32);
     result.increase(dtoa(static_cast<double>(value), result.data()));
     return result;
 }
 
 static inline util::string to_string(double value)
 {
+    using num::fpconv::dtoa;
     util::string result;
     result.reserve(32);
-    using num::fpconv::dtoa;
     result.increase(dtoa(value, result.data()));
     return result;
 }
 
 static inline util::string to_string(float val, std::size_t exp)
 {
-    using num::dtoap::make_real;
-    return util::string(make_real(static_cast<double>(val), exp));
+    using num::dtoap;
+    util::string result;
+    result.reserve(32);
+    result.increase(dtoap(static_cast<double>(val), exp, result.data()));
+    return result;
 }
 
 static inline util::string to_string(double val, std::size_t exp)
 {
-    using num::dtoap::make_real;
-    return util::string(make_real(val, exp));
+    using num::dtoap;
+    util::string result;
+    result.reserve(32);
+    result.increase(dtoap(val, exp, result.data()));
+    return result;
 }
 /*
 template<class A>

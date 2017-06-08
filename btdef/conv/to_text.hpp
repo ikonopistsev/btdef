@@ -18,9 +18,9 @@ namespace conv {
 template<typename T>
 util::text to_text(T val) noexcept
 {
-    util::text result;
     using num::itoa;
-    result.increase(std::distance(result.begin(), itoa(val, result.data())));
+    util::text result;
+    result.increase(std::distance(result.data(), itoa(val, result.data())));
     return result;
 }
 
@@ -40,16 +40,20 @@ static inline util::text to_text(double value) noexcept
     return result;
 }
 
-static inline util::text to_text(float val, std::size_t exp) noexcept
+static inline util::text to_text(float val, std::size_t exp)
 {
-    using num::dtoap::make_real;
-    return util::text(make_real(static_cast<double>(val), exp));
+    using num::dtoap;
+    util::text result;
+    result.increase(dtoap(static_cast<double>(val), exp, result.data()));
+    return result;
 }
 
-static inline util::text to_text(double val, std::size_t exp) noexcept
+static inline util::text to_text(double val, std::size_t exp)
 {
-    using num::dtoap::make_real;
-    return util::text(make_real(val, exp));
+    using num::dtoap;
+    util::text result;
+    result.increase(dtoap(val, exp, result.data()));
+    return result;
 }
 
 } // namespace conv

@@ -158,9 +158,7 @@ public:
     util::string json() const
     {
         util::string result;
-
-        if (!result.reserve(32))
-            throw std::bad_alloc();
+        util::string::runtime_error(result.reserve(32), "bad alloc");
 
         char* p = result.data();
         result.increase(std::distance(p, put_json(p)));
@@ -200,13 +198,15 @@ public:
         assert(fmt);
 
         util::string result;
+        util::string::runtime_error(result.reserve(fmt_len + buffer_size),
+                                                                "bad alloc");
 
-        if (!result.reserve(fmt_len + buffer_size))
-            throw std::bad_alloc();
+        std::size_t count = std::strftime(result.data(),
+            result.capacity() + 1, fmt, &tm_);
+        if (!count && fmt_len)
+            throw std::runtime_error("strftime");
 
-        result.increase(std::strftime(result.data(),
-            result.capacity() + 1, fmt, &tm_));
-
+        result.increase(count);
         return result;
     }
 
@@ -261,20 +261,20 @@ public:
 
     class lc_time
     {
-        util::text prev_;
+        std::string prev_;
 
-        static inline util::text create() noexcept
+        static inline std::string create() noexcept
         {
             const char *time_locale = std::setlocale(LC_TIME, nullptr);
             if (time_locale)
-                return util::text(time_locale);
+                return std::string(time_locale);
 
-            return util::text("C");
+            return std::string("C");
         }
 
     public:
 
-        lc_time(const util::text& l)
+        lc_time(const std::string& l)
             : prev_(create())
         {
             std::setlocale(LC_TIME, l.c_str());

@@ -45,7 +45,7 @@ private:
         using std::chrono::microseconds;
         using std::chrono::system_clock;
 
-        const auto time = static_cast<value_t>(sec) * k_usec + usec;
+        const value_t time = static_cast<value_t>(sec) * k_usec + usec;
         return std::chrono::time_point_cast<system_clock::duration>(
                 time_point<system_clock, microseconds>(microseconds(time)));
     }
@@ -83,7 +83,7 @@ private:
     static inline date make(const std::tm& tms,
         millisecond_t millisecond, minuteswest_t minuteswest)
     {
-        auto second = to_time(tms, minuteswest);
+        std::time_t second = to_time(tms, minuteswest);
         if (second < 0)
             throw std::runtime_error("parse date");
 
@@ -156,7 +156,7 @@ public:
 
     static inline date parse(const char *ptr)
     {
-        auto tms = time::empty_tm();
+        std::tm tms = time::empty_tm();
         millisecond_t msec = 0;
         minuteswest_t minwest = 0;
 
@@ -299,7 +299,7 @@ public:
 
     static inline value_t diff_abs(const date& a, const date& b) noexcept
     {
-        auto abs = diff(a, b);
+        value_t abs = diff(a, b);
         return (abs < 0) ? -abs : abs;
     }
 
@@ -336,8 +336,8 @@ public:
     tm::tm_t local_time() const noexcept
     {
         std::tm tms;
-        auto val = time();
-        auto sec = static_cast<std::time_t>(val / k_msec);
+        value_t val = time();
+        std::time_t sec = static_cast<std::time_t>(val / k_msec);
 #if defined(WIN32) || defined(_WIN32)
         ::localtime_s(&tms, &sec);
 #else
@@ -350,8 +350,8 @@ public:
     tm::tm_t utc_time() const noexcept
     {
         std::tm tms;
-        auto val = time();
-        auto sec = static_cast<std::time_t>(val / k_msec);
+        value_t val = time();
+        std::time_t sec = static_cast<std::time_t>(val / k_msec);
 #if defined(WIN32) || defined(_WIN32)
         ::gmtime_s(&tms, &sec);
 #else
@@ -514,14 +514,11 @@ public:
             if (tz)
             {
                 util::string result;
-                if (result.reserve(32))
-                {
-                    char* p = result.data();
-                    result.increase(std::distance(p, put_json(p, tz)));
-                    return result;
-                }
+                util::string::runtime_error(result.reserve(32), "bad alloc");
 
-                throw std::bad_alloc();
+                char* p = result.data();
+                result.increase(std::distance(p, put_json(p, tz)));
+                return result;
             }
             return tm::json();
         }
@@ -550,7 +547,12 @@ public:
 
         util::text text() const noexcept
         {
-            return tm::text("%a %b %d %Y %H:%M:%S GMT%z (%Z)");
+            return text("%a %b %d %Y %H:%M:%S GMT%z (%Z)");
+        }
+
+        util::text text(const char *fmt) const noexcept
+        {
+            return tm::text(fmt);
         }
 
         std::string to_date_string() const
@@ -590,8 +592,8 @@ public:
 
     explicit date(const local& l)
     {
-        auto tm = l.data();
-        auto sec = mktime(&tm);
+        std::tm tm = l.data();
+        time_t sec = mktime(&tm);
         if (sec == static_cast<time_t>(-1))
             throw std::runtime_error("invalid date");
 
@@ -600,8 +602,8 @@ public:
 
     date& operator=(const local& l)
     {
-        auto tm = l.data();
-        auto sec = mktime(&tm);
+        std::tm tm = l.data();
+        time_t sec = mktime(&tm);
         if (sec == static_cast<time_t>(-1))
             throw std::runtime_error("invalid date");
 
@@ -627,9 +629,7 @@ public:
         util::string date_json() const
         {
             util::string result;
-
-            if (!result.reserve(32))
-                throw std::bad_alloc();
+            util::string::runtime_error(result.reserve(32), "bad alloc");
 
             char* p = result.data();
             result.increase(std::distance(p, put_date_json(p)));
@@ -653,9 +653,7 @@ public:
         util::string time_json() const
         {
             util::string result;
-
-            if (!result.reserve(32))
-                throw std::bad_alloc();
+            util::string::runtime_error(result.reserve(32), "bad alloc");
 
             char* p = result.data();
             result.increase(std::distance(p, put_time_json(p)));

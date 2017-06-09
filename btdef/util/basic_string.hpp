@@ -2,6 +2,8 @@
 
 #include "btdef/util/text.hpp"
 
+#include <stdexcept>
+
 namespace btdef {
 namespace util {
 
@@ -564,6 +566,12 @@ public:
     size_type find(value_type value, size_type pos = 0) const noexcept
     {
         return find(&value, pos, 1);
+    }
+
+    static inline void runtime_error(size_type result, const char *text)
+    {
+        if (!result)
+            throw std::runtime_error(text);
     }
 };
 

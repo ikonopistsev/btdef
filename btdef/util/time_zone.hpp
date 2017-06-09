@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "btdef/util/util.hpp"
+#include "btdef/util/text.hpp"
 #include <cstdlib>
 
 namespace btdef {
@@ -31,7 +31,7 @@ public:
         if (getenv_s(&size, buffer, sizeof(buffer), "TZ") == 0)
             return std::string(buffer, size);
 #else
-        auto env = ::getenv("TZ");
+        const char* env = ::getenv("TZ");
         if (env)
             return std::string(env);
 #endif
@@ -64,7 +64,8 @@ public:
 
     ~time_zone()
     {
-	    if (prev_.empty()) return;
+        if (prev_.empty())
+            return;
 
 #if defined(WIN32) || defined(_WIN32)
         _putenv_s("TZ", prev_.c_str());

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <cassert>
-#include <cstddef>
+#include "btdef/util/util.hpp"
+
 #include <cstring>
 
 #include <iterator>

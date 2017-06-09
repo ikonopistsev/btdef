@@ -7,4 +7,3 @@
 
 #include <cassert>
 #include <cstdint>
-

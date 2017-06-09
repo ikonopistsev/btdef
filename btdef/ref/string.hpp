@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "bthash.hpp"
+#include "btdef/hash/fnv1a.hpp"
 
 #include <iosfwd>
 #include <string>
@@ -25,10 +25,10 @@ class basic_string;
 namespace detail {
 
 template<typename T>
-struct default_string;
+struct empty_string;
 
 template<>
-struct default_string<char>
+struct empty_string<char>
 {
     static inline const char* value() noexcept
     {
@@ -37,7 +37,7 @@ struct default_string<char>
 };
 
 template<>
-struct default_string<wchar_t>
+struct empty_string<wchar_t>
 {
     static inline const wchar_t* value() noexcept
     {
@@ -52,8 +52,11 @@ class basic_string
 {
 public:
     typedef T value_t;
-    typedef const value_t* pointer;
-    typedef pointer const_iterator;
+    typedef value_t* pointer;
+    typedef const value_t* const_pointer;
+    typedef const_pointer const_iterator;
+    typedef std::size_t size_type;
+    typedef std::ptrdiff_t difference_type;
     typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
     typedef basic_string<T> this_type;
 
@@ -63,17 +66,14 @@ private:
 
     // res::string::с_str() is not allow
     // use data() and size() to get part of string
-    pointer c_str() const noexcept
-    {
-        return nullptr;
-    }
+    pointer c_str() const noexcept;
 
 public:
 
     static const auto npos = static_cast<std::size_t>(-1);
 
     basic_string() noexcept
-        : ptr_(detail::default_string<value_t>::value())
+        : ptr_(detail::empty_string<value_t>::value())
         , size_(0)
     {   }
 
@@ -106,8 +106,9 @@ public:
         : basic_string(str.get(), N - 1)
     {   }
 
-    basic_string(const std::basic_string<value_t>& str) noexcept
-        : basic_string(str.c_str(), str.size())
+    template<class S>
+    basic_string(const S& str) noexcept
+        : basic_string(str.data(), str.size())
     {   }
 
     const_iterator cbegin() const noexcept
@@ -150,12 +151,10 @@ public:
         return const_reverse_iterator(begin());
     }
 
-
     pointer data() const noexcept
     {
         return ptr_;
     }
-
 
     bool empty() const noexcept
     {
@@ -172,17 +171,52 @@ public:
         return size_;
     }
 
-    std::size_t max_size() const noexcept
+    int compare(const_pointer value, size_type len) const noexcept
     {
-        return size_;
+        int ret = std::memcmp(ptr_, value, (std::min)(size_, len));
+        if (ret)
+            return ret;
+        return (size_ < len) ? -1 : 1;
     }
 
-    int compare(const this_type& x) const noexcept
+    int compare(size_type pos, size_type count1,
+        const_pointer value, size_type count2) const noexcept
     {
-        int res = std::memcmp(ptr_, x.ptr_, (std::min)(size_, x.size_));
-        if (res)
-            return res;
-        return (size_ < x.size_) ? -1 : 1;
+        if (pos < size_)
+            count1 = (std::min)(size_ - pos, count1);
+        else
+            count1 = 0;
+
+        int ret = std::memcmp(ptr_ + pos, value, (std::min)(count1, count2));
+        if (ret)
+            return ret;
+
+        return (count1 < count2) ? -1 : 1;
+    }
+
+    template<class T>
+    int compare(const T& other) const noexcept
+    {
+        return compare(other.data(), other.size());
+    }
+
+    template<class T>
+    int compare(size_type pos, size_type len, const T& other) const noexcept
+    {
+        return compare(pos, len, other.data(), other.size());
+    }
+
+    int compare(const_pointer value) const noexcept
+    {
+        assert(value);
+        return compare(value, std::strlen(value));
+    }
+
+    int compare(size_type pos, size_type len,
+        const_pointer value) const noexcept
+    {
+        assert(value);
+        return compare(pos, len, value, std::strlen(value));
     }
 
     bool starts_with(const this_type& x) const noexcept
@@ -322,7 +356,7 @@ public:
         return std::basic_string<value_t>(ptr_, size_);
     }
 };
-
+/*
 template<typename T, typename R>
 std::basic_ostream<T, R>& operator<<(std::basic_ostream<T, R>& os,
     const basic_string<T>& str)
@@ -455,10 +489,10 @@ bool operator>=(const std::basic_string<T, R, A>& lhs,
 {
     return lhs.compare(0, lhs.size(), rhs.data(), rhs.size()) >= 0;
 }
-
+*/
 } // namespace btref
 
-
+/*
 namespace std {
 
 template<>
@@ -472,3 +506,4 @@ struct hash<btref::basic_string<char>>
 };
 
 } // namespace std
+*/

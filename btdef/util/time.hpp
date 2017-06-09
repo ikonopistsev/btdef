@@ -5,7 +5,8 @@
 
 #pragma once
 
-#include "btdef/util/util.hpp"
+#include <cstring>
+#include <chrono>
 
 #if defined(WIN32) || defined(_WIN32)
 #include <Windows.h>
@@ -13,8 +14,6 @@
 #else
 #include <sys/time.h>
 #endif
-
-#include <cstring>
 
 namespace btdef {
 namespace util {

@@ -364,6 +364,9 @@ public:
         return 0;
     }
 
+    void reserve(size_type) noexcept
+    {   }
+
     size_type free_size() const noexcept
     {
         return cache_capacity - size_;

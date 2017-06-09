@@ -404,9 +404,10 @@ public:
         return capacity_;
     }
 
+    // интерфейсный метод возвращает -1 элеметнт под '\0'
     size_type capacity() const noexcept
     {
-        return capacity_;
+        return capacity_ - 1;
     }
 
     void clear() noexcept
@@ -463,7 +464,6 @@ public:
         int ret = std::memcmp(data_, value, (std::min)(size_, len));
         if (ret)
             return ret;
-
         return (size_ < len) ? -1 : 1;
     }
 

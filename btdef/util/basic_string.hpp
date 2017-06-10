@@ -118,10 +118,17 @@ public:
     size_type concatenate(const_pointer value, size_type len) noexcept
     {
         assert(data_);
-        if (len == 1)
-            return concatenate(*value);
-        std::memcpy(end(), value, len);
-        size_ += len;
+        if (len)
+        {
+            assert(value);
+
+            if (len == 1)
+                return concatenate(*value);
+            else
+                std::memcpy(end(), value, len);
+
+            size_ += len;
+        }
         return size_;
     }
 
@@ -135,10 +142,13 @@ public:
     size_type concatenate(size_type n, value_type value) noexcept
     {
         assert(data_);
+
         if (n == 1)
             return concatenate(value);
+
         std::memset(end(), value, n);
         size_ += n;
+
         return size_;
     }
 
@@ -218,7 +228,8 @@ public:
 
     basic_string& assign(basic_string&& other) noexcept
     {
-        return swap(other);
+        swap(other);
+        return *this;
     }
 
     size_type assign(value_type value) noexcept
@@ -253,7 +264,8 @@ public:
 
     basic_string& operator=(basic_string&& other) noexcept
     {
-        return assign(std::move(other));
+        assign(std::move(other));
+        return *this;
     }
 
     basic_string& operator=(const_pointer value) noexcept
@@ -266,6 +278,18 @@ public:
     {
         assign(value);
         return *this;
+    }
+
+    template<class T>
+    size_type operator=(const T& other) noexcept
+    {
+        return assign(other.data(), other.size());
+    }
+
+    template<std::size_t N>
+    size_type operator=(std::reference_wrapper<const value_type[N]> r) noexcept
+    {
+        return assign(r.get(), N - 1);
     }
 
     reference operator[](size_type i) noexcept
@@ -306,13 +330,11 @@ public:
 
     const_pointer data() const noexcept
     {
-        assert(data_);
         return data_;
     }
 
     pointer data() noexcept
     {
-        assert(data_);
         return data_;
     }
 
@@ -464,9 +486,14 @@ public:
     int compare(const_pointer value, size_type len) const noexcept
     {
         int ret = std::memcmp(data_, value, (std::min)(size_, len));
-        if (ret)
-            return ret;
-        return (size_ < len) ? -1 : 1;
+        if (!ret)
+        {
+            if (size_ < len)
+                return -1;
+            if (size_ > len)
+                return 1;
+        }
+        return ret;
     }
 
     int compare(size_type pos, size_type count1,
@@ -478,10 +505,14 @@ public:
             count1 = 0;
 
         int ret = std::memcmp(data_ + pos, value, (std::min)(count1, count2));
-        if (ret)
-            return ret;
-
-        return (count1 < count2) ? -1 : 1;
+        if (!ret)
+        {
+            if (count1 < count2)
+                return -1;
+            if (count1 > count2)
+                return 1;
+        }
+        return ret;
     }
 
     template<class T>
@@ -507,6 +538,16 @@ public:
     {
         assert(value);
         return compare(pos, len, value, std::strlen(value));
+    }
+
+    bool operator==(const basic_string& rhs) const noexcept
+    {
+        return compare(rhs) == 0;
+    }
+
+    bool operator<(const basic_string& rhs) const noexcept
+    {
+        return compare(rhs) < 0;
     }
 
     template<class T>
@@ -582,9 +623,9 @@ typedef basic_string<char, allocator::basic<char>> string;
 
 //---
 
-template<class T, class A>
-bool operator==(const btdef::util::basic_string<T, A>& lhs,
-    const btdef::util::basic_string<T, A>& rhs) noexcept
+template<class C, class A1, class A2>
+bool operator==(const btdef::util::basic_string<C, A1>& lhs,
+    const btdef::util::basic_string<C, A2>& rhs) noexcept
 {
     return lhs.compare(rhs) == 0;
 }
@@ -626,44 +667,44 @@ bool operator>=(const btdef::util::basic_string<T, A>& lhs,
 
 //---
 
-template<class T, class A>
-bool operator==(const btdef::util::basic_string<T, A>& lhs,
-    const T* rhs) noexcept
+template<class C, class A>
+bool operator==(const btdef::util::basic_string<C, A>& lhs,
+    const C* rhs) noexcept
 {
     return lhs.compare(rhs) == 0;
 }
 
-template<class T, class A>
-bool operator!=(const btdef::util::basic_string<T, A>& lhs,
-    const T* rhs) noexcept
+template<class C, class A>
+bool operator!=(const btdef::util::basic_string<C, A>& lhs,
+    const C* rhs) noexcept
 {
     return !(lhs == rhs);
 }
 
-template<class T, class A>
-bool operator<(const btdef::util::basic_string<T, A>& lhs,
-    const T* rhs) noexcept
+template<class C, class A>
+bool operator<(const btdef::util::basic_string<C, A>& lhs,
+    const C* rhs) noexcept
 {
     return lhs.compare(rhs) < 0;
 }
 
-template<class T, class A>
-bool operator>(const btdef::util::basic_string<T, A>& lhs,
-    const T* rhs) noexcept
+template<class C, class A>
+bool operator>(const btdef::util::basic_string<C, A>& lhs,
+    const C* rhs) noexcept
 {
     return lhs.compare(rhs) > 0;
 }
 
-template<class T, class A>
-bool operator<=(const btdef::util::basic_string<T, A>& lhs,
-    const T* rhs) noexcept
+template<class C, class A>
+bool operator<=(const btdef::util::basic_string<C, A>& lhs,
+    const C* rhs) noexcept
 {
     return !(rhs < lhs);
 }
 
-template<class T, class A>
-bool operator>=(const btdef::util::basic_string<T, A>& lhs,
-    const T* rhs) noexcept
+template<class C, class A>
+bool operator>=(const btdef::util::basic_string<C, A>& lhs,
+    const C* rhs) noexcept
 {
     return !(lhs < rhs);
 }
@@ -711,21 +752,5 @@ bool operator>=(const btdef::util::basic_string<T, A>& lhs,
 {
     return !(lhs < rhs);
 }
-
 //---
 
-template<class C, class T, class A>
-std::basic_ostream<C, T>& operator<<(std::basic_ostream<C, T>& os,
-    const btdef::util::basic_string<C, A>& rhs)
-{
-    return os.write(rhs.data(), rhs.size());
-}
-
-/*
-template<class A>
-std::string& operator+=(std::string& lhs,
-    const btdef::util::basic_string<char, A>& rhs)
-{
-    return lhs.append(rhs.data(), rhs.size());
-}
-*/

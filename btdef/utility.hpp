@@ -9,6 +9,8 @@
 #include "btdef/conv/to_text.hpp"
 #include "btdef/conv/to_string.hpp"
 #include "btdef/util/time_zone.hpp"
+#include "btdef/util/basic_string_ext.hpp"
+#include "btdef/util/basic_text_ext.hpp"
 
 namespace utility {
 

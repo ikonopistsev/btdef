@@ -138,13 +138,28 @@ public:
     {   }
 #endif
 
-    // ultrafast parser :)
-    template<class S>
-    date(const S& str)
+    template<std::size_t N>
+    explicit date(const util::basic_text<char, N>& text)
     {
-        *this = parse(str.data());
+        if (!text.empty())
+            *this = parse(text.data());
     }
 
+    template<class A>
+    explicit date(const util::basic_string<char, A>& str)
+    {
+        if (!str.empty())
+            *this = parse(str.data());
+    }
+
+    template<class T, class A>
+    explicit date(const std::basic_string<char, T, A>& str)
+    {
+        if (!str.empty())
+            *this = parse(str.data());
+    }
+
+    // ultrafast parser :)
     explicit date(const char *ptr)
     {
         *this = parse(ptr);
@@ -156,6 +171,8 @@ public:
 
     static inline date parse(const char *ptr)
     {
+        assert(ptr);
+
         std::tm tms = time::empty_tm();
         millisecond_t msec = 0;
         minuteswest_t minwest = 0;

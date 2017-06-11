@@ -80,12 +80,6 @@ public:
         assign(ref.get(), N - 1);
     }
 
-    template<size_type N>
-    basic_string(const basic_text<value_type, N>& other) noexcept
-    {
-        assign(other.data(), other.size());
-    }
-
     template<class T>
     basic_string(const T& other) noexcept
     {
@@ -256,6 +250,20 @@ public:
         return append(value, len);
     }
 
+    template<size_type N>
+    size_type assign(std::reference_wrapper<const value_type[N]> ref) noexcept
+    {
+        size_ = 0;
+        return append(ref.get(), N - 1);
+    }
+
+    template<class T>
+    size_type assign(const T& other) noexcept
+    {
+        size_ = 0;
+        return append(other.data(), other.size());
+    }
+
     basic_string& operator=(const basic_string& other) noexcept
     {
         assign(other);
@@ -280,16 +288,18 @@ public:
         return *this;
     }
 
-    template<class T>
-    size_type operator=(const T& other) noexcept
+    template<std::size_t N>
+    basic_string& operator=(std::reference_wrapper<const value_type[N]> r) noexcept
     {
-        return assign(other.data(), other.size());
+        assign(r.get(), N - 1);
+        return *this;
     }
 
-    template<std::size_t N>
-    size_type operator=(std::reference_wrapper<const value_type[N]> r) noexcept
+    template<class T>
+    basic_string& operator=(const T& other) noexcept
     {
-        return assign(r.get(), N - 1);
+        assign(other.data(), other.size());
+        return *this;
     }
 
     reference operator[](size_type i) noexcept
@@ -468,10 +478,16 @@ public:
         return allocate_concatenate(value, len);
     }
 
-    template<class S>
-    size_type append(const S& str) noexcept
+    template<size_type N>
+    size_type append(std::reference_wrapper<const value_type[N]> ref) noexcept
     {
-        return append(str.data(), str.size());
+        return append(ref.get(), N - 1);
+    }
+
+    template<class T>
+    size_type append(const T& other) noexcept
+    {
+        return append(other.data(), other.size());
     }
 
     size_type operator+=(const basic_string& other) noexcept
@@ -489,10 +505,16 @@ public:
         return append(value);
     }
 
-    template<class S>
-    size_type operator+=(const S& str) noexcept
+    template<size_type N>
+    size_type operator+=(std::reference_wrapper<const value_type[N]> ref) noexcept
     {
-        return append(str);
+        return append(ref.get(), N - 1);
+    }
+
+    template<class T>
+    size_type operator+=(const T& other) noexcept
+    {
+        return append(other.data(), other.size());
     }
 
     int compare(const_pointer value, size_type len) const noexcept

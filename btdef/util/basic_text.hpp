@@ -93,22 +93,25 @@ public:
         return 0;
     }
 
+    size_type assign(value_type value) noexcept;
+    size_type assign(size_type n, value_type value) noexcept;
+
     size_type assign(const_pointer value) noexcept
     {
         assert(value);
         return assign(value, std::strlen(value));
     }
 
-    template<class T>
-    size_type assign(const T& other) noexcept
-    {
-        return assign(other.begin(), other.size());
-    }
-
     template<value_type N>
     size_type assign(std::reference_wrapper<const value_type[N]> ref) noexcept
     {
         return assign(ref.get(), N - 1);
+    }
+
+    template<class T>
+    size_type assign(const T& other) noexcept
+    {
+        return assign(other.begin(), other.size());
     }
 
     size_type assign(size_type n, char value) noexcept

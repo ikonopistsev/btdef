@@ -845,49 +845,52 @@ public:
 } // namespace util
 } // namespace btdef
 
-bool operator!=(const btdef::util::date& a,
+bool inline operator!=(const btdef::util::date& a,
     const btdef::util::date& b) noexcept
 {
     return !(a == b);
 }
 
-bool operator>(const btdef::util::date& a,
+bool inline operator>(const btdef::util::date& a,
     const btdef::util::date& b) noexcept
 {
     return b < a;
 }
 
-bool operator<=(const btdef::util::date& a,
+bool inline operator<=(const btdef::util::date& a,
                 const btdef::util::date& b) noexcept
 {
     return !(b < a);
 }
 
-bool operator>=(const btdef::util::date& a,
+bool inline operator>=(const btdef::util::date& a,
                 const btdef::util::date& b) noexcept
 {
     return !(a < b);
 }
 
 template<typename T, typename P>
-std::basic_ostream<T, P>& operator<<(std::basic_ostream<T, P>& os,
-    const btdef::util::date& dt) noexcept
+inline std::basic_ostream<T, P>& 
+    operator<<(std::basic_ostream<T, P>& os,
+        const btdef::util::date& dt) noexcept
 {
     btdef::util::text t = dt.text();
     return os.write(t.data(), t.size());
 }
 
 template<typename T, typename P>
-std::basic_ostream<T, P>& operator<<(std::basic_ostream<T, P>& os,
-    const btdef::util::date::local& loc) noexcept
+inline std::basic_ostream<T, P>& 
+    operator<<(std::basic_ostream<T, P>& os,
+        const btdef::util::date::local& loc) noexcept
 {
     btdef::util::text t = loc.text();
     return os.write(t.data(), t.size());
 }
 
 template<typename T, typename P>
-std::basic_ostream<T, P>& operator<<(std::basic_ostream<T, P>& os,
-    const btdef::util::date::utc& utc) noexcept
+inline std::basic_ostream<T, P>& 
+    operator<<(std::basic_ostream<T, P>& os,
+        const btdef::util::date::utc& utc) noexcept
 {
     btdef::util::text t = utc.text();
     return os.write(t.data(), t.size());

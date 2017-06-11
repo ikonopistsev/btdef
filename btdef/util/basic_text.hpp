@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "btdef/util/util.hpp"
 
@@ -586,4 +586,5 @@ bool operator>=(const btdef::util::basic_text<C, N>& lhs,
 {
     return !(lhs < rhs);
 }
+
 //---

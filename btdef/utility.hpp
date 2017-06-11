@@ -51,9 +51,3 @@ using btdef::conv::to_text;
 using btdef::conv::to_string;
 
 } // namespace utility
-
-namespace std {
-
-//using btdef::conv::stdex::to_string;
-
-} // namespace std

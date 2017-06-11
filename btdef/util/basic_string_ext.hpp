@@ -59,7 +59,7 @@ template<typename C, typename T, typename A1, typename A2>
 bool operator==(const std::basic_string<C, T, A1>& lhs,
     const btdef::util::basic_string<C, A2>& rhs) noexcept
 {
-    return rhs.compare(lhs) == 0;
+    return rhs == lhs;
 }
 
 template<typename C, typename T, typename A1, typename A2>

@@ -16,7 +16,7 @@ namespace btdef {
 namespace conv {
 
 template<typename T>
-util::string to_string(T val)
+static inline util::string to_string(T val)
 {
     using num::itoa;
     util::string result;
@@ -60,30 +60,7 @@ static inline util::string to_string(double val, std::size_t exp)
     result.increase(dtoap(val, exp, result.data()));
     return result;
 }
-/*
-template<class A>
-std::string to_string(const util::basic_string<char, A>& str)
-{
-    return std::string(str.data(), str.size());
-}
 
-template<std::size_t N>
-util::text to_text(std::reference_wrapper<const char[N]> ref)
-{
-    static_assert(util::text::cache_size > N, "string size");
-    return util::text(ref);
-}
-
-namespace stdex {
-
-template<std::size_t N>
-std::string to_string(std::reference_wrapper<const char[N]> ref)
-{
-    return std::string(ref.get(), N - 1);
-}
-
-} // namespace stdex
-*/
 } // namespace conv
 } // namespace btdef
 

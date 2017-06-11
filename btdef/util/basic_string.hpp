@@ -468,6 +468,12 @@ public:
         return allocate_concatenate(value, len);
     }
 
+    template<class S>
+    size_type append(const S& str) noexcept
+    {
+        return append(str.data(), str.size());
+    }
+
     size_type operator+=(const basic_string& other) noexcept
     {
         return append(other);
@@ -481,6 +487,12 @@ public:
     size_type operator+=(const_pointer value) noexcept
     {
         return append(value);
+    }
+
+    template<class S>
+    size_type operator+=(const S& str) noexcept
+    {
+        return append(str);
     }
 
     int compare(const_pointer value, size_type len) const noexcept

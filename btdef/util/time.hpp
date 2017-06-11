@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <ctime>
 #include <cstring>
 #include <chrono>
 

@@ -655,7 +655,7 @@ typedef basic_string<char, allocator::basic<char>> string;
 } // namespace util
 } // namespace btdef
 
-//---
+// ---- btdef::util::basic_string same type
 
 template<class C, class A1, class A2>
 bool operator==(const btdef::util::basic_string<C, A1>& lhs,
@@ -699,51 +699,8 @@ bool operator>=(const btdef::util::basic_string<T, A>& lhs,
     return !(lhs < rhs);
 }
 
-//---
-
-template<class C, class A>
-bool operator==(const btdef::util::basic_string<C, A>& lhs,
-    const C* rhs) noexcept
-{
-    return lhs.compare(rhs) == 0;
-}
-
-template<class C, class A>
-bool operator!=(const btdef::util::basic_string<C, A>& lhs,
-    const C* rhs) noexcept
-{
-    return !(lhs == rhs);
-}
-
-template<class C, class A>
-bool operator<(const btdef::util::basic_string<C, A>& lhs,
-    const C* rhs) noexcept
-{
-    return lhs.compare(rhs) < 0;
-}
-
-template<class C, class A>
-bool operator>(const btdef::util::basic_string<C, A>& lhs,
-    const C* rhs) noexcept
-{
-    return lhs.compare(rhs) > 0;
-}
-
-template<class C, class A>
-bool operator<=(const btdef::util::basic_string<C, A>& lhs,
-    const C* rhs) noexcept
-{
-    return !(rhs < lhs);
-}
-
-template<class C, class A>
-bool operator>=(const btdef::util::basic_string<C, A>& lhs,
-    const C* rhs) noexcept
-{
-    return !(lhs < rhs);
-}
-
-//---
+// ---- btdef::util::basic_string same type
+// ---- btdef::util::basic_string other type
 
 template<class T, class A, class F>
 bool operator==(const btdef::util::basic_string<T, A>& lhs,
@@ -786,5 +743,5 @@ bool operator>=(const btdef::util::basic_string<T, A>& lhs,
 {
     return !(lhs < rhs);
 }
-//---
 
+// ---- btdef::util::basic_string other type

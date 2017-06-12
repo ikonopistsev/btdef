@@ -93,8 +93,12 @@ public:
         return 0;
     }
 
-    size_type assign(value_type value) noexcept;
-    size_type assign(size_type n, value_type value) noexcept;
+    size_type assign(value_type value) noexcept
+    {
+        size_ = 1;
+        *data_ = value;
+        return size_;
+    }
 
     size_type assign(const_pointer value) noexcept
     {
@@ -511,6 +515,8 @@ public:
 } // namespace util
 } // namespace btdef
 
+// ---- btdef::util::basic_text same type
+
 template<class C, std::size_t N>
 bool operator==(const btdef::util::basic_text<C, N>& lhs,
     const btdef::util::basic_text<C, N>& rhs) noexcept
@@ -546,7 +552,8 @@ bool operator>=(const btdef::util::basic_text<C, N>& lhs,
     return !(lhs < rhs);
 }
 
-//---
+// ---- btdef::util::basic_text same type
+// ---- btdef::util::basic_text other type
 
 template<class C, class F, std::size_t N>
 bool operator==(const btdef::util::basic_text<C, N>& lhs,
@@ -590,4 +597,4 @@ bool operator>=(const btdef::util::basic_text<C, N>& lhs,
     return !(lhs < rhs);
 }
 
-//---
+// ---- btdef::util::basic_text other type

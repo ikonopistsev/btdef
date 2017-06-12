@@ -20,6 +20,8 @@ struct hash<btdef::util::basic_string<char, A>>
 
 } // namespace std
 
+// ---- std::basic_string
+
 template<typename C, typename T, typename A1, typename A2>
 inline std::basic_string<C, T, A1>&
     operator+=(std::basic_string<C, T, A1>& lhs,
@@ -53,7 +55,7 @@ std::basic_ostream<C, T>& operator<<(std::basic_ostream<C, T>& os,
     return os.write(rhs.data(), rhs.size());
 }
 
-// ----
+// ---- std::basic_string
 
 template<typename C, typename T, typename A1, typename A2>
 bool operator==(const std::basic_string<C, T, A1>& lhs,
@@ -96,3 +98,5 @@ bool operator>=(const std::basic_string<C, T, A1>& lhs,
 {
     return !(lhs < rhs);
 }
+
+// ---- std::basic_string

@@ -11,6 +11,7 @@
 #include "btdef/util/time_zone.hpp"
 #include "btdef/util/basic_string_ext.hpp"
 #include "btdef/util/basic_text_ext.hpp"
+#include "btdef/ref/string.hpp"
 
 namespace utility {
 
@@ -51,3 +52,7 @@ using btdef::conv::to_text;
 using btdef::conv::to_string;
 
 } // namespace utility
+
+namespace ref {
+    using btref::string;
+} // namespace ref

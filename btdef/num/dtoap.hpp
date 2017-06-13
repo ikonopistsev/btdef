@@ -39,7 +39,7 @@ split(double val, std::size_t precision)
         static_cast<double>(std::numeric_limits<long long>::max());
     const auto exp = get_exp(precision);
 
-    val = std::fma(val, exp, 0.5);
+    val = std::fma(val, exp, 0.5555555555555555);
     if (val > max_val)
         throw std::range_error("too large real");
 
@@ -57,13 +57,20 @@ static inline char* print(double val, std::size_t exp, char *text)
 
     const auto llv = split(negative ? -val : val, exp);
     text = num::itoa(llv.first, text);
+
+    if (!exp)
+        return text;
+
     *text++ = '.';
 
     char* res = text + exp;
 
-    char t[24];
-    auto l = num::itoa(llv.second, t) - t;
-    std::memcpy(res - l, t, l);
+    if (llv.second)
+    {
+        char t[24];
+        auto l = num::itoa(llv.second, t) - t;
+        std::memcpy(res - l, t, l);
+    }
 
     return res;
 }

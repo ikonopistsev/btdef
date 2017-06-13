@@ -56,22 +56,14 @@ static inline char* print(double val, std::size_t exp, char *text)
         *text++ = '-';
 
     const auto llv = split(negative ? -val : val, exp);
-
-    if (llv.first)
-        text = num::itoa(llv.first, text);
-    else
-        ++text;
-
+    text = num::itoa(llv.first, text);
     *text++ = '.';
 
     char* res = text + exp;
 
-    if (llv.second)
-    {
-        char buf[24];
-        auto l = std::distance(buf, num::itoa(llv.second, buf));
-        std::memcpy(text + exp - l, buf, l);
-    }
+    char t[24];
+    auto l = num::itoa(llv.second, t) - t;
+    std::memcpy(res - l, t, l);
 
     return res;
 }

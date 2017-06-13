@@ -67,7 +67,11 @@ static inline char* print(double val, std::size_t exp, char *text)
     char* res = text + exp;
 
     if (llv.second)
-        num::itoa(llv.second, text);
+    {
+        char buf[24];
+        auto l = std::distance(buf, num::itoa(llv.second, buf));
+        std::memcpy(text + exp - l, buf, l);
+    }
 
     return res;
 }

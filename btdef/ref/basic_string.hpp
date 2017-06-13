@@ -456,6 +456,53 @@ bool operator>=(const btref::basic_string<C>& lhs,
 }
 
 // ---- btdef::util::basic_string same type
+
+//---
+
+template<class C, class A>
+bool operator==(const btdef::util::basic_string<C, A>& lhs,
+    const C* rhs) noexcept
+{
+    return lhs.compare(rhs) == 0;
+}
+
+template<class C, class A>
+bool operator!=(const btdef::util::basic_string<C, A>& lhs,
+    const C* rhs) noexcept
+{
+    return !(lhs == rhs);
+}
+
+template<class C, class A>
+bool operator<(const btdef::util::basic_string<C, A>& lhs,
+    const C* rhs) noexcept
+{
+    return lhs.compare(rhs) < 0;
+}
+
+template<class C, class A>
+bool operator>(const btdef::util::basic_string<C, A>& lhs,
+    const C* rhs) noexcept
+{
+    return lhs.compare(rhs) > 0;
+}
+
+template<class C, class A>
+bool operator<=(const btdef::util::basic_string<C, A>& lhs,
+    const C* rhs) noexcept
+{
+    return !(rhs < lhs);
+}
+
+template<class C, class A>
+bool operator>=(const btdef::util::basic_string<C, A>& lhs,
+    const C* rhs) noexcept
+{
+    return !(lhs < rhs);
+}
+
+//---
+
 // ---- btdef::util::basic_string other type
 
 template<class C, class F>

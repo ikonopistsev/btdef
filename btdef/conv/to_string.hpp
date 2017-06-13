@@ -46,8 +46,8 @@ static inline util::string to_string(double value)
 static inline util::string to_string(float val, std::size_t exp)
 {
     using num::dtoap;
-    util::string result;
-    result.reserve(32);
+    util::string result(std::cref("000000000000000000000000"));
+    result.clear();
     result.increase(dtoap(static_cast<double>(val), exp, result.data()));
     return result;
 }
@@ -55,8 +55,8 @@ static inline util::string to_string(float val, std::size_t exp)
 static inline util::string to_string(double val, std::size_t exp)
 {
     using num::dtoap;
-    util::string result;
-    result.reserve(32);
+    util::string result(std::cref("000000000000000000000000"));
+    result.clear();
     result.increase(dtoap(val, exp, result.data()));
     return result;
 }

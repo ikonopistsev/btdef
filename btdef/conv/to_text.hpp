@@ -43,7 +43,7 @@ static inline util::text to_text(double value) noexcept
 static inline util::text to_text(float val, std::size_t exp)
 {
     using num::dtoap;
-    util::text result;
+    util::text result(24, '0');
     result.increase(dtoap(static_cast<double>(val), exp, result.data()));
     return result;
 }
@@ -51,7 +51,7 @@ static inline util::text to_text(float val, std::size_t exp)
 static inline util::text to_text(double val, std::size_t exp)
 {
     using num::dtoap;
-    util::text result;
+    util::text result(24, '0');
     result.increase(dtoap(val, exp, result.data()));
     return result;
 }

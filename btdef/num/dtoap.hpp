@@ -18,12 +18,24 @@ namespace detail {
 
 static inline std::uint64_t get_exp(std::size_t precision)
 {
-    static constexpr std::size_t max_precision = 16;
+    static const std::size_t max_precision = 16;
     static const std::uint64_t exp[max_precision] = {
-        1ull, 10ull, 100ull, 1000ull, 10000ull, 100000ull, 1000000ull,
-        10000000ull, 100000000ull, 1000000000ull, 10000000000ull,
-        100000000000ull, 1000000000000ull, 10000000000000ull,
-        100000000000000ull, 1000000000000000ull
+        1ull, 
+        10ull, 
+        100ull, 
+        1000ull, 
+        10000ull, 
+        100000ull, 
+        1000000ull,
+        10000000ull, 
+        100000000ull, 
+        1000000000ull, 
+        10000000000ull,
+        100000000000ull, 
+        1000000000000ull, 
+        10000000000000ull,
+        100000000000000ull, 
+        1000000000000000ull
     };
 
     if (precision >= max_precision)
@@ -37,7 +49,7 @@ split(double val, std::size_t precision)
 {
     static const double max_val =
         static_cast<double>(std::numeric_limits<long long>::max());
-    const auto exp = get_exp(precision);
+    const std::uint64_t exp = get_exp(precision);
 
     val = std::fma(val, exp, 0.5555555555555555);
     if (val > max_val)
@@ -54,7 +66,9 @@ static inline char* print(double val, std::size_t exp, char *text)
     if (negative)
         *text++ = '-';
 
-    const auto llv = split(negative ? -val : val, exp);
+    const std::pair<std::uint64_t, std::uint64_t> llv = 
+        split(negative ? -val : val, exp);
+
     text = num::itoa(llv.first, text);
 
     if (!exp)
@@ -67,7 +81,7 @@ static inline char* print(double val, std::size_t exp, char *text)
     if (llv.second)
     {
         char t[24];
-        auto l = num::itoa(llv.second, t) - t;
+        std::size_t l = static_cast<std::size_t>(num::itoa(llv.second, t) - t);
         std::memcpy(res - l, t, l);
     }
 
@@ -76,10 +90,9 @@ static inline char* print(double val, std::size_t exp, char *text)
 
 } // namespace detail
 
-static inline std::size_t dtoap(double d, std::size_t exp, char *dest)
+static inline std::size_t dtoap(double val, std::size_t exp, char *dest)
 {
-    return std::distance(dest,
-        detail::print(d, exp, dest));
+    return static_cast<std::size_t>(detail::print(val, exp, dest) - dest);
 }
 
 } // namespace num

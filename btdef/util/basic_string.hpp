@@ -69,6 +69,11 @@ public:
         assign(value);
     }
 
+    basic_string(size_type size, value_type value) noexcept
+    {
+        assign(size, value);
+    }
+
     basic_string(const_pointer value, size_type size) noexcept
     {
         assign(value, size);

@@ -51,7 +51,6 @@ split(double val, std::size_t precision)
 static inline char* print(double val, std::size_t exp, char *text)
 {
     const bool negative = std::signbit(val);
-
     if (negative)
         *text++ = '-';
 

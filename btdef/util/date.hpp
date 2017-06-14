@@ -443,13 +443,13 @@ public:
         {
             switch (p)
             {
-                case Y:
+                case y:
                     tm_.tm_year = value - yd;
                     break;
-                case M:
+                case month:
                     tm_.tm_mon = value - md;
                     break;
-                case D:
+                case day:
                     tm_.tm_mday = value;
                     break;
                 case h:

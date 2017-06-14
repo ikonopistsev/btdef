@@ -38,9 +38,9 @@ protected:
 public:
     enum part
     {
-        Y,
-        M,
-        D,
+        y,
+        month,
+        day,
         h,
         m,
         s,

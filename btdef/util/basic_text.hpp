@@ -82,11 +82,7 @@ public:
             if (len)
             {
                 assert(value);
-
-                if (len == 1)
-                    *data_ = *value;
-                else
-                    std::memcpy(data_, value, len);
+                std::memcpy(data_, value, len);
             }
             return len;
         }
@@ -123,14 +119,8 @@ public:
         if (n < cache_size)
         {
             size_ = n;
-            if (n)
-            {
-                if (n == 1)
-                    *data_ = value;
-                else
-                    std::memset(data_, value, n);
-            }
-            return size_;
+            std::memset(data_, value, n);
+            return n;
         }
         return 0;
     }
@@ -411,12 +401,7 @@ public:
             if (len)
             {
                 assert(value);
-
-                if (len == 1)
-                    data_[size_] = *value;
-                else
-                    std::memcpy(end(), value, len);
-
+                std::memcpy(end(), value, len);
                 size_ += len;
             }
             return size_;
@@ -451,15 +436,8 @@ public:
         {
             if (n)
             {
-                if (n == 1)
-                {
-                    data_[size_++] = value;
-                }
-                else
-                {
-                    std::memset(end(), value, n);
-                    size_ += n;
-                }
+                std::memset(end(), value, n);
+                size_ += n;
             }
             return size_;
         }

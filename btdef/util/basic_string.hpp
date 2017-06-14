@@ -111,16 +111,10 @@ public:
 
     size_type concatenate(const_pointer value, size_type len) noexcept
     {
-        assert(data_);
         if (len)
         {
-            assert(value);
-
-            if (len == 1)
-                return concatenate(*value);
-            else
-                std::memcpy(end(), value, len);
-
+            assert(data_ && value);
+            std::memcpy(end(), value, len);
             size_ += len;
         }
         return size_;
@@ -136,13 +130,8 @@ public:
     size_type concatenate(size_type n, value_type value) noexcept
     {
         assert(data_);
-
-        if (n == 1)
-            return concatenate(value);
-
         std::memset(end(), value, n);
         size_ += n;
-
         return size_;
     }
 

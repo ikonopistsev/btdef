@@ -484,6 +484,12 @@ public:
         return append(other.data(), other.size());
     }
 
+    size_type append(const_pointer value) noexcept
+    {
+        assert(value);
+        return append(value, std::strlen(value));
+    }
+
     size_type operator+=(const basic_string& other) noexcept
     {
         return append(other);

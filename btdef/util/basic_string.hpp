@@ -96,6 +96,11 @@ public:
         allocator_.deallocate(data_, capacity_);
     }
 
+    static inline basic_string create(const basic_string& other)
+    {
+
+    }
+
     allocator_type get_allocator() const noexcept
     {
         return allocator_;

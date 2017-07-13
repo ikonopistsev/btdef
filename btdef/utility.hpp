@@ -13,6 +13,7 @@
 #include "btdef/ref/basic_string_ext.hpp"
 #include "btdef/util/basic_string_ext.hpp"
 #include "btdef/util/basic_text_ext.hpp"
+#include "btdef/buffer/basic.hpp"
 
 namespace utility {
 
@@ -26,6 +27,9 @@ using btdef::util::time_zone;
 
 using btdef::util::string;
 using btdef::util::text;
+
+using buffer = btdef::buffer::basic<btdef::buffer::detail::iovec_type,
+    btdef::allocator::basic<char>>;
 
 namespace num {
 
@@ -55,5 +59,7 @@ using btdef::conv::to_string;
 } // namespace utility
 
 namespace ref {
-    using btref::string;
+
+using btref::string;
+
 } // namespace ref

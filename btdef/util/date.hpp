@@ -27,7 +27,6 @@ public:
     typedef tm::millisecond_t millisecond_t;
     typedef std::intptr_t minuteswest_t;
     typedef std::intptr_t dstflag_t;
-    typedef date this_type;
 
     enum {
         k_msec = 1000u,
@@ -137,6 +136,16 @@ public:
         : time_point_(time::now(ft))
     {   }
 #endif
+
+    explicit date(const std::tm& tm, millisecond_t ms = 0)
+    {
+        std::tm t = tm;
+        time_t sec = mktime(&t);
+        if (sec == static_cast<time_t>(-1))
+            throw std::runtime_error("invalid date");
+
+        time_point_ = create(sec, ms * k_msec);
+    }
 
     template<std::size_t N>
     explicit date(const util::basic_text<char, N>& text)
@@ -392,19 +401,26 @@ public:
         }
 #endif
     public:
-
-        local() = default;
-
-        local(const std::tm& stdtm, millisecond_t millisecond)
-            : tm(stdtm, millisecond)
-        {   }
-
-        explicit local(const this_type& d) noexcept
+        local(const date& d) noexcept
             : tm(d.local_time())
 #if defined(WIN32) || defined(_WIN32)
             , minuteswest_(timezone())
 #endif
         {   }
+
+        local(const local& other) noexcept
+            : tm(other.data(), other.msec())
+#if defined(WIN32) || defined(_WIN32)
+            , minuteswest_(other.minuteswest_)
+#endif
+        {   }
+
+        local& operator=(const date& d)
+        {
+            local l(d);
+            *this = l;
+            return *this;
+        }
 
         minuteswest_t minuteswest() const noexcept
         {
@@ -413,66 +429,6 @@ public:
 #else
             return -tm_.tm_gmtoff / 60;
 #endif
-        }
-
-        local& set(int yyyy, int mm, int dd,
-            int h, int m, int s, millisecond_t ms = 0) noexcept
-        {
-            set(yyyy, mm, dd);
-            return set(h, m, s, ms);
-        }
-
-        local& set(int y, int m, int d) noexcept
-        {
-            tm_.tm_year = y - yd;
-            tm_.tm_mon = m - md;
-            tm_.tm_mday = d;
-            return *this;
-        }
-
-        local& set(int h, int m, int s, millisecond_t ms) noexcept
-        {
-            tm_.tm_hour = h;
-            tm_.tm_min = m;
-            tm_.tm_sec = s;
-            millisecond_ = ms;
-            return *this;
-        }
-
-        local& set(tm::part p, int value) noexcept
-        {
-            switch (p)
-            {
-                case y:
-                    tm_.tm_year = value - yd;
-                    break;
-                case month:
-                    tm_.tm_mon = value - md;
-                    break;
-                case day:
-                    tm_.tm_mday = value;
-                    break;
-                case h:
-                    tm_.tm_hour = value;
-                    break;
-                case m:
-                    tm_.tm_min = value;
-                    break;
-                case s:
-                    tm_.tm_sec = value;
-                    break;
-                case ms:
-                    millisecond_ = value;
-            };
-
-            return *this;
-        }
-
-        local& set(const std::tm& tm, millisecond_t ms = 0) noexcept
-        {
-            tm_ = tm;
-            millisecond_ = ms;
-            return *this;
         }
 
         dstflag_t dstflag() const noexcept
@@ -607,33 +563,22 @@ public:
         }
     };
 
+
     explicit date(const local& l)
     {
-        std::tm tm = l.data();
-        time_t sec = mktime(&tm);
+        std::tm t = l.data();
+        time_t sec = mktime(&t);
         if (sec == static_cast<time_t>(-1))
             throw std::runtime_error("invalid date");
 
-        time_point_ = create(sec, k_msec * l.msec());
-    }
-
-    date& operator=(const local& l)
-    {
-        std::tm tm = l.data();
-        time_t sec = mktime(&tm);
-        if (sec == static_cast<time_t>(-1))
-            throw std::runtime_error("invalid date");
-
-        time_point_ = create(sec, k_msec * l.msec());
-
-        return *this;
+        time_point_ = create(sec, l.msec() * k_msec);
     }
 
     class utc
         : public tm
     {
     public:
-        explicit utc(const this_type& d) noexcept
+        explicit utc(const date& d) noexcept
             : tm(d.utc_time())
         {   }
 

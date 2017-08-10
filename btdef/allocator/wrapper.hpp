@@ -30,7 +30,6 @@ public:
     using size_type = typename std::allocator<T>::size_type;
     using difference_type = typename std::allocator<T>::difference_type;
 
-public:
     allocator_type* base_{nullptr};
 
     wrapper() = default;

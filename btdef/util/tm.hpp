@@ -90,7 +90,7 @@ public:
         return tm_.tm_sec;
     }
 
-    std::intptr_t msec() const noexcept
+    millisecond_t msec() const noexcept
     {
         return millisecond_;
     }

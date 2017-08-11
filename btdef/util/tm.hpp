@@ -13,6 +13,7 @@
 
 #include <utility>
 #include <clocale>
+#include <string>
 #include <new>
 
 namespace btdef {

@@ -60,8 +60,7 @@ public:
         base_->free(ptr);
     }
 #else
-    void deallocate(pointer ptr,
-        std::size_t)
+    void deallocate(pointer ptr, std::size_t)
     {
         assert(base_);
         base_->free(ptr);
@@ -71,13 +70,13 @@ public:
     template<class U, class... Args>
     void construct(U* p, Args&&... args)
     {
-        std::allocator<T>().construct(p, std::forward<Args>(args)...);
+        std::allocator<U>().construct(p, std::forward<Args>(args)...);
     }
 
     template<class U>
     void destroy(U* p)
     {
-        std::allocator<T>().destroy(p);
+        std::allocator<U>().destroy(p);
     }
 
     template<class U>

@@ -87,9 +87,15 @@ public:
     };
 
     template<class U>
-    bool operator==(const wrapper<U>& other) const
+    bool operator==(const wrapper<U>& other) const noexcept
     {
         return base_ == other.base_;
+    }
+
+    template<class U>
+    bool operator!=(const wrapper<U>& other) const noexcept
+    {
+        return !(*this == other);
     }
 };
 

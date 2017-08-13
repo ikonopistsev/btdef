@@ -12,7 +12,7 @@ namespace btdef {
 namespace util {
 
 template<class C, std::size_t L>
-struct basic_text;
+class basic_text;
 
 template<std::size_t L>
 class basic_text<char, L>

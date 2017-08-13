@@ -13,6 +13,7 @@
 
 #include <utility>
 #include <clocale>
+#include <string>
 #include <new>
 
 namespace btdef {
@@ -25,38 +26,29 @@ public:
     typedef std::pair<std::tm, millisecond_t> tm_t;
 
 protected:
+    std::tm tm_;
+    millisecond_t millisecond_;
 
     enum {
-        md = 1,
+        buffer_size = 64,
         yd = 1900,
-        buffer_size = 160,
+        md = 1
     };
 
-    std::tm tm_ = time::empty_tm();
-    millisecond_t millisecond_{ 0 };
+    tm() noexcept
+        : tm_(time::empty_tm())
+        , millisecond_(0)
+    {   }
 
 public:
-    enum part
-    {
-        y,
-        month,
-        day,
-        h,
-        m,
-        s,
-        ms
-    };
-
-    tm() = default;
-
-    tm(const std::tm& stdtm, millisecond_t millisecond) noexcept
+    tm(const std::tm& stdtm, millisecond_t ms) noexcept
         : tm_(stdtm)
-        , millisecond_(millisecond)
+        , millisecond_(ms)
     {  }
 
-    tm(const tm_t& tmt) noexcept
-        : tm_(tmt.first)
-        , millisecond_(tmt.second)
+    tm(const tm_t& val) noexcept
+        : tm_(val.first)
+        , millisecond_(val.second)
     {   }
 
     std::intptr_t year() const noexcept
@@ -99,7 +91,7 @@ public:
         return tm_.tm_sec;
     }
 
-    std::intptr_t msec() const noexcept
+    millisecond_t msec() const noexcept
     {
         return millisecond_;
     }
@@ -200,7 +192,6 @@ public:
         util::string result;
         util::string::runtime_error(result.reserve(fmt_len + buffer_size),
                                                                 "bad alloc");
-
         std::size_t count = std::strftime(result.data(),
             result.capacity() + 1, fmt, &tm_);
         if (!count && fmt_len)
@@ -258,33 +249,6 @@ public:
         result.increase(std::distance(p, itoa3zf(millisecond_,p)));
         return result;
     }
-
-    class lc_time
-    {
-        std::string prev_;
-
-        static inline std::string create() noexcept
-        {
-            const char *time_locale = std::setlocale(LC_TIME, nullptr);
-            if (time_locale)
-                return std::string(time_locale);
-
-            return std::string("C");
-        }
-
-    public:
-
-        lc_time(const std::string& l)
-            : prev_(create())
-        {
-            std::setlocale(LC_TIME, l.c_str());
-        }
-
-        ~lc_time()
-        {
-            std::setlocale(LC_TIME, prev_.c_str());
-        }
-    };
 
     std::string to_locale() const
     {

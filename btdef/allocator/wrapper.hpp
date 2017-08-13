@@ -30,10 +30,8 @@ public:
     using size_type = typename std::allocator<T>::size_type;
     using difference_type = typename std::allocator<T>::difference_type;
 
-private:
     allocator_type* base_{nullptr};
 
-public:
     wrapper() = default;
 
     explicit wrapper(allocator_type& base)
@@ -62,8 +60,7 @@ public:
         base_->free(ptr);
     }
 #else
-    void deallocate(pointer ptr,
-        std::size_t)
+    void deallocate(pointer ptr, std::size_t)
     {
         assert(base_);
         base_->free(ptr);
@@ -73,13 +70,13 @@ public:
     template<class U, class... Args>
     void construct(U* p, Args&&... args)
     {
-        std::allocator<T>().construct(p, std::forward<Args>(args)...);
+        std::allocator<U>().construct(p, std::forward<Args>(args)...);
     }
 
     template<class U>
     void destroy(U* p)
     {
-        std::allocator<T>().destroy(p);
+        std::allocator<U>().destroy(p);
     }
 
     template<class U>
@@ -89,9 +86,15 @@ public:
     };
 
     template<class U>
-    bool operator==(const wrapper<U>& other) const
+    bool operator==(const wrapper<U>& other) const noexcept
     {
         return base_ == other.base_;
+    }
+
+    template<class U>
+    bool operator!=(const wrapper<U>& other) const noexcept
+    {
+        return !(*this == other);
     }
 };
 

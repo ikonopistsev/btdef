@@ -1,6 +1,6 @@
 #pragma once
 
-#include "btdef/allocator/crt.hpp"
+#include "btdef/allocator/basic.hpp"
 
 #include <cstring>
 
@@ -10,13 +10,14 @@ namespace allocator {
 /*
  *  from rapidjson (http://rapidjson.org/)
  */
-
-template<typename T>
-class basic_pool_allocator
+template<class T>
+class linear
 {
 public:
-    enum : std::size_t {
-        chunk_capacity = 64 * 1024
+    typedef std::size_t size_type;
+
+    enum {
+        chunk_capacity = 16 * 4096
     };
 
 private:
@@ -27,7 +28,7 @@ private:
         chunk_header *next_;
     };
 
-    std::size_t chunk_capacity_;
+    size_type capacity_;
     chunk_header *head_;
     void *buffer_;
     T* allocator_;

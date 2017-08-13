@@ -5,7 +5,9 @@
 
 #pragma once
 
-#include "btdef/allocator/module.hpp"
+#include "btdef/config.hpp"
+
+#include <cstdlib>
 
 namespace btdef {
 namespace allocator {
@@ -13,17 +15,19 @@ namespace allocator {
 template<class T>
 struct basic
 {
+    typedef T* pointer;
     typedef T value_type;
-    typedef value_type* pointer;
     typedef std::size_t size_type;
 
-    pointer allocate(size_type size, pointer hint = nullptr) noexcept
+    pointer allocate(size_type size, pointer h = nullptr) const BTDEF_NOEXCEPT
     {
-        size *= sizeof(value_type);
-        return static_cast<pointer>(std::realloc(hint, size));
+        if (!size)
+            return nullptr;
+
+        return static_cast<pointer>(std::realloc(h, size * sizeof(T)));
     }
 
-    void deallocate(pointer p, size_type) noexcept
+    void deallocate(pointer p, size_type) const BTDEF_NOEXCEPT
     {
         std::free(p);
     }

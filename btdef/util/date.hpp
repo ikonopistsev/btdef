@@ -35,7 +35,7 @@ public:
 
 private:
 
-    time_point_t time_point_{ };
+    time_point_t time_point_{};
 
     template<typename S, typename M>
     static time_point_t create(S sec, M usec) noexcept
@@ -111,12 +111,8 @@ public:
 
     date() = default;
 
-    date(const date& other) noexcept
-        : time_point_(other.time_point_)
-    {   }
-
-    explicit date(const time_point_t& timepoint) noexcept
-        : time_point_(timepoint)
+    explicit date(time_point_t tp) noexcept
+        : time_point_(tp)
     {   }
 
     explicit date(value_t val) noexcept
@@ -127,7 +123,7 @@ public:
     для сторонней инициализации
     например для gettimeofday() или evnet::queue::gettimeofday_cached() const
     */
-    explicit date(const timeval_t& tv) noexcept
+    explicit date(timeval_t tv) noexcept
         : time_point_(create(tv.tv_sec, tv.tv_usec))
     {   }
 
@@ -265,7 +261,7 @@ public:
         return static_cast<std::time_t>(result);
     }
 
-    const time_point_t& time_point() const noexcept
+    time_point_t time_point() const noexcept
     {
         return time_point_;
     }
@@ -275,12 +271,12 @@ public:
         return static_cast<millisecond_t>(time() % k_msec);
     }
 
-    bool operator==(const date& other) const noexcept
+    bool operator==(date other) const noexcept
     {
         return time_point_ == other.time_point_;
     }
 
-    bool operator<(const date& other) const noexcept
+    bool operator<(date other) const noexcept
     {
         return time_point_ < other.time_point_;
     }
@@ -291,7 +287,7 @@ public:
     }
 
     template<class Rep, class Period>
-    date operator+(const std::chrono::duration<Rep, Period>& d) const noexcept
+    date operator+(std::chrono::duration<Rep, Period> d) const noexcept
     {
         return date(time_point_ + d);
     }
@@ -302,35 +298,33 @@ public:
     }
 
     template<class Rep, class Period>
-    date operator-(const std::chrono::duration<Rep, Period>& d) const noexcept
+    date operator-(std::chrono::duration<Rep, Period> d) const noexcept
     {
         return date(time_point_ - d);
     }
 
-    value_t operator-(const date& other) const noexcept
+    value_t operator-(date other) const noexcept
     {
         return diff(*this, other);
     }
 
-    static inline value_t diff(const date& a, const date& b) noexcept
+    static inline value_t diff(date a, date b) noexcept
     {
         return a.time() - b.time();
     }
 
-    static inline double ddiff(const date& a, const date& b,
-                               double d = 1000.0) noexcept
+    static inline double ddiff(date a, date b, double d = 1000.0) noexcept
     {
         return diff(a, b) / d;
     }
 
-    static inline value_t diff_abs(const date& a, const date& b) noexcept
+    static inline value_t diff_abs(date a, date b) noexcept
     {
         value_t abs = diff(a, b);
         return (abs < 0) ? -abs : abs;
     }
 
-    static inline double ddiff_abs(const date& a, const date& b,
-                                   double d = 1000.0) noexcept
+    static inline double ddiff_abs(date a, date b, double d = 1000.0) noexcept
     {
         return diff_abs(a, b) / d;
     }
@@ -341,7 +335,7 @@ public:
     }
 
     template<class Rep, class Period>
-    date& operator+=(const std::chrono::duration<Rep, Period>& d) noexcept
+    date& operator+=(std::chrono::duration<Rep, Period> d) noexcept
     {
         time_point_ += d;
         return *this;
@@ -353,7 +347,7 @@ public:
     }
 
     template<class Rep, class Period>
-    date& operator-=(const std::chrono::duration<Rep, Period>& d) noexcept
+    date& operator-=(std::chrono::duration<Rep, Period> d) noexcept
     {
         time_point_ -= d;
         return *this;
@@ -401,21 +395,14 @@ public:
         }
 #endif
     public:
-        local(const date& d) noexcept
+        local(date d) noexcept
             : tm(d.local_time())
 #if defined(WIN32) || defined(_WIN32)
             , minuteswest_(timezone())
 #endif
         {   }
 
-        local(const local& other) noexcept
-            : tm(other.data(), other.msec())
-#if defined(WIN32) || defined(_WIN32)
-            , minuteswest_(other.minuteswest_)
-#endif
-        {   }
-
-        local& operator=(const date& d)
+        local& operator=(date d)
         {
             local l(d);
             *this = l;
@@ -578,7 +565,7 @@ public:
         : public tm
     {
     public:
-        explicit utc(const date& d) noexcept
+        explicit utc(date d) noexcept
             : tm(d.utc_time())
         {   }
 
@@ -790,34 +777,29 @@ public:
 } // namespace util
 } // namespace btdef
 
-bool inline operator!=(const btdef::util::date& a,
-    const btdef::util::date& b) noexcept
+bool inline operator!=(btdef::util::date a, btdef::util::date b) noexcept
 {
     return !(a == b);
 }
 
-bool inline operator>(const btdef::util::date& a,
-    const btdef::util::date& b) noexcept
+bool inline operator>(btdef::util::date a, btdef::util::date b) noexcept
 {
     return b < a;
 }
 
-bool inline operator<=(const btdef::util::date& a,
-                const btdef::util::date& b) noexcept
+bool inline operator<=(btdef::util::date a, btdef::util::date b) noexcept
 {
     return !(b < a);
 }
 
-bool inline operator>=(const btdef::util::date& a,
-                const btdef::util::date& b) noexcept
+bool inline operator>=(btdef::util::date a, btdef::util::date b) noexcept
 {
     return !(a < b);
 }
 
 template<typename T, typename P>
 inline std::basic_ostream<T, P>& 
-    operator<<(std::basic_ostream<T, P>& os,
-        const btdef::util::date& dt) noexcept
+    operator<<(std::basic_ostream<T, P>& os, btdef::util::date dt) noexcept
 {
     btdef::util::text t = dt.text();
     return os.write(t.data(), t.size());

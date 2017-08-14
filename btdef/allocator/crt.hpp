@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "btdef/allocator/module.hpp"
+//#include "btdef/allocator/module.hpp"
 
 #ifdef BTDEF_TRACE_CRT_MALLOC
 #include <cstdio>

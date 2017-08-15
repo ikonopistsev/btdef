@@ -39,7 +39,7 @@ private:
     };
 
 public:
-    static const size_type npos = -1;
+    static const size_type npos = static_cast<size_type>(-1);
 
     basic_string() = default;
 

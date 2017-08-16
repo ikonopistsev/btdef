@@ -87,8 +87,8 @@ public:
         : basic_string(str.get(), N - 1)
     {   }
 
-    template<template<class> class T>
-    basic_string(const T<C>& str) noexcept
+    template<class T>
+    basic_string(const T& str) noexcept
         : basic_string(str.data(), str.size())
     {   }
 
@@ -324,7 +324,7 @@ public:
         return rfind(c);
     }
 
-    this_type substr(size_type pos, size_type n = npos) const noexcept
+    this_type substr(size_type pos, size_type n = npos) const
     {
         if (pos > size_)
             throw std::out_of_range("basic_string::substr");

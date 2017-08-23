@@ -10,7 +10,10 @@ namespace std {
 template<>
 struct hash<btref::basic_string<char>>
 {
-    size_t operator()(const btref::basic_string<char>& str) const noexcept
+    typedef size_t result_type;
+    typedef btref::basic_string<char> argument_type;
+
+    size_t operator()(argument_type str) const noexcept
     {
         btdef::hash::fnv1a fn;
         return static_cast<size_t>(fn(str.data(), str.size()));

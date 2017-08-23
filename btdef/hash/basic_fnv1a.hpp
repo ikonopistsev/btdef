@@ -18,7 +18,7 @@ template<>
 class basic_fnv1a<4>
 {
 public:
-    typedef unsigned long value_t;
+    typedef std::uint32_t value_t;
 
 private:
     const value_t salt_;
@@ -31,6 +31,33 @@ public:
     basic_fnv1a(value_t salt) noexcept
         : salt_(salt)
     {   }
+
+    value_t operator()(const char *ptr) const noexcept
+    {
+        value_t hval = salt_;
+        while (*ptr != '\0')
+        {
+            hval ^= static_cast<value_t>(*ptr++);
+            hval += (hval << 1) + (hval << 4) +
+                (hval << 7) + (hval << 8) + (hval << 24);
+        }
+
+        return hval;
+    }
+
+    value_t operator()(std::size_t& len, const char *ptr) const noexcept
+    {
+        value_t hval = salt_;
+        while (*ptr != '\0')
+        {
+            hval ^= static_cast<value_t>(*ptr++);
+            hval += (hval << 1) + (hval << 4) +
+                (hval << 7) + (hval << 8) + (hval << 24);
+            ++len;
+        }
+
+        return hval;
+    }
 
     value_t operator()(const void *ptr, std::size_t len) const noexcept
     {
@@ -53,7 +80,7 @@ template<>
 class basic_fnv1a<8>
 {
 public:
-    typedef unsigned long long value_t;
+    typedef std::uint64_t value_t;
 
 private:
     const value_t salt_;
@@ -66,6 +93,33 @@ public:
     basic_fnv1a(value_t salt) noexcept
         : salt_(salt)
     {   }
+
+    value_t operator()(const char *ptr) const noexcept
+    {
+        value_t hval = salt_;
+        while (*ptr != '\0')
+        {
+            hval ^= static_cast<value_t>(*ptr++);
+            hval += (hval << 1) + (hval << 4) + (hval << 5) +
+                (hval << 7) + (hval << 8) + (hval << 40);
+        }
+
+        return hval;
+    }
+
+    value_t operator()(std::size_t& len, const char *ptr) const noexcept
+    {
+        value_t hval = salt_;
+        while (*ptr != '\0')
+        {
+            hval ^= static_cast<value_t>(*ptr++);
+            hval += (hval << 1) + (hval << 4) + (hval << 5) +
+                (hval << 7) + (hval << 8) + (hval << 40);
+            ++len;
+        }
+
+        return hval;
+    }
 
     value_t operator()(const void *ptr, std::size_t len) const noexcept
     {

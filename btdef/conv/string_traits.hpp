@@ -46,6 +46,19 @@ struct antout<T, 1>
     static constexpr auto pow = 1;
     static constexpr auto size = 1u;
 
+    static const char* read(const char *ptr, T& res) noexcept
+    {
+        res = static_cast<T>(conv(ptr));
+        return ptr + size;
+    }
+
+    static const char* read(const char *ptr, T i, T& res) noexcept
+    {
+        ptr = read(ptr, res);
+        res += i;
+        return ptr;
+    }
+
     static std::intptr_t conv(const char *ptr) noexcept
     {
         auto i = *ptr - '0';

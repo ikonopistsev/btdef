@@ -21,12 +21,10 @@ public:
     typedef std::uint32_t value_t;
 
 private:
-    const value_t salt_;
+    const value_t salt_{ 0x811c9dc5 };
 
 public:
-    basic_fnv1a() noexcept
-        : salt_(0x811c9dc5)
-    {   }
+    basic_fnv1a() = default;
 
     basic_fnv1a(value_t salt) noexcept
         : salt_(salt)
@@ -41,7 +39,6 @@ public:
             hval += (hval << 1) + (hval << 4) +
                 (hval << 7) + (hval << 8) + (hval << 24);
         }
-
         return hval;
     }
 
@@ -55,23 +52,31 @@ public:
                 (hval << 7) + (hval << 8) + (hval << 24);
             ++len;
         }
-
         return hval;
     }
 
-    value_t operator()(const void *ptr, std::size_t len) const noexcept
+    value_t operator()(const char* p, const char* e) const noexcept
     {
         value_t hval = salt_;
-        auto p = static_cast<const unsigned char*>(ptr);
-        auto e = p + len;
         while (p < e)
         {
             hval ^= static_cast<value_t>(*p++);
             hval += (hval << 1) + (hval << 4) +
                 (hval << 7) + (hval << 8) + (hval << 24);
         }
-
         return hval;
+    }
+
+    value_t operator()(const void *ptr, std::size_t len) const noexcept
+    {
+        auto p = static_cast<const char*>(ptr);
+        return this->operator()(p, p + len);
+    }
+
+    template<class T>
+    value_t operator()(const T& text) const noexcept
+    {
+        return this->operator()(text.data(), text.size());
     }
 };
 
@@ -83,12 +88,10 @@ public:
     typedef std::uint64_t value_t;
 
 private:
-    const value_t salt_;
+    const value_t salt_{ 0xcbf29ce484222325ull };
 
 public:
-    basic_fnv1a() noexcept
-        : salt_(0xcbf29ce484222325ull)
-    {   }
+    basic_fnv1a() = default;
 
     basic_fnv1a(value_t salt) noexcept
         : salt_(salt)
@@ -103,7 +106,6 @@ public:
             hval += (hval << 1) + (hval << 4) + (hval << 5) +
                 (hval << 7) + (hval << 8) + (hval << 40);
         }
-
         return hval;
     }
 
@@ -117,23 +119,31 @@ public:
                 (hval << 7) + (hval << 8) + (hval << 40);
             ++len;
         }
-
         return hval;
     }
 
-    value_t operator()(const void *ptr, std::size_t len) const noexcept
+    value_t operator()(const char *p, const char *e) const noexcept
     {
         value_t hval = salt_;
-        auto p = static_cast<const unsigned char*>(ptr);
-        auto e = p + len;
         while (p < e)
         {
             hval ^= static_cast<value_t>(*p++);
             hval += (hval << 1) + (hval << 4) + (hval << 5) +
                 (hval << 7) + (hval << 8) + (hval << 40);
         }
-
         return hval;
+    }
+
+    value_t operator()(const void *ptr, std::size_t len) const noexcept
+    {
+        auto p = static_cast<const char*>(ptr);
+        return this->operator()(p, p + len);
+    }
+
+    template<class T>
+    value_t operator()(const T& text) const noexcept
+    {
+        return this->operator()(text.data(), text.size());
     }
 };
 

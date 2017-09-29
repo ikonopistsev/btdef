@@ -67,6 +67,14 @@ public:
         return hval;
     }
 
+    value_t djb2(const char* p, const char* e) const noexcept
+    {
+        value_t hval = 5381;
+        while (p < e)
+            hval = ((hval << 5) + hval) + static_cast<value_t>(*p++);
+        return hval;
+    }
+
     value_t operator()(const void *ptr, std::size_t len) const noexcept
     {
         auto p = static_cast<const char*>(ptr);
@@ -131,6 +139,14 @@ public:
             hval += (hval << 1) + (hval << 4) + (hval << 5) +
                 (hval << 7) + (hval << 8) + (hval << 40);
         }
+        return hval;
+    }
+
+    value_t djb2(const char* p, const char* e) const noexcept
+    {
+        value_t hval = 5381;
+        while (p < e)
+            hval = ((hval << 5) + hval) + static_cast<value_t>(*p++);
         return hval;
     }
 

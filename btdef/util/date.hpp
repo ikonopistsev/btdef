@@ -694,7 +694,7 @@ public:
         return utc(*this).json();
     }
 
-    util::string json_text() const noexcept
+    util::text json_text() const noexcept
     {
         return utc(*this).json_text();
     }

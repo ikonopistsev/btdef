@@ -48,7 +48,7 @@ public:
     {   }
 
     basic_string(const basic_string& other) noexcept
-        : allocator_(other.ocator())
+        : allocator_(other.get_allocator())
     {
         assign(other);
     }

@@ -27,10 +27,7 @@ using btdef::util::time_zone;
 
 using btdef::util::string;
 using btdef::util::text;
-/*
-//using buffer = btdef::buffer::basic<btdef::buffer::detail::iovec_type,
-//    btdef::allocator::basic<char>>;
-*/
+
 namespace num {
 
 using btdef::num::detail::itoa2zf;

@@ -21,10 +21,8 @@ struct basic
 
     pointer allocate(size_type size, pointer h = nullptr) const BTDEF_NOEXCEPT
     {
-        if (!size)
-            return nullptr;
-
-        return static_cast<pointer>(std::realloc(h, size * sizeof(T)));
+        return (size) ?
+            static_cast<pointer>(std::realloc(h, size * sizeof(T))) : nullptr;
     }
 
     void deallocate(pointer p, size_type) const BTDEF_NOEXCEPT

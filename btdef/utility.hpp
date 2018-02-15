@@ -13,7 +13,6 @@
 #include "btdef/ref/basic_string_ext.hpp"
 #include "btdef/util/basic_string_ext.hpp"
 #include "btdef/util/basic_text_ext.hpp"
-//#include "btdef/buffer/basic.hpp"
 
 namespace utility {
 

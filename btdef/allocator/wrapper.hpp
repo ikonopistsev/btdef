@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "btdef/allocator/pool_allocator.hpp"
+#include "btdef/allocator/basic_pool.hpp"
 
 #include <memory>
 
@@ -21,7 +21,7 @@ class wrapper
 {
 public:
     using value_type = T;
-    using allocator_type = pool_allocator;
+    using allocator_type = pool;
     using Traits = std::allocator_traits<wrapper<T>>;
     using pointer = typename std::allocator<T>::pointer;
     using const_pointer = typename std::allocator<T>::const_pointer;

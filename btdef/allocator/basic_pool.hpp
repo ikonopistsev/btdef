@@ -10,14 +10,13 @@ namespace allocator {
 /*
  *  from rapidjson (http://rapidjson.org/)
  */
-template<class T>
-class linear
+
+template<typename T>
+class basic_pool
 {
 public:
-    typedef std::size_t size_type;
-
-    enum {
-        chunk_capacity = 16 * 4096
+    enum : std::size_t {
+        chunk_capacity = 64 * 1024
     };
 
 private:
@@ -28,32 +27,27 @@ private:
         chunk_header *next_;
     };
 
-    size_type capacity_;
-    chunk_header *head_;
-    void *buffer_;
-    T* allocator_;
-    T* own_;
+    std::size_t chunk_capacity_{};
+    chunk_header *head_{nullptr};
+    void *buffer_{nullptr};
+    T* allocator_{nullptr};
+    T* own_{nullptr};
 
-    basic_pool_allocator(const basic_pool_allocator& rhs);
-    basic_pool_allocator& operator=(const basic_pool_allocator& rhs);
+    basic_pool(const basic_pool&);
+    basic_pool& operator=(const basic_pool&);
 
 public:
-    basic_pool_allocator(std::size_t chunk_size = chunk_capacity,
+    basic_pool(std::size_t chunk_size = chunk_capacity,
         T* allocator = nullptr) noexcept
         : chunk_capacity_(chunk_size)
-        , head_(nullptr)
-        , buffer_(nullptr)
         , allocator_(allocator)
-        , own_(nullptr)
     {   }
 
-    basic_pool_allocator(void *buffer, size_t size,
+    basic_pool(void *buffer, size_t size,
         std::size_t chunk_size = chunk_capacity, T* allocator = nullptr) noexcept
         : chunk_capacity_(chunk_size)
-        , head_(nullptr)
         , buffer_(buffer)
         , allocator_(allocator)
-        , own_(nullptr)
     {
         assert(buffer);
         assert(size > sizeof(chunk_header));
@@ -63,7 +57,7 @@ public:
         head_->next_ = nullptr;
     }
 
-    ~basic_pool_allocator() noexcept
+    ~basic_pool() noexcept
     {
         clear();
         delete own_;
@@ -168,7 +162,7 @@ private:
             own_ = allocator_ = new T();
 
         chunk_header* chunk = reinterpret_cast<chunk_header*>(
-          allocator_->malloc(BTDEF_ALLOCATOR_ALIGN(sizeof(chunk_header))
+            allocator_->malloc(BTDEF_ALLOCATOR_ALIGN(sizeof(chunk_header))
                                                                 + capacity));
 
         if (chunk)
@@ -184,7 +178,7 @@ private:
     }
 };
 
-typedef basic_pool_allocator<crt> pool_allocator;
+typedef basic_pool<basic<char>> pool;
 
 } // namespace allocator
 } // namespace btdef

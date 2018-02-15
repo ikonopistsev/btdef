@@ -3,6 +3,7 @@
 // terms of the Do What The Fuck You Want To Public License, Version 2,
 // as published by Sam Hocevar. See http://www.wtfpl.net/ for more details.
 
+
 #pragma once
 
 #include "btdef/util/date.hpp"
@@ -13,7 +14,6 @@
 #include "btdef/ref/basic_string_ext.hpp"
 #include "btdef/util/basic_string_ext.hpp"
 #include "btdef/util/basic_text_ext.hpp"
-//#include "btdef/buffer/basic.hpp"
 
 namespace utility {
 
@@ -26,10 +26,7 @@ using btdef::util::date;
 using btdef::util::time_zone;
 using btdef::util::string;
 using btdef::util::text;
-/*
-//using buffer = btdef::buffer::basic<btdef::buffer::detail::iovec_type,
-//    btdef::allocator::basic<char>>;
-*/
+
 namespace num {
 
 using btdef::num::detail::itoa2zf;

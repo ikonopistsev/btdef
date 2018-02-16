@@ -23,7 +23,6 @@ using btdef::util::time::empty_tm;
 using btdef::util::tm;
 using btdef::util::date;
 using btdef::util::time_zone;
-
 using btdef::util::string;
 using btdef::util::text;
 

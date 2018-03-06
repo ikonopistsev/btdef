@@ -9,10 +9,6 @@
 
 #include <memory>
 
-#ifdef BTDEF_TRACE_WRAPPER
-#include <cstdio>
-#endif // BTDEF_TRACE_WRAPPER
-
 namespace btdef {
 namespace allocator {
 
@@ -46,27 +42,14 @@ public:
     pointer allocate(std::size_t n)
     {
         assert(base_);
-#ifdef BTDEF_TRACE_WRAPPER
-        fprintf(stdout, "alloc %d\n", static_cast<int>(n * sizeof(T)));
-#endif
         return reinterpret_cast<pointer>(base_->malloc(n * sizeof(T)));
     }
-
-#ifdef BTDEF_TRACE_WRAPPER
-    void deallocate(pointer ptr, std::size_t n)
-    {
-        assert(base_);
-        fprintf(stdout, "free %d\n", static_cast<int>(n * sizeof(T)));
-        base_->free(ptr);
-    }
-#else
     void deallocate(pointer ptr, std::size_t)
     {
         assert(base_);
         base_->free(ptr);
     }
-#endif
-    // требуется в VC++ и libstdc++
+
     template<class U, class... Args>
     void construct(U* p, Args&&... args)
     {

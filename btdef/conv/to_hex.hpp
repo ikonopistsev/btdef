@@ -5,10 +5,12 @@
 
 #pragma once
 
+#include "btdef/ref/string.hpp"
+
 namespace btdef {
 namespace conv {
 
-static inline const char* to_hex(unsigned char val) noexcept
+static inline btref::string to_hex(unsigned char val) noexcept
 {
     static const char * const t[] = {
         "00", "01", "02", "03", "04", "05", "06", "07",
@@ -45,10 +47,10 @@ static inline const char* to_hex(unsigned char val) noexcept
         "f8", "f9", "fa", "fb", "fc", "fd", "fe", "ff"
     };
 
-    return t[val];
+    return btref::string(t[val], 2);
 }
 
-static inline const char* to_hex(char val) noexcept
+static inline btref::string to_hex(char val) noexcept
 {
     return to_hex(static_cast<unsigned char>(val));
 }

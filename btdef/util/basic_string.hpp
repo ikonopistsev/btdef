@@ -35,8 +35,9 @@ private:
 
     enum {
         start_size = 320u,
-        size_factor = 3u
     };
+
+    static constexpr double size_factor = 1.61803;
 
 public:
     static const size_type npos = static_cast<size_type>(-1);
@@ -143,10 +144,11 @@ public:
     size_type allocate_concatenate(const_pointer value, size_type len) noexcept
     {
         size_type new_capacity = (capacity_) ?
-            capacity_ * size_factor : size_type(start_size);
+            static_cast<size_type>(capacity_ * size_factor)
+                  : size_type(start_size);
 
         if (new_capacity <= len)
-            new_capacity = len * size_factor;
+            new_capacity = len;
 
         pointer ptr = allocator_.allocate(new_capacity, data_);
         if (ptr)
@@ -161,7 +163,8 @@ public:
     size_type allocate_concatenate(value_type value) noexcept
     {
         size_type new_capacity = (capacity_) ?
-            capacity_ * size_factor : size_type(start_size);
+            static_cast<size_type>(capacity_ * size_factor)
+                  : size_type(start_size);
 
         pointer ptr = allocator_.allocate(new_capacity, data_);
         if (ptr)
@@ -176,10 +179,11 @@ public:
     size_type allocate_concatenate(size_type n, value_type value) noexcept
     {
         size_type new_capacity = (capacity_) ?
-            capacity_ * size_factor : size_type(start_size);
+            static_cast<size_type>(capacity_ * size_factor)
+                  : size_type(start_size);
 
         if (new_capacity <= n)
-            new_capacity = n * size_factor;
+            new_capacity = n;
 
         pointer ptr = allocator_.allocate(new_capacity, data_);
         if (ptr)
@@ -194,10 +198,11 @@ public:
     size_type allocate(size_type len) noexcept
     {
         size_type new_capacity = (capacity_) ?
-            capacity_ * size_factor : size_type(start_size);
+            static_cast<size_type>(capacity_ * size_factor)
+                  : size_type(start_size);
 
         if (new_capacity <= len)
-            new_capacity = len * size_factor;
+            new_capacity = len;
 
         pointer ptr = allocator_.allocate(new_capacity, data_);
         if (ptr)

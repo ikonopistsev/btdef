@@ -21,6 +21,7 @@ using btdef::util::time::now;
 using btdef::util::time::steady;
 using btdef::util::time::create_tm;
 using btdef::util::time::empty_tm;
+using btdef::util::mkstr;
 using btdef::util::tm;
 using btdef::util::date;
 using btdef::util::time_zone;

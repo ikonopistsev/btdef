@@ -45,13 +45,14 @@ public:
     value_t operator()(std::size_t& len, const char *ptr) const noexcept
     {
         value_t hval = salt_;
-        while (*ptr != '\0')
+        const char *p = ptr;
+        while (*p != '\0')
         {
-            hval ^= static_cast<value_t>(*ptr++);
+            hval ^= static_cast<value_t>(*p++);
             hval += (hval << 1) + (hval << 4) +
                 (hval << 7) + (hval << 8) + (hval << 24);
-            ++len;
         }
+        len = p - ptr;
         return hval;
     }
 
@@ -64,14 +65,6 @@ public:
             hval += (hval << 1) + (hval << 4) +
                 (hval << 7) + (hval << 8) + (hval << 24);
         }
-        return hval;
-    }
-
-    value_t djb2(const char* p, const char* e) const noexcept
-    {
-        value_t hval = 5381;
-        while (p < e)
-            hval = ((hval << 5) + hval) + static_cast<value_t>(*p++);
         return hval;
     }
 
@@ -120,13 +113,14 @@ public:
     value_t operator()(std::size_t& len, const char *ptr) const noexcept
     {
         value_t hval = salt_;
-        while (*ptr != '\0')
+        const char *p = ptr;
+        while (*p != '\0')
         {
-            hval ^= static_cast<value_t>(*ptr++);
+            hval ^= static_cast<value_t>(*p++);
             hval += (hval << 1) + (hval << 4) + (hval << 5) +
                 (hval << 7) + (hval << 8) + (hval << 40);
-            ++len;
         }
+        len = p - ptr;
         return hval;
     }
 
@@ -139,14 +133,6 @@ public:
             hval += (hval << 1) + (hval << 4) + (hval << 5) +
                 (hval << 7) + (hval << 8) + (hval << 40);
         }
-        return hval;
-    }
-
-    value_t djb2(const char* p, const char* e) const noexcept
-    {
-        value_t hval = 5381;
-        while (p < e)
-            hval = ((hval << 5) + hval) + static_cast<value_t>(*p++);
         return hval;
     }
 

@@ -37,7 +37,7 @@ std::basic_string<T> mkstr(
 {
     std::basic_string<T> result;
     result.reserve(size > N ? size : N);
-    result.append(text_ref.get(), N - 1);
+    result.assign(text_ref.get(), N - 1);
     return result;
 }
     

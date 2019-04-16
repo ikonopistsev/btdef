@@ -1,10 +1,7 @@
 #pragma once
 
+#include "btdef/config.hpp"
 #include "btdef/util/basic_text.hpp"
-
-#ifndef BTDEF_UTIL_TEXT_SIZE
-#define BTDEF_UTIL_TEXT_SIZE 40
-#endif // BTDEF_UTIL_TEXT_SIZE
 
 namespace btdef {
 namespace util {

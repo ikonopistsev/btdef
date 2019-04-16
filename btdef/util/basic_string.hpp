@@ -1,6 +1,7 @@
 #pragma once
 
 #include "btdef/util/text.hpp"
+#include "btdef/allocator/basic.hpp"
 
 #include <stdexcept>
 
@@ -288,7 +289,8 @@ public:
     }
 
     template<std::size_t N>
-    basic_string& operator=(std::reference_wrapper<const value_type[N]> r) noexcept
+    basic_string& operator=(
+        std::reference_wrapper<const value_type[N]> r) noexcept
     {
         assign(r.get(), N - 1);
         return *this;
@@ -511,7 +513,8 @@ public:
     }
 
     template<size_type N>
-    size_type operator+=(std::reference_wrapper<const value_type[N]> ref) noexcept
+    size_type operator+=(
+        std::reference_wrapper<const value_type[N]> ref) noexcept
     {
         return append(ref.get(), N - 1);
     }

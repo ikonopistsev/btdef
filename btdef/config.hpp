@@ -26,6 +26,10 @@
 #define BTDEF_NOEXCEPT
 #endif
 
+#ifndef BTDEF_UTIL_TEXT_SIZE
+#define BTDEF_UTIL_TEXT_SIZE 320
+#endif // BTDEF_UTIL_TEXT_SIZE
+
 /*
  *  from rapidjson (http://rapidjson.org/)
  */
@@ -47,4 +51,6 @@
 #define BTDEF_ALLOCATOR_ALIGN(x) (((x) + 3u) & ~3u)
 #endif // BTDEF_ALLOCATOR_64BIT
 #endif // BTDEF_ALLOCATOR_ALIGN
+
+
 

@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "btdef/config.hpp"
 #include "btdef/util/util.hpp"
 
 #include <cstring>
@@ -31,7 +32,7 @@ public:
     typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
     enum {
-        cache_size = L * sizeof(std::uint64_t),
+        cache_size = BTDEF_ALLOCATOR_ALIGN(L),
         cache_capacity = cache_size - 1
     };
 

@@ -462,7 +462,8 @@ public:
             {
                 util::text result;
                 char* p = result.data();
-                result.increase(std::distance(p, put_json(p, tz)));
+                result.increase(static_cast<std::size_t>(
+                    std::distance(p, put_json(p, tz))));
                 return result;
             }
             return tm::json_text();
@@ -477,7 +478,8 @@ public:
                 util::string::runtime_error(result.reserve(32), "bad alloc");
 
                 char* p = result.data();
-                result.increase(std::distance(p, put_json(p, tz)));
+                result.increase(static_cast<std::size_t>(
+                    std::distance(p, put_json(p, tz))));
                 return result;
             }
             return tm::json();
@@ -581,7 +583,8 @@ public:
             util::string::runtime_error(result.reserve(32), "bad alloc");
 
             char* p = result.data();
-            result.increase(std::distance(p, put_date_json(p)));
+            result.increase(static_cast<std::size_t>(
+                std::distance(p, put_date_json(p))));
             return result;
         }
 
@@ -589,7 +592,8 @@ public:
         {
             util::text result;
             char* p = result.data();
-            result.increase(std::distance(p, put_date_json(p)));
+            result.increase(static_cast<std::size_t>(
+                std::distance(p, put_date_json(p))));
             return result;
         }
 
@@ -605,7 +609,8 @@ public:
             util::string::runtime_error(result.reserve(32), "bad alloc");
 
             char* p = result.data();
-            result.increase(std::distance(p, put_time_json(p)));
+            result.increase(static_cast<std::size_t>(
+                std::distance(p, put_time_json(p))));
             return result;
         }
 
@@ -613,7 +618,8 @@ public:
         {
             util::text result;
             char* p = result.data();
-            result.increase(std::distance(p, put_time_json(p)));
+            result.increase(static_cast<std::size_t>(
+                std::distance(p, put_time_json(p))));
             return result;
         }
     };
@@ -638,7 +644,7 @@ public:
     }
 
     // Returns a time as a string value.
-    // example: "Sat Nov 28 2015 00:05:36 GMT+0300 (RTZ 2 (зима))" using local time
+    // ex: "Sat Nov 28 2015 00:05:36 GMT+0300 (RTZ 2 (зима))" using local time
     std::string to_string() const
     {
         return local(*this).to_string();
@@ -743,8 +749,8 @@ public:
 
         util::text result;
         char* p = result.data();
-        result.increase(std::distance(p,
-            itoa3zf(static_cast<std::uint32_t>(millisecond()), p)));
+        result.increase(static_cast<std::size_t>(std::distance(p,
+            itoa3zf(static_cast<std::uint32_t>(millisecond()), p))));
         return result;
     }
 

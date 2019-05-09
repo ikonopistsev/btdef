@@ -52,7 +52,7 @@ public:
             hval += (hval << 1) + (hval << 4) +
                 (hval << 7) + (hval << 8) + (hval << 24);
         }
-        len = p - ptr;
+        len = static_cast<std::size_t>(p - ptr);
         return hval;
     }
 
@@ -120,7 +120,7 @@ public:
             hval += (hval << 1) + (hval << 4) + (hval << 5) +
                 (hval << 7) + (hval << 8) + (hval << 40);
         }
-        len = p - ptr;
+        len = static_cast<std::size_t>(p - ptr);
         return hval;
     }
 

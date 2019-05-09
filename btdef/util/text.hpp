@@ -1,5 +1,6 @@
 #pragma once
 
+#include "btdef/config.hpp"
 #include "btdef/util/basic_text.hpp"
 
 #ifndef BTDEF_UTIL_TEXT_SIZE

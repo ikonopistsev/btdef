@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "btdef/config.hpp"
 #include "btdef/util/util.hpp"
 #include "btdef/config.hpp"
 

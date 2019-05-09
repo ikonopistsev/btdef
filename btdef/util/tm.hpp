@@ -153,7 +153,8 @@ public:
         util::string::runtime_error(result.reserve(32), "bad alloc");
 
         char* p = result.data();
-        result.increase(std::distance(p, put_json(p)));
+        result.increase(static_cast<std::size_t>(
+            std::distance(p, put_json(p))));
 
         return result;
     }
@@ -162,7 +163,8 @@ public:
     {
         util::text result;
         char* p = result.data();
-        result.increase(std::distance(p, put_json(p)));
+        result.increase(static_cast<std::size_t>(
+            std::distance(p, put_json(p))));
         return result;
     }
 
@@ -246,7 +248,8 @@ public:
 
         util::text result;
         char* p = result.data();
-        result.increase(std::distance(p, itoa3zf(millisecond_,p)));
+        result.increase(static_cast<std::size_t>(
+            std::distance(p, itoa3zf(millisecond_,p))));
         return result;
     }
 

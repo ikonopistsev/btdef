@@ -3,6 +3,7 @@
 #include "btdef/allocator/basic.hpp"
 
 #include <cstring>
+#include <cassert>
 
 namespace btdef {
 namespace allocator {
@@ -114,7 +115,7 @@ public:
 
     void* realloc(void* ptr, std::size_t size, std::size_t new_size) noexcept
     {
-        if (ptr == 0)
+        if (!ptr)
             return malloc(new_size);
 
         if (new_size == 0)

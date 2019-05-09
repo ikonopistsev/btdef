@@ -40,7 +40,7 @@ std::basic_string<T> mkstr(
     result.assign(text_ref.get(), N - 1);
     return result;
 }
-    
+
 } // namespace util
 } // namespace btdef
 

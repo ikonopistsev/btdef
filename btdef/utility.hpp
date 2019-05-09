@@ -59,5 +59,6 @@ using btdef::conv::to_hex;
 namespace ref {
 
 using btref::string;
+using btref::mkstr;
 
 } // namespace ref

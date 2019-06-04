@@ -16,9 +16,7 @@ template<typename T>
 class basic_pool
 {
 public:
-    enum : std::size_t {
-        chunk_capacity = 64 * 1024
-    };
+    static const auto chunk_capacity = std::size_t(64 * 1024);
 
 private:
     struct chunk_header

@@ -556,7 +556,7 @@ public:
     explicit date(const local& l)
     {
         std::tm t = l.data();
-        time_t sec = mktime(&t);
+        time_t sec = std::mktime(&t);
         if (sec == static_cast<time_t>(-1))
             throw std::runtime_error("invalid date");
 

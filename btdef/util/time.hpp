@@ -80,6 +80,22 @@ static inline std::tm empty_tm() noexcept
     return empty;
 }
 
+static inline std::tm empty_tm_dst() noexcept
+{
+    std::tm tmdst = create_tm();
+    // вообще выглядит не очень
+    // но реальность она такая
+    // для mktime, на момент генерации таймстампа,
+    // нужен флаг учета летнего времени
+    // его можно узнать только запросив этот фалг
+    // перед генерацией таймстампа
+    time_t t = std::time(nullptr);
+    // такая вот грабелька
+    tmdst.tm_isdst = localtime(&t)->tm_isdst;
+    return tmdst;
+}
+
+
 } // namespace time
 } // namespace util
 } // namespace btdef

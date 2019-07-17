@@ -1,7 +1,7 @@
 #pragma once
 
 #include "btdef/config.hpp"
-#include "btdef/util/basic_text.hpp"
+#include "btdef/util/basic_text_ext.hpp"
 
 #ifndef BTDEF_UTIL_TEXT_SIZE
 #define BTDEF_UTIL_TEXT_SIZE 320

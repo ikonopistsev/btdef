@@ -6,10 +6,10 @@
 #pragma once
 
 #include "btdef/num/itoa.hpp"
-#include "btdef/util/string.hpp"
 
 #include <stdexcept>
-
+#include <limits>
+#include <cstring>
 #include <cmath>
 
 namespace btdef {

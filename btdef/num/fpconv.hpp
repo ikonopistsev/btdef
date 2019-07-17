@@ -1,8 +1,5 @@
 #pragma once
 
-#include "btdef/util/text.hpp"
-
-#include <string>
 #include <algorithm>
 #include <cstdint>
 #include <cstring>

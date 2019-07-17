@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "btdef/ref/basic_string.hpp"
+#include "btdef/ref/basic_string_ext.hpp"
 
 namespace btref {
 

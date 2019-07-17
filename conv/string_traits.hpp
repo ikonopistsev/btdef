@@ -5,8 +5,9 @@
 
 #pragma once
 
+#include "btdef/config.hpp"
+
 #include <limits>
-#include <cstdint>
 
 namespace btdef {
 namespace conv {
@@ -18,20 +19,20 @@ struct antout
     static constexpr auto pow = 10 * antout<T, N - 1>::pow;
     static constexpr auto size = 1u + antout<T, N - 1>::size;
 
-    static const char* read(const char *ptr, T& res) noexcept
+    static const char* read(const char *ptr, T& res) BTDEF_NOEXCEPT
     {
         res = static_cast<T>(conv(ptr));
         return ptr + size;
     }
 
-    static const char* read(const char *ptr, T i, T& res) noexcept
+    static const char* read(const char *ptr, T i, T& res) BTDEF_NOEXCEPT
     {
         ptr = read(ptr, res);
         res += i;
         return ptr;
     }
 
-    static std::intptr_t conv(const char *ptr) noexcept
+    static std::intptr_t conv(const char *ptr) BTDEF_NOEXCEPT
     {
         auto i = *ptr++ - '0';
         if ((i < 0) || (i > 9))
@@ -46,20 +47,20 @@ struct antout<T, 1>
     static constexpr auto pow = 1;
     static constexpr auto size = 1u;
 
-    static const char* read(const char *ptr, T& res) noexcept
+    static const char* read(const char *ptr, T& res) BTDEF_NOEXCEPT
     {
         res = static_cast<T>(conv(ptr));
         return ptr + size;
     }
 
-    static const char* read(const char *ptr, T i, T& res) noexcept
+    static const char* read(const char *ptr, T i, T& res) BTDEF_NOEXCEPT
     {
         ptr = read(ptr, res);
         res += i;
         return ptr;
     }
 
-    static std::intptr_t conv(const char *ptr) noexcept
+    static std::intptr_t conv(const char *ptr) BTDEF_NOEXCEPT
     {
         auto i = *ptr - '0';
         if ((i < 0) || (i > 9))
@@ -73,27 +74,27 @@ struct antout<T, 1>
 // return UNSIGNED result as SIGNED value;
 // if result < 0 then parse error;
 template<std::size_t N>
-static std::intptr_t antout(const char *ptr) noexcept
+static std::intptr_t antout(const char *ptr) BTDEF_NOEXCEPT
 {
     return detail::antout<std::intptr_t, N>::conv(ptr);
 }
 
 template<std::size_t N, typename T>
-static const char* antoutp(const char *ptr, T& res) noexcept
+static const char* antoutp(const char *ptr, T& res) BTDEF_NOEXCEPT
 {
     return detail::antout<T, N>::read(ptr, res);
 }
 
 // i - init value
 template<std::size_t N, typename T>
-static const char* antoutp(const char *ptr, T i, T& res) noexcept
+static const char* antoutp(const char *ptr, T i, T& res) BTDEF_NOEXCEPT
 {
     return detail::antout<T, N>::read(ptr, i, res);
 }
 
 // return UNSIGNED result as SIGNED value;
 // if result < 0 then parse error;
-static inline std::intptr_t antou(const char *ptr, std::size_t n) noexcept
+static inline std::intptr_t antou(const char *ptr, std::size_t n) BTDEF_NOEXCEPT
 {
     std::intptr_t res = 0;
     switch (n)

@@ -55,8 +55,8 @@ split(double val, std::size_t precision)
     if (val > max_val)
         throw std::range_error("too large real");
 
-    const auto ull = static_cast<std::uint64_t>(val);
-    const auto rval = ull % exp;
+    const std::uint64_t ull = static_cast<std::uint64_t>(val);
+    const std::uint64_t rval = ull % exp;
     return std::make_pair((ull - rval) / exp, rval);
 }
 

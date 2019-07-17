@@ -18,7 +18,7 @@ struct hash<btref::basic_string<char>>
     typedef size_t result_type;
     typedef btref::basic_string<char> argument_type;
 
-    size_t operator()(argument_type str) const noexcept
+    size_t operator()(argument_type str) const BTDEF_NOEXCEPT
     {
         btdef::hash::fnv1a fn;
         return static_cast<size_t>(fn(str.data(), str.size()));
@@ -77,42 +77,42 @@ std::basic_ostream<C, T>& operator<<(std::basic_ostream<C, T>& os,
 
 template<typename C, typename T, typename A>
 bool operator==(const std::basic_string<C, T, A>& lhs,
-    const btref::basic_string<C>& rhs) noexcept
+    const btref::basic_string<C>& rhs) BTDEF_NOEXCEPT
 {
     return rhs == lhs;
 }
 
 template<typename C, typename T, typename A>
 bool operator!=(const std::basic_string<C, T, A>& lhs,
-    const btref::basic_string<C>& rhs) noexcept
+    const btref::basic_string<C>& rhs) BTDEF_NOEXCEPT
 {
     return !(lhs == rhs);
 }
 
 template<typename C, typename T, typename A>
 bool operator<(const std::basic_string<C, T, A>& lhs,
-    const btref::basic_string<C>& rhs) noexcept
+    const btref::basic_string<C>& rhs) BTDEF_NOEXCEPT
 {
     return rhs > lhs;
 }
 
 template<typename C, typename T, typename A>
 bool operator>(const std::basic_string<C, T, A>& lhs,
-    const btref::basic_string<C>& rhs) noexcept
+    const btref::basic_string<C>& rhs) BTDEF_NOEXCEPT
 {
     return rhs < lhs;
 }
 
 template<typename C, typename T, typename A>
 bool operator<=(const std::basic_string<C, T, A>& lhs,
-    const btref::basic_string<C>& rhs) noexcept
+    const btref::basic_string<C>& rhs) BTDEF_NOEXCEPT
 {
     return !(rhs < lhs);
 }
 
 template<typename C, typename T, typename A>
 bool operator>=(const std::basic_string<C, T, A>& lhs,
-    const btref::basic_string<C>& rhs) noexcept
+    const btref::basic_string<C>& rhs) BTDEF_NOEXCEPT
 {
     return !(lhs < rhs);
 }

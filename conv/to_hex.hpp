@@ -10,7 +10,7 @@
 namespace btdef {
 namespace conv {
 
-static inline btref::string to_hex(unsigned char val) noexcept
+static inline btref::string to_hex(unsigned char val) BTDEF_NOEXCEPT
 {
     static const char * const t[] = {
         "00", "01", "02", "03", "04", "05", "06", "07",
@@ -50,7 +50,7 @@ static inline btref::string to_hex(unsigned char val) noexcept
     return btref::string(t[val], 2);
 }
 
-static inline btref::string to_hex(char val) noexcept
+static inline btref::string to_hex(char val) BTDEF_NOEXCEPT
 {
     return to_hex(static_cast<unsigned char>(val));
 }

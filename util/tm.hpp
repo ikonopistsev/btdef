@@ -35,73 +35,73 @@ protected:
         md = 1
     };
 
-    tm() noexcept
+    tm() BTDEF_NOEXCEPT
         : tm_(time::empty_tm())
         , millisecond_(0)
     {   }
 
 public:
-    tm(const std::tm& stdtm, millisecond_t ms) noexcept
+    tm(const std::tm& stdtm, millisecond_t ms) BTDEF_NOEXCEPT
         : tm_(stdtm)
         , millisecond_(ms)
     {  }
 
-    tm(const tm_t& val) noexcept
+    tm(const tm_t& val) BTDEF_NOEXCEPT
         : tm_(val.first)
         , millisecond_(val.second)
     {   }
 
-    std::intptr_t year() const noexcept
+    std::intptr_t year() const BTDEF_NOEXCEPT
     {
         return tm_.tm_year + yd;
     }
 
-    std::intptr_t mon() const noexcept
+    std::intptr_t mon() const BTDEF_NOEXCEPT
     {
         return tm_.tm_mon + md;
     }
 
-    std::intptr_t mday() const noexcept
+    std::intptr_t mday() const BTDEF_NOEXCEPT
     {
         return tm_.tm_mday;
     }
 
-    std::intptr_t wday() const noexcept
+    std::intptr_t wday() const BTDEF_NOEXCEPT
     {
         return tm_.tm_wday;
     }
 
-    std::intptr_t yday() const noexcept
+    std::intptr_t yday() const BTDEF_NOEXCEPT
     {
         return tm_.tm_yday;
     }
 
-    std::intptr_t hour() const noexcept
+    std::intptr_t hour() const BTDEF_NOEXCEPT
     {
         return tm_.tm_hour;
     }
 
-    std::intptr_t min() const noexcept
+    std::intptr_t min() const BTDEF_NOEXCEPT
     {
         return tm_.tm_min;
     }
 
-    std::intptr_t sec() const noexcept
+    std::intptr_t sec() const BTDEF_NOEXCEPT
     {
         return tm_.tm_sec;
     }
 
-    millisecond_t msec() const noexcept
+    millisecond_t msec() const BTDEF_NOEXCEPT
     {
         return millisecond_;
     }
 
-    const std::tm& data() const noexcept
+    const std::tm& data() const BTDEF_NOEXCEPT
     {
         return tm_;
     }
 
-    char* put_date_json(char *p) const noexcept
+    char* put_date_json(char *p) const BTDEF_NOEXCEPT
     {
         using num::detail::itoa2zf;
         using num::detail::itoa4zf;
@@ -115,7 +115,7 @@ public:
         return p;
     }
 
-    char* put_time_json(char *p) const noexcept
+    char* put_time_json(char *p) const BTDEF_NOEXCEPT
     {
         using num::detail::itoa2zf;
         using num::detail::itoa3zf;
@@ -131,7 +131,7 @@ public:
         return p;
     }
 
-    char* put_json(char *p) const noexcept
+    char* put_json(char *p) const BTDEF_NOEXCEPT
     {
         p = put_date_json(p);
         *p++ = 'T';
@@ -159,7 +159,7 @@ public:
         return result;
     }
 
-    util::text json_text() const noexcept
+    util::text json_text() const BTDEF_NOEXCEPT
     {
         util::text result;
         char* p = result.data();
@@ -215,7 +215,7 @@ public:
         return str(fmt, std::strlen(fmt));
     }
 
-    util::text text(const char *fmt) const noexcept
+    util::text text(const char *fmt) const BTDEF_NOEXCEPT
     {
         assert(fmt);
 
@@ -237,12 +237,12 @@ public:
         return str("%a, %d %b %Y %H:%M:%S GMT");
     }
 
-    util::text text() const noexcept
+    util::text text() const BTDEF_NOEXCEPT
     {
         return text("%a, %d %b %Y %H:%M:%S GMT");
     }
 
-    util::text millisecond() const noexcept
+    util::text millisecond() const BTDEF_NOEXCEPT
     {
         using num::detail::itoa3zf;
 
@@ -259,7 +259,7 @@ public:
         return std::string(t.data(), t.size());
     }
 
-    util::text locale_text() const noexcept
+    util::text locale_text() const BTDEF_NOEXCEPT
     {
         return text("%x, %X");
     }
@@ -269,12 +269,12 @@ public:
         return str("%x, %X");
     }
 
-    util::text zone() const noexcept
+    util::text zone() const BTDEF_NOEXCEPT
     {
         return util::text(std::cref("+0000"));
     }
 
-    util::text zonename() const noexcept
+    util::text zonename() const BTDEF_NOEXCEPT
     {
         return util::text(std::cref("GMT"));
     }

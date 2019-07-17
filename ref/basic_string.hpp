@@ -30,7 +30,7 @@ struct empty_string;
 template<>
 struct empty_string<char>
 {
-    static inline const char* value() noexcept
+    static inline const char* value() BTDEF_NOEXCEPT
     {
         return "";
     }
@@ -39,7 +39,7 @@ struct empty_string<char>
 template<>
 struct empty_string<wchar_t>
 {
-    static inline const wchar_t* value() noexcept
+    static inline const wchar_t* value() BTDEF_NOEXCEPT
     {
         return L"";
     }
@@ -65,15 +65,15 @@ private:
 
     // res::string::с_str() is not allow
     // use data() and size() to get part of string
-    const_pointer c_str() const noexcept;
+    const_pointer c_str() const BTDEF_NOEXCEPT;
 
 public:
 
-    static const auto npos = static_cast<size_type>(-1);
+    static const size_type npos = static_cast<size_type>(-1);
 
     basic_string() = default;
 
-    basic_string(const_pointer ptr, size_type size) noexcept
+    basic_string(const_pointer ptr, size_type size) BTDEF_NOEXCEPT
         : ptr_(ptr)
         , size_(size)
     {   }
@@ -83,71 +83,71 @@ public:
     basic_string(const_pointer) = delete;
 
     template<size_type N>
-    basic_string(std::reference_wrapper<const C[N]> str) noexcept
+    basic_string(std::reference_wrapper<const C[N]> str) BTDEF_NOEXCEPT
         : basic_string(str.get(), N - 1)
     {   }
 
     template<class T>
-    basic_string(const T& str) noexcept
+    basic_string(const T& str) BTDEF_NOEXCEPT
         : basic_string(str.data(), str.size())
     {   }
 
-    const_iterator cbegin() const noexcept
+    const_iterator cbegin() const BTDEF_NOEXCEPT
     {
         return ptr_;
     }
 
-    const_iterator cend() const noexcept
+    const_iterator cend() const BTDEF_NOEXCEPT
     {
         return ptr_ + size_;
     }
 
-    const_iterator begin() const noexcept
+    const_iterator begin() const BTDEF_NOEXCEPT
     {
         return cbegin();
     }
 
-    const_iterator end() const noexcept
+    const_iterator end() const BTDEF_NOEXCEPT
     {
         return cend();
     }
 
-    const_reverse_iterator rbegin() const noexcept
+    const_reverse_iterator rbegin() const BTDEF_NOEXCEPT
     {
         return const_reverse_iterator(end());
     }
 
-    const_reverse_iterator rend() const noexcept
+    const_reverse_iterator rend() const BTDEF_NOEXCEPT
     {
         return const_reverse_iterator(begin());
     }
 
-    const_reverse_iterator crbegin() const noexcept
+    const_reverse_iterator crbegin() const BTDEF_NOEXCEPT
     {
         return const_reverse_iterator(end());
     }
 
-    const_reverse_iterator crend() const noexcept
+    const_reverse_iterator crend() const BTDEF_NOEXCEPT
     {
         return const_reverse_iterator(begin());
     }
 
-    const_pointer data() const noexcept
+    const_pointer data() const BTDEF_NOEXCEPT
     {
         return ptr_;
     }
 
-    bool empty() const noexcept
+    bool empty() const BTDEF_NOEXCEPT
     {
         return size_ == 0;
     }
 
-    size_type size() const noexcept
+    size_type size() const BTDEF_NOEXCEPT
     {
         return size_;
     }
 
-    int compare(const_pointer value, size_type len) const noexcept
+    int compare(const_pointer value, size_type len) const BTDEF_NOEXCEPT
     {
         int ret = std::memcmp(ptr_, value, (std::min)(size_, len));
         if (!ret)
@@ -161,7 +161,7 @@ public:
     }
 
     int compare(size_type pos, size_type count1,
-        const_pointer value, size_type count2) const noexcept
+        const_pointer value, size_type count2) const BTDEF_NOEXCEPT
     {
         if (pos < size_)
             count1 = (std::min)(size_ - pos, count1);
@@ -179,91 +179,91 @@ public:
         return ret;
     }
 
-    int compare(this_type other) const noexcept
+    int compare(this_type other) const BTDEF_NOEXCEPT
     {
         return compare(other.data(), other.size());
     }
 
     template<class T>
-    int compare(const T& other) const noexcept
+    int compare(const T& other) const BTDEF_NOEXCEPT
     {
         return compare(other.data(), other.size());
     }
 
-    int compare(size_type pos, size_type len, this_type other) const noexcept
+    int compare(size_type pos, size_type len, this_type other) const BTDEF_NOEXCEPT
     {
         return compare(pos, len, other.data(), other.size());
     }
 
     template<class T>
-    int compare(size_type pos, size_type len, const T& other) const noexcept
+    int compare(size_type pos, size_type len, const T& other) const BTDEF_NOEXCEPT
     {
         return compare(pos, len, other.data(), other.size());
     }
 
-    int compare(const_pointer value) const noexcept
+    int compare(const_pointer value) const BTDEF_NOEXCEPT
     {
         assert(value);
         return compare(value, std::strlen(value));
     }
 
     int compare(size_type pos, size_type len,
-        const_pointer value) const noexcept
+        const_pointer value) const BTDEF_NOEXCEPT
     {
         assert(value);
         return compare(pos, len, value, std::strlen(value));
     }
 
-    bool operator==(this_type other) const noexcept
+    bool operator==(this_type other) const BTDEF_NOEXCEPT
     {
         return compare(other) == 0;
     }
 
-    bool operator==(const_pointer value) const noexcept
+    bool operator==(const_pointer value) const BTDEF_NOEXCEPT
     {
         return compare(value) == 0;
     }
 
     template<size_type N>
-    bool operator==(std::reference_wrapper<const C[N]> ref) const noexcept
+    bool operator==(std::reference_wrapper<const C[N]> ref) const BTDEF_NOEXCEPT
     {
         return compare(ref.get(), N - 1) == 0;
     }
 
     template<class T>
-    bool operator==(const T& str) const noexcept
+    bool operator==(const T& str) const BTDEF_NOEXCEPT
     {
         return compare(str.data(), str.size()) == 0;
     }
 
-    bool operator<(this_type other) const noexcept
+    bool operator<(this_type other) const BTDEF_NOEXCEPT
     {
         return compare(other) < 0;
     }
 
-    bool operator<(const_pointer value) const noexcept
+    bool operator<(const_pointer value) const BTDEF_NOEXCEPT
     {
         return compare(value) < 0;
     }
 
     template<size_type N>
-    bool operator<(std::reference_wrapper<const C[N]> ref) const noexcept
+    bool operator<(std::reference_wrapper<const C[N]> ref) const BTDEF_NOEXCEPT
     {
         return compare(ref.get(), N - 1) < 0;
     }
 
     template<class T>
-    bool operator<(const T& str) const noexcept
+    bool operator<(const T& str) const BTDEF_NOEXCEPT
     {
         return compare(str.data(), str.size()) < 0;
     }
 
-    bool starts_with(this_type x) const noexcept
+    bool starts_with(this_type x) const BTDEF_NOEXCEPT
     {
         return size_ >= x.size_ && (std::memcmp(ptr_, x.ptr_, x.size_) == 0);
     }
 
-    bool ends_with(this_type x) const noexcept
+    bool ends_with(this_type x) const BTDEF_NOEXCEPT
     {
         return size_ >= x.size_ &&
            (std::memcmp(ptr_ + (size_ - x.size_), x.ptr_, x.size_) == 0);
@@ -271,13 +271,13 @@ public:
 
     size_type find(this_type s) const
     {
-        auto it = std::search(cbegin(), cend(), s.cbegin(), s.cend());
+        const_iterator it = std::search(cbegin(), cend(), s.cbegin(), s.cend());
         return it == cend() ? npos : std::distance(cbegin(), it);
     }
 
     size_type find(value_t c) const
     {
-        auto it = std::find(cbegin(), cend(), c);
+        const_iterator it = std::find(cbegin(), cend(), c);
         return it == cend() ? npos : std::distance(cbegin(), it);
     }
 
@@ -335,24 +335,24 @@ public:
         return this_type(ptr_ + pos, n);
     }
 
-    void assign(this_type other) noexcept
+    void assign(this_type other) BTDEF_NOEXCEPT
     {
         *this = other;
     }
 
     template<std::size_t N>
-    void assign(std::reference_wrapper<const C[N]> str_ref) noexcept
+    void assign(std::reference_wrapper<const C[N]> str_ref) BTDEF_NOEXCEPT
     {
         *this = this_type(str_ref);
     }
 
-    void assign(const_pointer str, size_type size) noexcept
+    void assign(const_pointer str, size_type size) BTDEF_NOEXCEPT
     {
         *this = this_type(str, size);
     }
 
     template<class T>
-    void assign(const T& str) noexcept
+    void assign(const T& str) BTDEF_NOEXCEPT
     {
         *this = this_type(str.data(), str.size());
     }
@@ -367,7 +367,7 @@ public:
         return at(size_ - 1);
     }
 
-    const value_t& operator[](size_type pos) const noexcept
+    const value_t& operator[](size_type pos) const BTDEF_NOEXCEPT
     {
         assert(pos < size_);
         return ptr_[pos];
@@ -387,37 +387,37 @@ public:
 // ---- btdef::util::basic_string same type
 
 template<class C>
-bool operator==(btref::basic_string<C> lhs, btref::basic_string<C> rhs) noexcept
+bool operator==(btref::basic_string<C> lhs, btref::basic_string<C> rhs) BTDEF_NOEXCEPT
 {
     return lhs.compare(rhs) == 0;
 }
 
 template<class C>
-bool operator!=(btref::basic_string<C> lhs, btref::basic_string<C> rhs) noexcept
+bool operator!=(btref::basic_string<C> lhs, btref::basic_string<C> rhs) BTDEF_NOEXCEPT
 {
     return !(lhs == rhs);
 }
 
 template<class C>
-bool operator<(btref::basic_string<C> lhs, btref::basic_string<C> rhs) noexcept
+bool operator<(btref::basic_string<C> lhs, btref::basic_string<C> rhs) BTDEF_NOEXCEPT
 {
     return lhs.compare(rhs) < 0;
 }
 
 template<class C>
-bool operator>(btref::basic_string<C> lhs, btref::basic_string<C> rhs) noexcept
+bool operator>(btref::basic_string<C> lhs, btref::basic_string<C> rhs) BTDEF_NOEXCEPT
 {
     return rhs < lhs;
 }
 
 template<class C>
-bool operator<=(btref::basic_string<C> lhs, btref::basic_string<C> rhs) noexcept
+bool operator<=(btref::basic_string<C> lhs, btref::basic_string<C> rhs) BTDEF_NOEXCEPT
 {
     return !(rhs < lhs);
 }
 
 template<class C>
-bool operator>=(btref::basic_string<C> lhs, btref::basic_string<C> rhs) noexcept
+bool operator>=(btref::basic_string<C> lhs, btref::basic_string<C> rhs) BTDEF_NOEXCEPT
 {
     return !(lhs < rhs);
 }
@@ -428,42 +428,42 @@ bool operator>=(btref::basic_string<C> lhs, btref::basic_string<C> rhs) noexcept
 
 template<class C, class A>
 bool operator==(const btdef::util::basic_string<C, A>& lhs,
-    const C* rhs) noexcept
+    const C* rhs) BTDEF_NOEXCEPT
 {
     return lhs.compare(rhs) == 0;
 }
 
 template<class C, class A>
 bool operator!=(const btdef::util::basic_string<C, A>& lhs,
-    const C* rhs) noexcept
+    const C* rhs) BTDEF_NOEXCEPT
 {
     return !(lhs == rhs);
 }
 
 template<class C, class A>
 bool operator<(const btdef::util::basic_string<C, A>& lhs,
-    const C* rhs) noexcept
+    const C* rhs) BTDEF_NOEXCEPT
 {
     return lhs.compare(rhs) < 0;
 }
 
 template<class C, class A>
 bool operator>(const btdef::util::basic_string<C, A>& lhs,
-    const C* rhs) noexcept
+    const C* rhs) BTDEF_NOEXCEPT
 {
     return lhs.compare(rhs) > 0;
 }
 
 template<class C, class A>
 bool operator<=(const btdef::util::basic_string<C, A>& lhs,
-    const C* rhs) noexcept
+    const C* rhs) BTDEF_NOEXCEPT
 {
     return !(rhs < lhs);
 }
 
 template<class C, class A>
 bool operator>=(const btdef::util::basic_string<C, A>& lhs,
-    const C* rhs) noexcept
+    const C* rhs) BTDEF_NOEXCEPT
 {
     return !(lhs < rhs);
 }
@@ -474,42 +474,42 @@ bool operator>=(const btdef::util::basic_string<C, A>& lhs,
 
 template<class C, template<class> class F>
 bool operator==(btref::basic_string<C> lhs,
-    const F<C>& rhs) noexcept
+    const F<C>& rhs) BTDEF_NOEXCEPT
 {
     return lhs.compare(rhs) == 0;
 }
 
 template<class C, class F>
 bool operator!=(btref::basic_string<C> lhs,
-    const F& rhs) noexcept
+    const F& rhs) BTDEF_NOEXCEPT
 {
     return !(lhs == rhs);
 }
 
 template<class C, class F>
 bool operator<(btref::basic_string<C> lhs,
-    const F& rhs) noexcept
+    const F& rhs) BTDEF_NOEXCEPT
 {
     return lhs.compare(rhs) < 0;
 }
 
 template<class C, class F>
 bool operator>(btref::basic_string<C> lhs,
-    const F& rhs) noexcept
+    const F& rhs) BTDEF_NOEXCEPT
 {
     return lhs.compare(rhs) > 0;
 }
 
 template<class C, class F>
 bool operator<=(btref::basic_string<C> lhs,
-    const F& rhs) noexcept
+    const F& rhs) BTDEF_NOEXCEPT
 {
     return !(rhs < lhs);
 }
 
 template<class C, class F>
 bool operator>=(btref::basic_string<C> lhs,
-    const F& rhs) noexcept
+    const F& rhs) BTDEF_NOEXCEPT
 {
     return !(lhs < rhs);
 }

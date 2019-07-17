@@ -17,7 +17,7 @@
 namespace btdef {
 namespace conv {
 
-static inline btdef::util::text to_hex(const char *ptr, std::size_t len) noexcept
+static inline btdef::util::text to_hex(const char *ptr, std::size_t len) BTDEF_NOEXCEPT
 {
     assert(ptr);
     assert(len < btdef::util::text::cache_capacity / 2);
@@ -32,7 +32,7 @@ static inline btdef::util::text to_hex(const char *ptr, std::size_t len) noexcep
     return result;
 }
 
-static inline btdef::util::text to_hex(std::uint64_t val) noexcept
+static inline btdef::util::text to_hex(std::uint64_t val) BTDEF_NOEXCEPT
 {
     btdef::util::text result;
 #ifndef htonll
@@ -53,7 +53,7 @@ static inline btdef::util::text to_hex(std::uint64_t val) noexcept
     return result;
 }
 
-static inline btdef::util::text to_hex(std::uint32_t val) noexcept
+static inline btdef::util::text to_hex(std::uint32_t val) BTDEF_NOEXCEPT
 {
 
     btdef::util::text result;
@@ -67,7 +67,7 @@ static inline btdef::util::text to_hex(std::uint32_t val) noexcept
     return result;
 }
 
-static inline btdef::util::text to_hex(std::uint16_t val) noexcept
+static inline btdef::util::text to_hex(std::uint16_t val) BTDEF_NOEXCEPT
 {
 
     btdef::util::text result;
@@ -81,27 +81,27 @@ static inline btdef::util::text to_hex(std::uint16_t val) noexcept
     return result;
 }
 
-static inline btdef::util::text to_hex(std::int64_t val) noexcept
+static inline btdef::util::text to_hex(std::int64_t val) BTDEF_NOEXCEPT
 {
     return to_hex(static_cast<std::uint64_t>(val));
 }
 
-static inline btdef::util::text to_hex(std::int32_t val) noexcept
+static inline btdef::util::text to_hex(std::int32_t val) BTDEF_NOEXCEPT
 {
     return to_hex(static_cast<std::uint64_t>(val));
 }
 
-static inline btdef::util::text to_hex(unsigned long long val) noexcept
+static inline btdef::util::text to_hex(unsigned long long val) BTDEF_NOEXCEPT
 {
     return to_hex(static_cast<std::uint64_t>(val));
 }
 
-static inline btdef::util::text to_hex(long long val) noexcept
+static inline btdef::util::text to_hex(long long val) BTDEF_NOEXCEPT
 {
     return to_hex(static_cast<std::uint64_t>(val));
 }
 
-static inline btdef::util::text to_hex(short val) noexcept
+static inline btdef::util::text to_hex(short val) BTDEF_NOEXCEPT
 {
     return to_hex(static_cast<std::uint16_t>(val));
 }

@@ -11,7 +11,7 @@ template<class A>
 struct hash<btdef::util::basic_string<char, A>>
 {
     size_t
-    operator()(const btdef::util::basic_string<char, A>& str) const noexcept
+    operator()(const btdef::util::basic_string<char, A>& str) const BTDEF_NOEXCEPT
     {
         btdef::hash::fnv1a fn;
         return static_cast<size_t>(fn(str.data(), str.size()));
@@ -83,42 +83,42 @@ std::basic_ostream<C, T>& operator<<(std::basic_ostream<C, T>& os,
 
 template<typename C, typename T, typename A1, typename A2>
 bool operator==(const std::basic_string<C, T, A1>& lhs,
-    const btdef::util::basic_string<C, A2>& rhs) noexcept
+    const btdef::util::basic_string<C, A2>& rhs) BTDEF_NOEXCEPT
 {
     return rhs == lhs;
 }
 
 template<typename C, typename T, typename A1, typename A2>
 bool operator!=(const std::basic_string<C, T, A1>& lhs,
-    const btdef::util::basic_string<C, A2>& rhs) noexcept
+    const btdef::util::basic_string<C, A2>& rhs) BTDEF_NOEXCEPT
 {
     return !(lhs == rhs);
 }
 
 template<typename C, typename T, typename A1, typename A2>
 bool operator<(const std::basic_string<C, T, A1>& lhs,
-    const btdef::util::basic_string<C, A2>& rhs) noexcept
+    const btdef::util::basic_string<C, A2>& rhs) BTDEF_NOEXCEPT
 {
     return rhs > lhs;
 }
 
 template<typename C, typename T, typename A1, typename A2>
 bool operator>(const std::basic_string<C, T, A1>& lhs,
-    const btdef::util::basic_string<C, A2>& rhs) noexcept
+    const btdef::util::basic_string<C, A2>& rhs) BTDEF_NOEXCEPT
 {
     return rhs < lhs;
 }
 
 template<typename C, typename T, typename A1, typename A2>
 bool operator<=(const std::basic_string<C, T, A1>& lhs,
-    const btdef::util::basic_string<C, A2>& rhs) noexcept
+    const btdef::util::basic_string<C, A2>& rhs) BTDEF_NOEXCEPT
 {
     return !(rhs < lhs);
 }
 
 template<typename C, typename T, typename A1, typename A2>
 bool operator>=(const std::basic_string<C, T, A1>& lhs,
-    const btdef::util::basic_string<C, A2>& rhs) noexcept
+    const btdef::util::basic_string<C, A2>& rhs) BTDEF_NOEXCEPT
 {
     return !(lhs < rhs);
 }

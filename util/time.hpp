@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include "btdef/config.hpp"
+
 #include <ctime>
 #include <cstring>
 #include <chrono>
@@ -31,7 +33,7 @@ typedef timeval timeval_t;
 #define UTIL_U64(x) x##ULL
 #endif
 
-static inline ULONGLONG to_quad_100ns(FILETIME ft) noexcept
+static inline ULONGLONG to_quad_100ns(FILETIME ft) BTDEF_NOEXCEPT
 {
     ULARGE_INTEGER li;
     li.LowPart = ft.dwLowDateTime;
@@ -39,7 +41,7 @@ static inline ULONGLONG to_quad_100ns(FILETIME ft) noexcept
     return li.QuadPart;
 }
 
-static inline time_point_t to_time_point_from_100ns(ULONGLONG ns100) noexcept
+static inline time_point_t to_time_point_from_100ns(ULONGLONG ns100) BTDEF_NOEXCEPT
 {
     using std::chrono::time_point;
     using std::chrono::nanoseconds;
@@ -48,7 +50,7 @@ static inline time_point_t to_time_point_from_100ns(ULONGLONG ns100) noexcept
         time_point<system_clock, nanoseconds>(nanoseconds(ns100 * 100)));
 }
 
-static inline time_point_t now(FILETIME ft) noexcept
+static inline time_point_t now(FILETIME ft) BTDEF_NOEXCEPT
 {
     static constexpr auto delta = UTIL_U64(116444736000000000);
     auto time = to_quad_100ns(ft);
@@ -57,30 +59,30 @@ static inline time_point_t now(FILETIME ft) noexcept
 }
 #endif
 
-static inline time_point_t now() noexcept
+static inline time_point_t now() BTDEF_NOEXCEPT
 {
     return std::chrono::system_clock::now();
 }
 
-static inline steady_point_t steady() noexcept
+static inline steady_point_t steady() BTDEF_NOEXCEPT
 {
     return std::chrono::steady_clock::now();
 }
 
-static inline std::tm create_tm() noexcept
+static inline std::tm create_tm() BTDEF_NOEXCEPT
 {
     std::tm result;
     std::memset(&result, 0, sizeof(result));
     return result;
 }
 
-static inline std::tm empty_tm() noexcept
+static inline std::tm empty_tm() BTDEF_NOEXCEPT
 {
     static std::tm empty = create_tm();
     return empty;
 }
 
-static inline std::tm empty_tm_dst() noexcept
+static inline std::tm empty_tm_dst() BTDEF_NOEXCEPT
 {
     std::tm tmdst = create_tm();
     // вообще выглядит не очень

@@ -18,11 +18,6 @@ struct hash<btdef::util::basic_string<char, A>>
     }
 };
 
-} // namespace std
-
-namespace btdef {
-namespace util {
-    
 template<typename T, std::size_t N>
 std::basic_string<T> mkstr(
     std::reference_wrapper<const T[N]> text_ref)
@@ -32,10 +27,33 @@ std::basic_string<T> mkstr(
 
 template<typename T, std::size_t N>
 std::basic_string<T> mkstr(
-    std::reference_wrapper<const T[N]> text_ref, 
+    std::reference_wrapper<const T[N]> text_ref,
     const std::size_t size)
 {
     std::basic_string<T> result;
+    result.reserve(size > N ? size : N);
+    result.assign(text_ref.get(), N - 1);
+    return result;
+}
+
+} // namespace std
+
+namespace btdef {
+namespace util {
+
+template<typename T, std::size_t N>
+basic_string<T, allocator::basic<T>> mkstr(
+    std::reference_wrapper<const T[N]> text_ref)
+{
+    return basic_string<T, allocator::basic<T>>(text_ref.get(), N - 1);
+}
+
+template<typename T, std::size_t N>
+basic_string<T, allocator::basic<T>> mkstr(
+    std::reference_wrapper<const T[N]> text_ref,
+    const std::size_t size)
+{
+    basic_string<T, allocator::basic<T>> result;
     result.reserve(size > N ? size : N);
     result.assign(text_ref.get(), N - 1);
     return result;

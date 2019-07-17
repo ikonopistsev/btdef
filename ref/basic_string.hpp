@@ -6,6 +6,8 @@
 #pragma once
 
 #include "btdef/hash/fnv1a.hpp"
+#include "btdef/util/basic_text.hpp"
+#include "btdef/util/basic_string.hpp"
 
 #include <iosfwd>
 #include <string>

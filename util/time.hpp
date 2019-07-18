@@ -91,9 +91,15 @@ static inline std::tm empty_tm_dst() BTDEF_NOEXCEPT
     // нужен флаг учета летнего времени
     // его можно узнать только запросив этот фалг
     // перед генерацией таймстампа
+    std::tm tmst;
     time_t t = std::time(nullptr);
+#if defined(WIN32) || defined(_WIN32)
+    localtime_s(&tmst, &t);
+#else
+    localtime_r(&t, &tmst);
+#endif
     // такая вот грабелька
-    tmdst.tm_isdst = localtime(&t)->tm_isdst;
+    tmdst.tm_isdst = tmst.tm_isdst;
     return tmdst;
 }
 

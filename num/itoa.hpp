@@ -413,16 +413,6 @@ static inline char* itoa(std::int64_t value, char *ptr) BTDEF_NOEXCEPT
     return itoa(u, ptr);
 }
 
-static inline char* itoa(long long value, char *ptr) BTDEF_NOEXCEPT
-{
-    return itoa(static_cast<std::int64_t>(value), ptr);
-}
-
-static inline char* itoa(unsigned long long value, char *ptr) BTDEF_NOEXCEPT
-{
-    return itoa(static_cast<std::uint64_t>(value), ptr);
-}
-
 } // namespace detail
 
 template<typename T>

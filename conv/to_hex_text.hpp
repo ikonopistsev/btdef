@@ -91,17 +91,7 @@ static inline btdef::util::text to_hex(std::int32_t val) BTDEF_NOEXCEPT
     return to_hex(static_cast<std::uint64_t>(val));
 }
 
-static inline btdef::util::text to_hex(unsigned long long val) BTDEF_NOEXCEPT
-{
-    return to_hex(static_cast<std::uint64_t>(val));
-}
-
-static inline btdef::util::text to_hex(long long val) BTDEF_NOEXCEPT
-{
-    return to_hex(static_cast<std::uint64_t>(val));
-}
-
-static inline btdef::util::text to_hex(short val) BTDEF_NOEXCEPT
+static inline btdef::util::text to_hex(std::int16_t val) BTDEF_NOEXCEPT
 {
     return to_hex(static_cast<std::uint16_t>(val));
 }

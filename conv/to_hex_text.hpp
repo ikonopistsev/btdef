@@ -17,7 +17,8 @@
 namespace btdef {
 namespace conv {
 
-static inline btdef::util::text to_hex(const char *ptr, std::size_t len) BTDEF_NOEXCEPT
+static inline btdef::util::text to_hex(const char *ptr,
+    std::size_t len) BTDEF_NOEXCEPT
 {
     assert(ptr);
     assert(len < btdef::util::text::cache_capacity / 2);

@@ -16,7 +16,7 @@ namespace btdef {
 namespace conv {
 
 template<typename T>
-static inline util::string to_string(T val)
+util::string to_string(T val)
 {
     using num::itoa;
     util::string result;

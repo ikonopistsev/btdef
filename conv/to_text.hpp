@@ -16,7 +16,7 @@ namespace btdef {
 namespace conv {
 
 template<typename T>
-static inline util::text to_text(T val) BTDEF_NOEXCEPT
+util::text to_text(T val) BTDEF_NOEXCEPT
 {
     using num::itoa;
     util::text result;

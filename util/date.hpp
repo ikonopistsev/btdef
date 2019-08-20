@@ -245,6 +245,11 @@ public:
         return date(time::now());
     }
 
+    static inline date from_time_t(std::time_t t) BTDEF_NOEXCEPT
+    {
+        return date(time::from_time_t(t));
+    }
+
     // Gets the time value in milliseconds.
     value_t time() const BTDEF_NOEXCEPT
     {
@@ -255,15 +260,22 @@ public:
 
     std::time_t unix_time() const BTDEF_NOEXCEPT
     {
-        using std::chrono::seconds;
-        auto time = time_point_.time_since_epoch();
-        auto result = std::chrono::duration_cast<seconds>(time).count();
-        return static_cast<std::time_t>(result);
+        using std::chrono::system_clock;
+        return system_clock::to_time_t(time_point_);
     }
 
     time_point_t time_point() const BTDEF_NOEXCEPT
     {
         return time_point_;
+    }
+
+    timeval_t sys_time() const BTDEF_NOEXCEPT
+    {
+        auto t = time();
+        return {
+            static_cast<decltype(timeval_t::tv_sec)>(t / k_msec),
+            static_cast<decltype(timeval_t::tv_usec)>((t % k_msec) * k_msec)
+        };
     }
 
     millisecond_t millisecond() const BTDEF_NOEXCEPT

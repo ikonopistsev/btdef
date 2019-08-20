@@ -59,6 +59,11 @@ static inline time_point_t now(FILETIME ft) BTDEF_NOEXCEPT
 }
 #endif
 
+static inline time_point_t from_time_t(std::time_t t) BTDEF_NOEXCEPT
+{
+    return std::chrono::system_clock::from_time_t(t);
+}
+
 static inline time_point_t now() BTDEF_NOEXCEPT
 {
     return std::chrono::system_clock::now();

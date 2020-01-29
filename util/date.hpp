@@ -261,7 +261,7 @@ public:
     std::time_t unix_time() const BTDEF_NOEXCEPT
     {
         using std::chrono::system_clock;
-        return system_clock::to_time_t(time_point_);
+        return static_cast<std::time_t>(system_clock::to_time_t(time_point_));
     }
 
     time_point_t time_point() const BTDEF_NOEXCEPT

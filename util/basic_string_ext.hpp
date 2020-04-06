@@ -54,7 +54,7 @@ basic_string<T, allocator::basic<T>> mkstr(
     const std::size_t size)
 {
     basic_string<T, allocator::basic<T>> result;
-    result.reserve(size > N ? size : N);
+    result.reserve_ex(size > N ? size : N);
     result.assign(text_ref.get(), N - 1);
     return result;
 }

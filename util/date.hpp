@@ -487,7 +487,7 @@ public:
             if (tz)
             {
                 util::string result;
-                util::string::runtime_error(result.reserve(32), "bad alloc");
+                result.reserve_ex(32);
 
                 char* p = result.data();
                 result.increase(static_cast<std::size_t>(
@@ -592,7 +592,7 @@ public:
         util::string date_json() const
         {
             util::string result;
-            util::string::runtime_error(result.reserve(32), "bad alloc");
+            result.reserve_ex(32);
 
             char* p = result.data();
             result.increase(static_cast<std::size_t>(
@@ -618,7 +618,7 @@ public:
         util::string time_json() const
         {
             util::string result;
-            util::string::runtime_error(result.reserve(32), "bad alloc");
+            result.reserve_ex(32);
 
             char* p = result.data();
             result.increase(static_cast<std::size_t>(

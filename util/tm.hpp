@@ -150,7 +150,7 @@ public:
     util::string json() const
     {
         util::string result;
-        util::string::runtime_error(result.reserve(32), "bad alloc");
+        result.reserve_ex(32);
 
         char* p = result.data();
         result.increase(static_cast<std::size_t>(
@@ -192,8 +192,7 @@ public:
         assert(fmt);
 
         util::string result;
-        util::string::runtime_error(result.reserve(fmt_len + buffer_size),
-                                                                "bad alloc");
+        result.reserve_ex(fmt_len + buffer_size);
         std::size_t count = std::strftime(result.data(),
             result.capacity() + 1, fmt, &tm_);
         if (!count && fmt_len)

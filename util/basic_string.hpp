@@ -40,6 +40,25 @@ private:
 
     static constexpr double size_factor = 1.61803;
 
+    class bad_alloc
+        : public std::bad_alloc
+    {
+        text what_;
+
+    public:
+        template<std::size_t N>
+        bad_alloc(const char (&text)[N]) noexcept
+            : what_(text, N - 1)
+        {
+            what_ += std::cref(": bad alloc");
+        }
+
+        const char* what() const noexcept override
+        {
+            return what_.c_str();
+        }
+    };
+
 public:
     static const size_type npos = static_cast<size_type>(-1);
 
@@ -55,7 +74,8 @@ public:
         assign(other);
     }
 
-    basic_string(const basic_string& other, const allocator_type& a) BTDEF_NOEXCEPT
+    basic_string(const basic_string& other,
+        const allocator_type& a) BTDEF_NOEXCEPT
         : allocator_(a)
     {
         assign(other);
@@ -82,7 +102,8 @@ public:
     }
 
     template<size_type N>
-    basic_string(std::reference_wrapper<const value_type[N]> ref) BTDEF_NOEXCEPT
+    basic_string(std::reference_wrapper<const value_type[N]> ref)
+        BTDEF_NOEXCEPT
     {
         assign(ref.get(), N - 1);
     }
@@ -142,7 +163,8 @@ public:
         return size_;
     }
 
-    size_type allocate_concatenate(const_pointer value, size_type len) BTDEF_NOEXCEPT
+    size_type allocate_concatenate(const_pointer value, size_type len)
+        BTDEF_NOEXCEPT
     {
         size_type new_capacity = (capacity_) ?
             static_cast<size_type>(capacity_ * size_factor)
@@ -177,7 +199,8 @@ public:
         return 0;
     }
 
-    size_type allocate_concatenate(size_type n, value_type value) BTDEF_NOEXCEPT
+    size_type allocate_concatenate(size_type n,
+        value_type value) BTDEF_NOEXCEPT
     {
         size_type new_capacity = (capacity_) ?
             static_cast<size_type>(capacity_ * size_factor)
@@ -251,7 +274,8 @@ public:
     }
 
     template<size_type N>
-    size_type assign(std::reference_wrapper<const value_type[N]> ref) BTDEF_NOEXCEPT
+    size_type assign(std::reference_wrapper<const value_type[N]> ref)
+        BTDEF_NOEXCEPT
     {
         size_ = 0;
         return append(ref.get(), N - 1);
@@ -439,6 +463,12 @@ public:
         return capacity_;
     }
 
+    void reserve_ex(size_type size)
+    {
+        if (reserve(size) < size)
+            throw bad_alloc("reserve_ex");
+    }
+
     // интерфейсный метод возвращает -1 элеметнт под '\0'
     size_type capacity() const BTDEF_NOEXCEPT
     {
@@ -480,7 +510,8 @@ public:
     }
 
     template<size_type N>
-    size_type append(std::reference_wrapper<const value_type[N]> ref) BTDEF_NOEXCEPT
+    size_type append(std::reference_wrapper<const value_type[N]> ref)
+        BTDEF_NOEXCEPT
     {
         return append(ref.get(), N - 1);
     }
@@ -564,7 +595,8 @@ public:
     }
 
     template<class T>
-    int compare(size_type pos, size_type len, const T& other) const BTDEF_NOEXCEPT
+    int compare(size_type pos, size_type len, const T& other) const
+        BTDEF_NOEXCEPT
     {
         return compare(pos, len, other.data(), other.size());
     }
@@ -635,7 +667,8 @@ public:
         return it == cend() ? npos : std::distance(cbegin(), it);
     }
 
-    size_type find(const basic_string& other, size_type pos = 0) const BTDEF_NOEXCEPT
+    size_type find(const basic_string& other,
+        size_type pos = 0) const BTDEF_NOEXCEPT
     {
         // FIXME TEST
         return find(other.data(), pos, other.size() - pos);
@@ -649,12 +682,6 @@ public:
     size_type find(value_type value, size_type pos = 0) const BTDEF_NOEXCEPT
     {
         return find(&value, pos, 1);
-    }
-
-    static inline void runtime_error(size_type result, const char *text)
-    {
-        if (!result)
-            throw std::runtime_error(text);
     }
 };
 

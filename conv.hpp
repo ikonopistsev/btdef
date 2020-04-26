@@ -17,8 +17,10 @@ using btdef::conv::to_hex;
 
 namespace conv {
 
-using btdef::conv::antout;
-using btdef::conv::antoutp;
 using btdef::conv::antou;
+using btdef::conv::antoun;
+using btdef::conv::antoi;
+using btdef::conv::antoin;
+using btdef::conv::antoutp;
 
 } // namespace conv

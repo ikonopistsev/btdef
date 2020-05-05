@@ -47,13 +47,13 @@ private:
 
     public:
         template<std::size_t N>
-        bad_alloc(const char (&text)[N]) noexcept
+        explicit bad_alloc(const char (&text)[N]) noexcept
             : what_(text, N - 1)
         {
             what_ += std::cref(": bad alloc");
         }
 
-        const char* what() const noexcept override
+        virtual const char* what() const noexcept override
         {
             return what_.c_str();
         }

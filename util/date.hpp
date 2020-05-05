@@ -75,8 +75,12 @@ private:
         if ((tm.tm_hour < 0) || (tm.tm_min < 0) || (tm.tm_sec < 0))
             return -1;
 
-        return (year * 365 + (year + 1) / 4 + mdays[month] + day) * 86400UL +
-            tm.tm_hour * 3600 + tm.tm_min * 60 + tm.tm_sec + minuteswest * 60;
+        std::time_t rc = tm.tm_hour * 3600 + tm.tm_min * 60 +
+                tm.tm_sec + minuteswest * 60;
+
+        rc += (year * 365 + (year + 1) / 4 + mdays[month] + day) * 86400u;
+
+        return rc;
     }
 
     static inline date make(const std::tm& tms,

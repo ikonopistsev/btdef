@@ -67,6 +67,7 @@ public:
     template<size_type N>
     basic_text(std::reference_wrapper<const value_type[N]> ref) BTDEF_NOEXCEPT
     {
+        static_assert(N < cache_size, "too big string");
         assign(ref.get(), N - 1);
     }
 
@@ -107,6 +108,7 @@ public:
     template<value_type N>
     size_type assign(std::reference_wrapper<const value_type[N]> ref) BTDEF_NOEXCEPT
     {
+        static_assert(N < cache_size, "too big string");
         return assign(ref.get(), N - 1);
     }
 

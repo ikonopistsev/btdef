@@ -161,7 +161,7 @@ private:
             own_ = allocator_ = new T();
 
         chunk_header* chunk = reinterpret_cast<chunk_header*>(
-            allocator_->malloc(BTDEF_ALLOCATOR_ALIGN(sizeof(chunk_header))
+            allocator_->allocate(BTDEF_ALLOCATOR_ALIGN(sizeof(chunk_header))
                                                                 + capacity));
 
         if (chunk)

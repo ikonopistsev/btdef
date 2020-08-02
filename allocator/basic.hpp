@@ -29,6 +29,11 @@ struct basic
     {
         std::free(p);
     }
+
+    void free(void* p) const BTDEF_NOEXCEPT
+    {
+        std::free(p);
+    }
 };
 
 } // namespace allocator

@@ -79,7 +79,7 @@ struct antout<T, 1>
     static
     T convn(const char *ptr) BTDEF_NOEXCEPT
     {
-        return static_cast<T>(*ptr - '0');
+        return static_cast<T>(*ptr) - '0';
     }
 
     static
@@ -87,9 +87,9 @@ struct antout<T, 1>
     {
         static_assert (std::is_signed<T>::value, "type not signed");
 
-        auto i = static_cast<std::intptr_t>(*ptr - '0');
+        auto i = static_cast<std::intptr_t>(*ptr) - '0';
         return ((i < 0) || (i > 9)) ?
-            std::numeric_limits<T>::min() : i;
+            std::numeric_limits<T>::min() : static_cast<T>(i);
     }
 };
 

@@ -35,14 +35,13 @@ static inline btdef::util::text to_hex(const char *ptr,
 
 static inline btdef::util::text to_hex(std::uint64_t val) BTDEF_NOEXCEPT
 {
-    btdef::util::text result;
+btdef::util::text result;
 #ifndef htonll
-#define htonll(x) (((static_cast<std::uint64_t>(htonl(x & 0xffff)) << 32) \
-    + htonl(static_cast<std::uint32_t>((x) >> 32))))
-    val = htonll(val);
+    val = (((static_cast<std::uint64_t>(htonl(val & 0xffffffff)) << 32) |
+        htonl(static_cast<std::uint32_t>((val) >> 32))));
 #undef htonll
 #else
-    val = htonll(val);
+val = htonll(val);
 #endif // htonll
 
     do

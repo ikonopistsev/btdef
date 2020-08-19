@@ -170,8 +170,9 @@ public:
             static_cast<size_type>(capacity_ * size_factor)
                   : size_type(start_size);
 
-        if (new_capacity <= len)
-            new_capacity = len;
+        size_type need_size = size() + len + 1;
+        if (new_capacity <= need_size)
+            new_capacity = need_size;
 
         pointer ptr = allocator_.allocate(new_capacity, data_);
         if (ptr)
@@ -188,6 +189,10 @@ public:
         size_type new_capacity = (capacity_) ?
             static_cast<size_type>(capacity_ * size_factor)
                   : size_type(start_size);
+
+        size_type need_size = size() + 2;
+        if (new_capacity <= need_size)
+            new_capacity = need_size;
 
         pointer ptr = allocator_.allocate(new_capacity, data_);
         if (ptr)
@@ -206,8 +211,9 @@ public:
             static_cast<size_type>(capacity_ * size_factor)
                   : size_type(start_size);
 
-        if (new_capacity <= n)
-            new_capacity = n;
+        size_type need_size = size() + n + 1;
+        if (new_capacity <= need_size)
+            new_capacity = need_size;
 
         pointer ptr = allocator_.allocate(new_capacity, data_);
         if (ptr)

@@ -8,6 +8,7 @@
 #include "btdef/num/itoa.hpp"
 
 #include <stdexcept>
+#include <utility>
 #include <limits>
 #include <cstring>
 #include <cmath>

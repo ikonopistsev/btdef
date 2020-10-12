@@ -94,11 +94,11 @@ private:
 public:
     basic_fnv1a() = default;
 
-    basic_fnv1a(value_t salt) BTDEF_NOEXCEPT
+    constexpr basic_fnv1a(value_t salt) BTDEF_NOEXCEPT
         : salt_(salt)
     {   }
 
-    value_t operator()(const char *ptr) const BTDEF_NOEXCEPT
+    constexpr value_t operator()(const char *ptr) const BTDEF_NOEXCEPT
     {
         value_t hval = salt_;
         while (*ptr != '\0')
@@ -110,7 +110,7 @@ public:
         return hval;
     }
 
-    value_t operator()(std::size_t& len, const char *ptr) const BTDEF_NOEXCEPT
+    constexpr value_t operator()(std::size_t& len, const char *ptr) const BTDEF_NOEXCEPT
     {
         value_t hval = salt_;
         const char *p = ptr;
@@ -124,7 +124,7 @@ public:
         return hval;
     }
 
-    value_t operator()(const char *p, const char *e) const BTDEF_NOEXCEPT
+    constexpr value_t operator()(const char *p, const char *e) const BTDEF_NOEXCEPT
     {
         value_t hval = salt_;
         while (p < e)
@@ -136,16 +136,16 @@ public:
         return hval;
     }
 
-    value_t operator()(const void *ptr, std::size_t len) const BTDEF_NOEXCEPT
+    constexpr value_t operator()(const void *ptr, std::size_t len) const BTDEF_NOEXCEPT
     {
         const char* p = static_cast<const char*>(ptr);
         return this->operator()(p, p + len);
     }
 
     template<class T>
-    value_t operator()(const T& text) const BTDEF_NOEXCEPT
+    constexpr value_t operator()(const T& text) const BTDEF_NOEXCEPT
     {
-        return this->operator()(text.data(), text.size());
+        return this->operator()(text.begin(), text.end());
     }
 };
 

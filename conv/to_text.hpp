@@ -20,7 +20,7 @@ util::text to_text(T val) BTDEF_NOEXCEPT
 {
     using num::itoa;
     util::text result;
-    result.increase(std::distance(result.data(), itoa(val, result.data())));
+    result.resize(std::distance(result.data(), itoa(val, result.data())));
     return result;
 }
 
@@ -28,7 +28,7 @@ static inline util::text to_text(float value) BTDEF_NOEXCEPT
 {
     using num::fpconv::dtoa;
     util::text result;
-    result.increase(dtoa(static_cast<double>(value), result.data()));
+    result.resize(dtoa(static_cast<double>(value), result.data()));
     return result;
 }
 
@@ -36,7 +36,7 @@ static inline util::text to_text(double value) BTDEF_NOEXCEPT
 {
     using num::fpconv::dtoa;
     util::text result;
-    result.increase(dtoa(static_cast<double>(value), result.data()));
+    result.resize(dtoa(static_cast<double>(value), result.data()));
     return result;
 }
 
@@ -44,7 +44,7 @@ static inline util::text to_text(float val, std::size_t exp) BTDEF_NOEXCEPT
 {
     using num::dtoap;
     util::text result(24, '0');
-    result.increase(dtoap(static_cast<double>(val), exp, result.data()));
+    result.resize(dtoap(static_cast<double>(val), exp, result.data()));
     return result;
 }
 
@@ -52,7 +52,7 @@ static inline util::text to_text(double val, std::size_t exp) BTDEF_NOEXCEPT
 {
     using num::dtoap;
     util::text result(24, '0');
-    result.increase(dtoap(val, exp, result.data()));
+    result.resize(dtoap(val, exp, result.data()));
     return result;
 }
 

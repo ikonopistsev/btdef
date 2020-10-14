@@ -72,8 +72,8 @@ public:
         assign(ref.get(), N - 1);
     }
 
-    template<class T>
-    basic_text(const T& other) noexcept
+    template<template<class...> class basic_other_string, class ...O>
+    basic_text(const basic_other_string<value_type, O...>& other) noexcept
     {
         assign(other.data(), other.size());
     }
@@ -113,8 +113,8 @@ public:
         return assign(ref.get(), N - 1);
     }
 
-    template<class T>
-    size_type assign(const T& other) noexcept
+    template<template<class...> class basic_other_string, class ...O>
+    size_type assign(const basic_other_string<value_type, O...>& other) noexcept
     {
         return assign(other.begin(), other.size());
     }
@@ -140,10 +140,10 @@ public:
         return assign(value);
     }
 
-    template<class T>
-    size_type operator=(const T& other) noexcept
+    template<template<class...> class basic_other_string, class ...O>
+    size_type operator=(const basic_other_string<value_type, O...>& o) noexcept
     {
-        return assign(other.data(), other.size());
+        return assign(o.data(), o.size());
     }
 
     template<std::size_t N>
@@ -152,19 +152,21 @@ public:
         return assign(r.get(), N - 1);
     }
 
-    template<class T>
-    bool starts_with(const T& other) const noexcept
+    template<template<class...> class basic_other_string, class ...O>
+    bool starts_with(const basic_other_string<value_type, O...>& o)
+        const noexcept
     {
-        return (size_ >= other.size()) &&
-            (std::memcmp(data_, other.data(), other.size()) == 0);
+        return (size_ >= o.size()) &&
+            (std::memcmp(data_, o.data(), o.size()) == 0);
     }
 
-    template<class T>
-    bool ends_with(const T& other) const noexcept
+    template<template<class...> class basic_other_string, class ...O>
+    bool ends_with(const basic_other_string<value_type, O...>& o)
+        const noexcept
     {
-        size_type sz = other.size();
+        size_type sz = o.size();
         return (size_ >= sz) &&
-           (std::memcmp(data_ + (size_ - sz), other.data(), sz) == 0);
+           (std::memcmp(data_ + (size_ - sz), o.data(), sz) == 0);
     }
 
     reference operator[](size_type i) noexcept
@@ -304,17 +306,16 @@ public:
             --size_;
     }
 
-    size_type resize(size_type len) noexcept
+    size_type resize(size_type size) noexcept
     {
-        if (len < cache_size)
+        assert(size < cache_size);
+
+        if (size < cache_size)
         {
-            if (len < size_)
-            {
-                size_ = len;
-                return len;
-            }
-            return size_;
+            size_ = size;
+            return size;
         }
+
         return 0;
     }
 
@@ -324,12 +325,6 @@ public:
     size_type free_size() const noexcept
     {
         return cache_capacity - size_;
-    }
-
-    void increase(size_type size) noexcept
-    {
-        assert(size < free_size());
-        size_ = size;
     }
 
     size_type append(const_pointer value, size_type len) noexcept
@@ -443,8 +438,25 @@ template<class C, std::size_t N1, std::size_t N2>
 bool operator==(const btdef::util::basic_text<C, N1>& lhs,
     const btdef::util::basic_text<C, N2>& rhs) noexcept
 {
-    using btdef::util::sv;
     return sv(lhs) == sv(rhs);
+}
+
+template<class C, std::size_t N,
+         template<class...> class basic_other_string, class ...O>
+bool operator==(const btdef::util::basic_text<C, N>& lhs,
+    const basic_other_string<C, O...>& rhs) noexcept
+{
+    using btdef::util::sv;
+    return sv(lhs) == rhs;
+}
+
+template<class C, std::size_t N,
+         template<class...> class basic_other_string, class ...O>
+bool operator==(const basic_other_string<C, O...>& lhs,
+    const btdef::util::basic_text<C, N>& rhs) noexcept
+{
+    using btdef::util::sv;
+    return lhs == sv(rhs);
 }
 
 template<class C, std::size_t N>
@@ -466,6 +478,22 @@ bool operator==(std::basic_string_view<C> lhs,
 template<class C, std::size_t N1, std::size_t N2>
 bool operator!=(const btdef::util::basic_text<C, N1>& lhs,
     const btdef::util::basic_text<C, N2>& rhs) noexcept
+{
+    return !(lhs == rhs);
+}
+
+template<class C, std::size_t N,
+         template<class...> class basic_other_string, class ...O>
+bool operator!=(const btdef::util::basic_text<C, N>& lhs,
+    const basic_other_string<C, O...>& rhs) noexcept
+{
+    return !(lhs == rhs);
+}
+
+template<class C, std::size_t N,
+         template<class...> class basic_other_string, class ...O>
+bool operator!=(const basic_other_string<C, O...>& lhs,
+    const btdef::util::basic_text<C, N>& rhs) noexcept
 {
     return !(lhs == rhs);
 }
@@ -492,6 +520,24 @@ bool operator<(const btdef::util::basic_text<C, N1>& lhs,
     return sv(lhs) < sv(rhs);
 }
 
+template<class C, std::size_t N,
+         template<class...> class basic_other_string, class ...O>
+bool operator<(const btdef::util::basic_text<C, N>& lhs,
+    const basic_other_string<C, O...>& rhs) noexcept
+{
+    using btdef::util::sv;
+    return sv(lhs) < rhs;
+}
+
+template<class C, std::size_t N,
+         template<class...> class basic_other_string, class ...O>
+bool operator<(const basic_other_string<C, O...>& lhs,
+    const btdef::util::basic_text<C, N>& rhs) noexcept
+{
+    using btdef::util::sv;
+    return lhs < sv(rhs);
+}
+
 template<class C, std::size_t N>
 bool operator<(const btdef::util::basic_text<C, N>& lhs,
     std::basic_string_view<C> rhs) noexcept
@@ -511,6 +557,22 @@ bool operator<(std::basic_string_view<C> lhs,
 template<class C, std::size_t N1, std::size_t N2>
 bool operator>(const btdef::util::basic_text<C, N1>& lhs,
     const btdef::util::basic_text<C, N2>& rhs) noexcept
+{
+    return rhs < lhs;
+}
+
+template<class C, std::size_t N,
+         template<class...> class basic_other_string, class ...O>
+bool operator>(const btdef::util::basic_text<C, N>& lhs,
+    const basic_other_string<C, O...>& rhs) noexcept
+{
+    return rhs < lhs;
+}
+
+template<class C, std::size_t N,
+         template<class...> class basic_other_string, class ...O>
+bool operator>(const basic_other_string<C, O...>& lhs,
+    const btdef::util::basic_text<C, N>& rhs) noexcept
 {
     return rhs < lhs;
 }
@@ -536,6 +598,22 @@ bool operator<=(const btdef::util::basic_text<C, N1>& lhs,
     return !(lhs > rhs);
 }
 
+template<class C, std::size_t N,
+         template<class...> class basic_other_string, class ...O>
+bool operator<=(const btdef::util::basic_text<C, N>& lhs,
+    const basic_other_string<C, O...>& rhs) noexcept
+{
+    return !(lhs > rhs);
+}
+
+template<class C, std::size_t N,
+         template<class...> class basic_other_string, class ...O>
+bool operator<=(const basic_other_string<C, O...>& lhs,
+    const btdef::util::basic_text<C, N>& rhs) noexcept
+{
+    return !(lhs > rhs);
+}
+
 template<class C, std::size_t N>
 bool operator<=(const btdef::util::basic_text<C, N>& lhs,
     std::basic_string_view<C> rhs) noexcept
@@ -553,6 +631,22 @@ bool operator<=(std::basic_string_view<C> lhs,
 template<class C, std::size_t N1, std::size_t N2>
 bool operator>=(const btdef::util::basic_text<C, N1>& lhs,
     const btdef::util::basic_text<C, N2>& rhs) noexcept
+{
+    return !(lhs < rhs);
+}
+
+template<class C, std::size_t N,
+         template<class...> class basic_other_string, class ...O>
+bool operator>=(const btdef::util::basic_text<C, N>& lhs,
+    const basic_other_string<C, O...>& rhs) noexcept
+{
+    return !(lhs < rhs);
+}
+
+template<class C, std::size_t N,
+         template<class...> class basic_other_string, class ...O>
+bool operator>=(const basic_other_string<C, O...>& lhs,
+    const btdef::util::basic_text<C, N>& rhs) noexcept
 {
     return !(lhs < rhs);
 }

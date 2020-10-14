@@ -163,7 +163,7 @@ public:
     {
         util::text result;
         char* p = result.data();
-        result.increase(static_cast<std::size_t>(
+        result.resize(static_cast<std::size_t>(
             std::distance(p, put_json(p))));
         return result;
     }
@@ -219,7 +219,7 @@ public:
         assert(fmt);
 
         util::text result;
-        result.increase(std::strftime(result.data(),
+        result.resize(std::strftime(result.data(),
             result.capacity() + 1, fmt, &tm_));
 
         return result;
@@ -247,7 +247,7 @@ public:
 
         util::text result;
         char* p = result.data();
-        result.increase(static_cast<std::size_t>(
+        result.resize(static_cast<std::size_t>(
             std::distance(p, itoa3zf(millisecond_,p))));
         return result;
     }

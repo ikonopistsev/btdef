@@ -4,6 +4,7 @@
 #include "btdef/hash/fnv1a.hpp"
 
 #include <string>
+#include <string_view>
 
 namespace std {
 

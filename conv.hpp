@@ -11,6 +11,7 @@ namespace btdef {
 using btdef::conv::to_text;
 using btdef::conv::to_string;
 using btdef::conv::to_hex;
+using btdef::conv::to_hex00;
 
 } // namespace btdef
 

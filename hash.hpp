@@ -7,4 +7,4 @@ namespace hash {
 using btdef::hash::fnv1a;
 using btdef::hash::basic_fnv1a;
 
-} // namespace ref
+} // namespace hash

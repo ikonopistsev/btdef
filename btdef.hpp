@@ -10,8 +10,6 @@
 #include "btdef/conv/to_text.hpp"
 #include "btdef/conv/to_string.hpp"
 #include "btdef/util/time_zone.hpp"
-#include "btdef/ref/string.hpp"
-#include "btdef/ref/basic_string_ext.hpp"
 #include "btdef/util/basic_string_ext.hpp"
 #include "btdef/util/basic_text_ext.hpp"
 #include "btdef/hash/fnv1a.hpp"
@@ -58,16 +56,9 @@ using btdef::conv::to_hex;
 
 } // namespace utility
 
-namespace ref {
-
-using btref::string;
-using btref::mkstr;
-
-} // namespace ref
-
 namespace hash {
 
 using btdef::hash::fnv1a;
 using btdef::hash::basic_fnv1a;
 
-} // namespace ref
+} // namespace hash

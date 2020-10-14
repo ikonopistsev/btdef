@@ -10,25 +10,19 @@
 namespace btdef {
 namespace hash {
 
-template<int N>
-class basic_fnv1a;
+template<int>
+struct basic_fnv1a;
 
 // x86
 template<>
-class basic_fnv1a<4>
+struct basic_fnv1a<4>
 {
-public:
     typedef std::uint32_t value_t;
-
-private:
-    static constexpr auto salt_ = value_t{ 0x811c9dc5 };
-
-public:
-    basic_fnv1a() = default;
+    constexpr static auto salt = value_t{ 0x811c9dc5 };
 
     constexpr value_t operator()(const char *ptr) const BTDEF_NOEXCEPT
     {
-        value_t hval = salt_;
+        value_t hval = salt;
         while (*ptr != '\0')
         {
             hval ^= static_cast<value_t>(*ptr++);
@@ -40,7 +34,7 @@ public:
 
     value_t operator()(std::size_t& len, const char *ptr) const BTDEF_NOEXCEPT
     {
-        auto hval = salt_;
+        auto hval = salt;
         const char *p = ptr;
         while (*p != '\0')
         {
@@ -54,7 +48,7 @@ public:
 
     constexpr value_t operator()(const char* p, const char* e) const BTDEF_NOEXCEPT
     {
-        auto hval = salt_;
+        auto hval = salt;
         while (p < e)
         {
             hval ^= static_cast<value_t>(*p++);
@@ -80,20 +74,14 @@ public:
 
 // x86_64
 template<>
-class basic_fnv1a<8>
+struct basic_fnv1a<8>
 {
-public:
     typedef std::uint64_t value_t;
-
-private:
-    static constexpr auto salt_ = value_t{ 0xcbf29ce484222325ull };
-
-public:
-    basic_fnv1a() = default;
+    constexpr static auto salt = value_t{ 0xcbf29ce484222325ull };
 
     constexpr value_t operator()(const char *ptr) const BTDEF_NOEXCEPT
     {
-        auto hval = salt_;
+        auto hval = salt;
         while (*ptr != '\0')
         {
             hval ^= static_cast<value_t>(*ptr++);
@@ -105,7 +93,7 @@ public:
 
     value_t operator()(std::size_t& len, const char *ptr) const BTDEF_NOEXCEPT
     {
-        auto hval = salt_;
+        auto hval = salt;
         const char *p = ptr;
         while (*p != '\0')
         {
@@ -119,7 +107,7 @@ public:
 
     constexpr value_t operator()(const char *p, const char *e) const BTDEF_NOEXCEPT
     {
-        auto hval = salt_;
+        auto hval = salt;
         while (p < e)
         {
             hval ^= static_cast<value_t>(*p++);

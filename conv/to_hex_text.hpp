@@ -81,6 +81,12 @@ auto cv_htount(T value)
     return cv_htount(static_cast<type>(value));
 }
 
+template<class T>
+void to_hex_print(T& rc, std::uint8_t val)
+{
+    rc += to_hex(static_cast<unsigned char>(val));
+}
+
 template<class T, class V,
     typename std::enable_if_t<std::numeric_limits<V>::is_integer, int> = 1>
 void to_hex_print(T& rc, V value)
@@ -95,6 +101,12 @@ void to_hex_print(T& rc, V value)
             rc += to_hex(v);
         val >>= 8;
     } while (val);
+}
+
+template<class T>
+void to_hex00_print(T& rc, std::uint8_t val)
+{
+    rc += to_hex(static_cast<unsigned char>(val));
 }
 
 template<class T, class V,

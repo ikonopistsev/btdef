@@ -57,7 +57,7 @@ public:
 
     basic_text(const basic_text& other) noexcept
     {
-        assign(other.data(), other.size());
+        assign(other);
     }
 
     basic_text(const_pointer value) noexcept
@@ -76,6 +76,15 @@ public:
     basic_text(const basic_other_string<value_type, O...>& other) noexcept
     {
         assign(other.data(), other.size());
+    }
+
+    size_type assign(const basic_text& other) noexcept
+    {
+        auto size = other.size();
+        size_ = size;
+        if (size)
+            std::memcpy(data_, other.data(), size);
+        return size;
     }
 
     size_type assign(const_pointer value, size_type len) noexcept

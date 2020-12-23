@@ -676,7 +676,6 @@ public:
     size_type find(const basic_string& other,
         size_type pos = 0) const BTDEF_NOEXCEPT
     {
-        // FIXME TEST
         return find(other.data(), pos, other.size() - pos);
     }
 

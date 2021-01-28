@@ -44,7 +44,7 @@ using btdef::num::itoa;
 
 namespace conv {
 
-using btdef::conv::antout;
+using btdef::conv::detail::antout;
 using btdef::conv::antoutp;
 using btdef::conv::antou;
 

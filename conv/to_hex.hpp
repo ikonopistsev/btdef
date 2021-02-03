@@ -5,14 +5,14 @@
 
 #pragma once
 
-#include "btdef/ref/string.hpp"
+#include <string_view>
 
 namespace btdef {
 namespace conv {
 
-static inline btref::string to_hex(unsigned char val) BTDEF_NOEXCEPT
+static inline std::string_view to_hex(unsigned char val) BTDEF_NOEXCEPT
 {
-    static const char * const t[] = {
+    constexpr static const std::string_view t[] = {
         "00", "01", "02", "03", "04", "05", "06", "07",
         "08", "09", "0a", "0b", "0c", "0d", "0e", "0f",
         "10", "11", "12", "13", "14", "15", "16", "17",
@@ -47,10 +47,10 @@ static inline btref::string to_hex(unsigned char val) BTDEF_NOEXCEPT
         "f8", "f9", "fa", "fb", "fc", "fd", "fe", "ff"
     };
 
-    return btref::string(t[val], 2);
+    return t[val];
 }
 
-static inline btref::string to_hex(char val) BTDEF_NOEXCEPT
+static inline std::string_view to_hex(char val) BTDEF_NOEXCEPT
 {
     return to_hex(static_cast<unsigned char>(val));
 }

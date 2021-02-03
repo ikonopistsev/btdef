@@ -478,7 +478,7 @@ public:
             {
                 util::text result;
                 char* p = result.data();
-                result.increase(static_cast<std::size_t>(
+                result.resize(static_cast<std::size_t>(
                     std::distance(p, put_json(p, tz))));
                 return result;
             }
@@ -608,7 +608,7 @@ public:
         {
             util::text result;
             char* p = result.data();
-            result.increase(static_cast<std::size_t>(
+            result.resize(static_cast<std::size_t>(
                 std::distance(p, put_date_json(p))));
             return result;
         }
@@ -634,7 +634,7 @@ public:
         {
             util::text result;
             char* p = result.data();
-            result.increase(static_cast<std::size_t>(
+            result.resize(static_cast<std::size_t>(
                 std::distance(p, put_time_json(p))));
             return result;
         }
@@ -765,7 +765,7 @@ public:
 
         util::text result;
         char* p = result.data();
-        result.increase(static_cast<std::size_t>(std::distance(p,
+        result.resize(static_cast<std::size_t>(std::distance(p,
             itoa3zf(static_cast<std::uint32_t>(millisecond()), p))));
         return result;
     }

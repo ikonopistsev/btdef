@@ -52,7 +52,7 @@ static inline time_point_t to_time_point_from_100ns(ULONGLONG ns100) BTDEF_NOEXC
 
 static inline time_point_t now(FILETIME ft) BTDEF_NOEXCEPT
 {
-    static constexpr auto delta = UTIL_U64(116444736000000000);
+    constexpr static auto delta = UTIL_U64(116444736000000000);
     auto time = to_quad_100ns(ft);
     time -= delta;
     return to_time_point_from_100ns(time);

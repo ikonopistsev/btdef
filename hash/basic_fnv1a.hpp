@@ -10,29 +10,19 @@
 namespace btdef {
 namespace hash {
 
-template<int N>
-class basic_fnv1a;
+template<int>
+struct basic_fnv1a;
 
 // x86
 template<>
-class basic_fnv1a<4>
+struct basic_fnv1a<4>
 {
-public:
     typedef std::uint32_t value_t;
+    constexpr static auto salt = value_t{ 0x811c9dc5 };
 
-private:
-    const value_t salt_{ 0x811c9dc5 };
-
-public:
-    basic_fnv1a() = default;
-
-    basic_fnv1a(value_t salt) BTDEF_NOEXCEPT
-        : salt_(salt)
-    {   }
-
-    value_t operator()(const char *ptr) const BTDEF_NOEXCEPT
+    constexpr value_t operator()(const char *ptr) const BTDEF_NOEXCEPT
     {
-        value_t hval = salt_;
+        value_t hval = salt;
         while (*ptr != '\0')
         {
             hval ^= static_cast<value_t>(*ptr++);
@@ -44,7 +34,7 @@ public:
 
     value_t operator()(std::size_t& len, const char *ptr) const BTDEF_NOEXCEPT
     {
-        value_t hval = salt_;
+        auto hval = salt;
         const char *p = ptr;
         while (*p != '\0')
         {
@@ -56,9 +46,9 @@ public:
         return hval;
     }
 
-    value_t operator()(const char* p, const char* e) const BTDEF_NOEXCEPT
+    constexpr value_t operator()(const char* p, const char* e) const BTDEF_NOEXCEPT
     {
-        value_t hval = salt_;
+        auto hval = salt;
         while (p < e)
         {
             hval ^= static_cast<value_t>(*p++);
@@ -68,39 +58,30 @@ public:
         return hval;
     }
 
-    value_t operator()(const void *ptr, std::size_t len) const BTDEF_NOEXCEPT
+    constexpr value_t operator()(const void *ptr,
+        std::size_t len) const BTDEF_NOEXCEPT
     {
-        const char* p = static_cast<const char*>(ptr);
+        auto p = static_cast<const char*>(ptr);
         return this->operator()(p, p + len);
     }
 
     template<class T>
-    value_t operator()(const T& text) const BTDEF_NOEXCEPT
+    constexpr value_t operator()(const T& text) const BTDEF_NOEXCEPT
     {
-        return this->operator()(text.data(), text.size());
+        return this->operator()(text.begin(), text.end());
     }
 };
 
 // x86_64
 template<>
-class basic_fnv1a<8>
+struct basic_fnv1a<8>
 {
-public:
     typedef std::uint64_t value_t;
-
-private:
-    const value_t salt_{ 0xcbf29ce484222325ull };
-
-public:
-    basic_fnv1a() = default;
-
-    constexpr basic_fnv1a(value_t salt) BTDEF_NOEXCEPT
-        : salt_(salt)
-    {   }
+    constexpr static auto salt = value_t{ 0xcbf29ce484222325ull };
 
     constexpr value_t operator()(const char *ptr) const BTDEF_NOEXCEPT
     {
-        value_t hval = salt_;
+        auto hval = salt;
         while (*ptr != '\0')
         {
             hval ^= static_cast<value_t>(*ptr++);
@@ -110,9 +91,9 @@ public:
         return hval;
     }
 
-    constexpr value_t operator()(std::size_t& len, const char *ptr) const BTDEF_NOEXCEPT
+    value_t operator()(std::size_t& len, const char *ptr) const BTDEF_NOEXCEPT
     {
-        value_t hval = salt_;
+        auto hval = salt;
         const char *p = ptr;
         while (*p != '\0')
         {
@@ -126,7 +107,7 @@ public:
 
     constexpr value_t operator()(const char *p, const char *e) const BTDEF_NOEXCEPT
     {
-        value_t hval = salt_;
+        auto hval = salt;
         while (p < e)
         {
             hval ^= static_cast<value_t>(*p++);
@@ -136,9 +117,10 @@ public:
         return hval;
     }
 
-    constexpr value_t operator()(const void *ptr, std::size_t len) const BTDEF_NOEXCEPT
+    constexpr value_t operator()(const void *ptr,
+        std::size_t len) const BTDEF_NOEXCEPT
     {
-        const char* p = static_cast<const char*>(ptr);
+        auto p = static_cast<const char*>(ptr);
         return this->operator()(p, p + len);
     }
 

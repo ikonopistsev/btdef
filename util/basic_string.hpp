@@ -676,7 +676,6 @@ public:
     size_type find(const basic_string& other,
         size_type pos = 0) const BTDEF_NOEXCEPT
     {
-        // FIXME TEST
         return find(other.data(), pos, other.size() - pos);
     }
 
@@ -692,6 +691,12 @@ public:
 };
 
 typedef basic_string<char, allocator::basic<char>> string;
+
+template<class C, class A>
+static auto sv(const basic_string<C, A>& val) noexcept
+{
+    return std::basic_string_view<C>(val.data(), val.size());
+}
 
 } // namespace util
 } // namespace btdef

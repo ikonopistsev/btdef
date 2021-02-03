@@ -27,9 +27,6 @@ HEADERS += \
     num/dtoap.hpp \
     num/fpconv.hpp \
     num/itoa.hpp \
-    ref/basic_string.hpp \
-    ref/basic_string_ext.hpp \
-    ref/string.hpp \
     util/basic_string.hpp \
     util/basic_string_ext.hpp \
     util/basic_text.hpp \
@@ -47,6 +44,5 @@ HEADERS += \
     date.hpp \
     hash.hpp \
     num.hpp \
-    ref.hpp \
     string.hpp \
     text.hpp

@@ -18,8 +18,8 @@ namespace detail {
 template<typename T, std::size_t N>
 struct antout
 {
-    static constexpr auto pow = 10 * antout<T, N - 1>::pow;
-    static constexpr auto size = 1u + antout<T, N - 1>::size;
+    constexpr static auto pow = 10 * antout<T, N - 1>::pow;
+    constexpr static auto size = 1u + antout<T, N - 1>::size;
 
     static
     const char* read(const char *ptr, T& res) BTDEF_NOEXCEPT
@@ -58,8 +58,8 @@ struct antout
 template<typename T>
 struct antout<T, 1>
 {
-    static constexpr auto size = 1u;
-    static constexpr auto pow = T{1};
+    constexpr static auto size = 1u;
+    constexpr static auto pow = T{1};
 
     static
     const char* read(const char *ptr, T& res) BTDEF_NOEXCEPT

@@ -16,6 +16,8 @@ class param
     P self_{};
 
 public:
+    using value_type = P;
+
     param() = default;
     param(const param&) = default;
     param(param&&) = default;

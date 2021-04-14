@@ -32,6 +32,14 @@ struct basic_fnv1a<4>
         return hval;
     }
 
+    value_t calc(value_t hval, const char c) const BTDEF_NOEXCEPT
+    {
+        hval ^= static_cast<value_t>(c);
+        hval += (hval << 1) + (hval << 4) +
+            (hval << 7) + (hval << 8) + (hval << 24);
+        return hval;
+    }
+
     value_t operator()(std::size_t& len, const char *ptr) const BTDEF_NOEXCEPT
     {
         auto hval = salt;
@@ -88,6 +96,14 @@ struct basic_fnv1a<8>
             hval += (hval << 1) + (hval << 4) + (hval << 5) +
                 (hval << 7) + (hval << 8) + (hval << 40);
         }
+        return hval;
+    }
+
+    value_t calc(value_t hval, const char c) const BTDEF_NOEXCEPT
+    {
+        hval ^= static_cast<value_t>(c);
+        hval += (hval << 1) + (hval << 4) + (hval << 5) +
+            (hval << 7) + (hval << 8) + (hval << 40);
         return hval;
     }
 

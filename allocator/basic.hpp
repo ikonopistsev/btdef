@@ -30,7 +30,7 @@ struct basic
         std::free(p);
     }
 
-    void free(void* p) const BTDEF_NOEXCEPT
+    void deallocate(pointer p) const BTDEF_NOEXCEPT
     {
         std::free(p);
     }

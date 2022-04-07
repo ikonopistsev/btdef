@@ -92,15 +92,6 @@ public:
         return size_;
     }
 
-    template<std::size_t M>
-    size_type assign(const basic_text<char, M>& other) noexcept
-    {
-         size_ = other.size();
-         if (size_)
-            std::memcpy(data_, other.data(), size_);
-         return size_;
-    }
-
     size_type assign(const_pointer value, size_type len) noexcept
     {
         if (len < cache_size)
@@ -336,16 +327,14 @@ public:
 
     size_type append(const_pointer value, size_type len) noexcept
     {
-        if (len <= free_size())
+        if (len && (len <= free_size()))
         {
-            if (len)
-            {
-                assert(value);
-                std::memcpy(end(), value, len);
-                size_ += len;
-            }
+            assert(value);
+            std::memcpy(end(), value, len);
+            size_ += len;
             return size_;
         }
+
         return 0;
     }
 
@@ -368,13 +357,10 @@ public:
 
     size_type append(size_type n, value_type value) noexcept
     {
-        if (n <= free_size())
+        if (n && (n <= free_size()))
         {
-            if (n)
-            {
-                std::memset(end(), value, n);
-                size_ += n;
-            }
+            std::memset(end(), value, n);
+            size_ += n;
             return size_;
         }
         return 0;

@@ -6,7 +6,7 @@ namespace btdef {
 namespace num {
 namespace detail {
 
-static inline const char* ch_arr() BTDEF_NOEXCEPT
+static inline const char* ch_arr() noexcept
 {
     static const char res[200] = {
         '0','0','0','1','0','2','0','3','0','4',
@@ -33,7 +33,7 @@ static inline const char* ch_arr() BTDEF_NOEXCEPT
     return res;
 }
 
-static inline char* itoa4zf(std::uint32_t value, char *ptr) BTDEF_NOEXCEPT
+static inline char* itoa4zf(std::uint32_t value, char *ptr) noexcept
 {
     if (!value)
     {
@@ -69,7 +69,7 @@ static inline char* itoa4zf(std::uint32_t value, char *ptr) BTDEF_NOEXCEPT
     return ptr;
 }
 
-static inline char* itoa3zf(std::uint32_t value, char *ptr) BTDEF_NOEXCEPT
+static inline char* itoa3zf(std::uint32_t value, char *ptr) noexcept
 {
     if (!value)
     {
@@ -99,7 +99,7 @@ static inline char* itoa3zf(std::uint32_t value, char *ptr) BTDEF_NOEXCEPT
     return ptr;
 }
 
-static inline char* itoa2zf(std::uint32_t value, char *ptr) BTDEF_NOEXCEPT
+static inline char* itoa2zf(std::uint32_t value, char *ptr) noexcept
 {
     if (!value)
     {
@@ -121,7 +121,7 @@ static inline char* itoa2zf(std::uint32_t value, char *ptr) BTDEF_NOEXCEPT
     return ptr;
 }
 
-static inline char* itoa(std::uint32_t value, char *ptr) BTDEF_NOEXCEPT
+static inline char* itoa(std::uint32_t value, char *ptr) noexcept
 {
     if (!value)
     {
@@ -205,7 +205,7 @@ static inline char* itoa(std::uint32_t value, char *ptr) BTDEF_NOEXCEPT
     return ptr;
 }
 
-static inline char* itoa(std::int32_t value, char *ptr) BTDEF_NOEXCEPT
+static inline char* itoa(std::int32_t value, char *ptr) noexcept
 {
     std::uint32_t u = static_cast<std::uint32_t>(value);
     if (value < 0)
@@ -217,7 +217,7 @@ static inline char* itoa(std::int32_t value, char *ptr) BTDEF_NOEXCEPT
     return itoa(u, ptr);
 }
 
-static inline char* itoa(std::uint64_t value, char* ptr) BTDEF_NOEXCEPT
+static inline char* itoa(std::uint64_t value, char* ptr) noexcept
 {
     if (!value)
     {
@@ -401,7 +401,7 @@ static inline char* itoa(std::uint64_t value, char* ptr) BTDEF_NOEXCEPT
     return ptr;
 }
 
-static inline char* itoa(std::int64_t value, char *ptr) BTDEF_NOEXCEPT
+static inline char* itoa(std::int64_t value, char *ptr) noexcept
 {
     std::uint64_t u = static_cast<std::uint64_t>(value);
     if (value < 0)
@@ -416,27 +416,27 @@ static inline char* itoa(std::int64_t value, char *ptr) BTDEF_NOEXCEPT
 } // namespace detail
 
 template<typename T>
-char* itoa(T value, char *ptr) BTDEF_NOEXCEPT
+char* itoa(T value, char *ptr) noexcept
 {
     return detail::itoa(value, ptr);
 }
 
-static inline char* int32toa(std::int32_t value, char *ptr) BTDEF_NOEXCEPT
+static inline char* int32toa(std::int32_t value, char *ptr) noexcept
 {
     return detail::itoa(value, ptr);
 }
 
-static inline char* int64toa(std::int64_t value, char *ptr) BTDEF_NOEXCEPT
+static inline char* int64toa(std::int64_t value, char *ptr) noexcept
 {
     return detail::itoa(value, ptr);
 }
 
-static inline char* uint32toa(std::uint32_t value, char *ptr) BTDEF_NOEXCEPT
+static inline char* uint32toa(std::uint32_t value, char *ptr) noexcept
 {
     return detail::itoa(value, ptr);
 }
 
-static inline char* uint64toa(std::uint64_t value, char *ptr) BTDEF_NOEXCEPT
+static inline char* uint64toa(std::uint64_t value, char *ptr) noexcept
 {
     return detail::itoa(value, ptr);
 }

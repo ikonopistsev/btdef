@@ -16,7 +16,7 @@ namespace btdef {
 namespace conv {
 
 template<typename T>
-util::text to_text(T val) BTDEF_NOEXCEPT
+util::text to_text(T val) noexcept
 {
     using num::itoa;
     util::text result;
@@ -24,7 +24,7 @@ util::text to_text(T val) BTDEF_NOEXCEPT
     return result;
 }
 
-static inline util::text to_text(float value) BTDEF_NOEXCEPT
+static inline util::text to_text(float value) noexcept
 {
     using num::fpconv::dtoa;
     util::text result;
@@ -32,7 +32,7 @@ static inline util::text to_text(float value) BTDEF_NOEXCEPT
     return result;
 }
 
-static inline util::text to_text(double value) BTDEF_NOEXCEPT
+static inline util::text to_text(double value) noexcept
 {
     using num::fpconv::dtoa;
     util::text result;
@@ -40,7 +40,7 @@ static inline util::text to_text(double value) BTDEF_NOEXCEPT
     return result;
 }
 
-static inline util::text to_text(float val, std::size_t exp) BTDEF_NOEXCEPT
+static inline util::text to_text(float val, std::size_t exp) noexcept
 {
     using num::dtoap;
     util::text result(24, '0');
@@ -48,7 +48,7 @@ static inline util::text to_text(float val, std::size_t exp) BTDEF_NOEXCEPT
     return result;
 }
 
-static inline util::text to_text(double val, std::size_t exp) BTDEF_NOEXCEPT
+static inline util::text to_text(double val, std::size_t exp) noexcept
 {
     using num::dtoap;
     util::text result(24, '0');

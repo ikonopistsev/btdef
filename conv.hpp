@@ -15,13 +15,3 @@ using btdef::conv::to_hex00;
 
 } // namespace btdef
 
-
-namespace conv {
-
-using btdef::conv::antou;
-using btdef::conv::antoun;
-using btdef::conv::antoi;
-using btdef::conv::antoin;
-using btdef::conv::antoutp;
-
-} // namespace conv

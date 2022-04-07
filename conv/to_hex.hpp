@@ -10,9 +10,9 @@
 namespace btdef {
 namespace conv {
 
-static inline std::string_view to_hex(unsigned char val) BTDEF_NOEXCEPT
+static inline std::string_view to_hex(unsigned char val) noexcept
 {
-    constexpr static const std::string_view t[] = {
+    static const std::string_view t[] = {
         "00", "01", "02", "03", "04", "05", "06", "07",
         "08", "09", "0a", "0b", "0c", "0d", "0e", "0f",
         "10", "11", "12", "13", "14", "15", "16", "17",
@@ -50,7 +50,7 @@ static inline std::string_view to_hex(unsigned char val) BTDEF_NOEXCEPT
     return t[val];
 }
 
-static inline std::string_view to_hex(char val) BTDEF_NOEXCEPT
+static inline std::string_view to_hex(char val) noexcept
 {
     return to_hex(static_cast<unsigned char>(val));
 }

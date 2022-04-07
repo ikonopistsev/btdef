@@ -19,18 +19,18 @@ struct basic
     typedef T value_type;
     typedef std::size_t size_type;
 
-    pointer allocate(size_type size, pointer h = nullptr) const BTDEF_NOEXCEPT
+    pointer allocate(size_type size, pointer h = nullptr) const noexcept
     {
         return (size) ?
             static_cast<pointer>(std::realloc(h, size * sizeof(T))) : nullptr;
     }
 
-    void deallocate(pointer p, size_type) const BTDEF_NOEXCEPT
+    void deallocate(pointer p, size_type) const noexcept
     {
         std::free(p);
     }
 
-    void deallocate(pointer p) const BTDEF_NOEXCEPT
+    void deallocate(pointer p) const noexcept
     {
         std::free(p);
     }

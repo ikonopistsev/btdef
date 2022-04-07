@@ -69,13 +69,13 @@ public:
     };
 
     template<class U>
-    bool operator==(const wrapper<U>& other) const BTDEF_NOEXCEPT
+    bool operator==(const wrapper<U>& other) const noexcept
     {
         return base_ == other.base_;
     }
 
     template<class U>
-    bool operator!=(const wrapper<U>& other) const BTDEF_NOEXCEPT
+    bool operator!=(const wrapper<U>& other) const noexcept
     {
         return !(*this == other);
     }

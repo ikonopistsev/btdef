@@ -37,16 +37,16 @@ private:
 
 public:
     basic_pool(std::size_t chunk_size = chunk_capacity,
-        T* allocator = nullptr) BTDEF_NOEXCEPT
+        T* allocator = nullptr) noexcept
         : chunk_capacity_(chunk_size)
         , allocator_(allocator)
     {   }
 
     basic_pool(void *buffer, size_t size,
-        std::size_t chunk_size = chunk_capacity, T* allocator = nullptr) BTDEF_NOEXCEPT
+        std::size_t chunk_size = chunk_capacity, T* alloc = nullptr) noexcept
         : chunk_capacity_(chunk_size)
         , buffer_(buffer)
-        , allocator_(allocator)
+        , allocator_(alloc)
     {
         assert(buffer);
         assert(size > sizeof(chunk_header));
@@ -56,13 +56,13 @@ public:
         head_->next_ = nullptr;
     }
 
-    ~basic_pool() BTDEF_NOEXCEPT
+    ~basic_pool() noexcept
     {
         clear();
         delete own_;
     }
 
-    void clear() BTDEF_NOEXCEPT
+    void clear() noexcept
     {
         while (head_ && (head_ != buffer_))
         {
@@ -74,7 +74,7 @@ public:
             head_->size_ = 0;
     }
 
-    std::size_t capacity() const BTDEF_NOEXCEPT
+    std::size_t capacity() const noexcept
     {
         std::size_t capacity = 0;
         for (chunk_header* c = head_; c != 0; c = c->next_)
@@ -82,7 +82,7 @@ public:
         return capacity;
     }
 
-    std::size_t size() const BTDEF_NOEXCEPT
+    std::size_t size() const noexcept
     {
         size_t size = 0;
         for (chunk_header* c = head_; c != 0; c = c->next_)
@@ -90,7 +90,7 @@ public:
         return size;
     }
 
-    void* malloc(std::size_t size) BTDEF_NOEXCEPT
+    void* malloc(std::size_t size) noexcept
     {
         if (!size)
             return nullptr;
@@ -111,7 +111,7 @@ public:
         return buffer;
     }
 
-    void* realloc(void* ptr, std::size_t size, std::size_t new_size) BTDEF_NOEXCEPT
+    void* realloc(void* ptr, std::size_t size, std::size_t new_size) noexcept
     {
         if (!ptr)
             return malloc(new_size);
@@ -150,12 +150,12 @@ public:
             return nullptr;
     }
 
-    static void free(void*) BTDEF_NOEXCEPT
+    static void free(void*) noexcept
     {   }
 
 private:
 
-    bool add_chunk(std::size_t capacity) BTDEF_NOEXCEPT
+    bool add_chunk(std::size_t capacity) noexcept
     {
         if (!allocator_)
             own_ = allocator_ = new T();

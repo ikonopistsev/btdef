@@ -8,12 +8,10 @@
 #include "btdef/util/time.hpp"
 #include "btdef/num/itoa.hpp"
 #include "btdef/util/text.hpp"
-#include "btdef/util/string.hpp"
 #include "btdef/conv/string_traits.hpp"
 
 #include <utility>
 #include <clocale>
-#include <string>
 #include <new>
 
 namespace btdef {
@@ -35,73 +33,73 @@ protected:
         md = 1
     };
 
-    tm() BTDEF_NOEXCEPT
+    tm() noexcept
         : tm_(time::empty_tm())
         , millisecond_(0)
     {   }
 
 public:
-    tm(const std::tm& stdtm, millisecond_t ms) BTDEF_NOEXCEPT
+    tm(const std::tm& stdtm, millisecond_t ms) noexcept
         : tm_(stdtm)
         , millisecond_(ms)
     {  }
 
-    tm(const tm_t& val) BTDEF_NOEXCEPT
+    tm(const tm_t& val) noexcept
         : tm_(val.first)
         , millisecond_(val.second)
     {   }
 
-    std::intptr_t year() const BTDEF_NOEXCEPT
+    std::intptr_t year() const noexcept
     {
         return tm_.tm_year + yd;
     }
 
-    std::intptr_t mon() const BTDEF_NOEXCEPT
+    std::intptr_t mon() const noexcept
     {
         return tm_.tm_mon + md;
     }
 
-    std::intptr_t mday() const BTDEF_NOEXCEPT
+    std::intptr_t mday() const noexcept
     {
         return tm_.tm_mday;
     }
 
-    std::intptr_t wday() const BTDEF_NOEXCEPT
+    std::intptr_t wday() const noexcept
     {
         return tm_.tm_wday;
     }
 
-    std::intptr_t yday() const BTDEF_NOEXCEPT
+    std::intptr_t yday() const noexcept
     {
         return tm_.tm_yday;
     }
 
-    std::intptr_t hour() const BTDEF_NOEXCEPT
+    std::intptr_t hour() const noexcept
     {
         return tm_.tm_hour;
     }
 
-    std::intptr_t min() const BTDEF_NOEXCEPT
+    std::intptr_t min() const noexcept
     {
         return tm_.tm_min;
     }
 
-    std::intptr_t sec() const BTDEF_NOEXCEPT
+    std::intptr_t sec() const noexcept
     {
         return tm_.tm_sec;
     }
 
-    millisecond_t msec() const BTDEF_NOEXCEPT
+    millisecond_t msec() const noexcept
     {
         return millisecond_;
     }
 
-    const std::tm& data() const BTDEF_NOEXCEPT
+    const std::tm& data() const noexcept
     {
         return tm_;
     }
 
-    char* put_date_json(char *p) const BTDEF_NOEXCEPT
+    char* put_date_json(char *p) const noexcept
     {
         using num::detail::itoa2zf;
         using num::detail::itoa4zf;
@@ -115,7 +113,7 @@ public:
         return p;
     }
 
-    char* put_time_json(char *p) const BTDEF_NOEXCEPT
+    char* put_time_json(char *p) const noexcept
     {
         using num::detail::itoa2zf;
         using num::detail::itoa3zf;
@@ -131,7 +129,7 @@ public:
         return p;
     }
 
-    char* put_json(char *p) const BTDEF_NOEXCEPT
+    char* put_json(char *p) const noexcept
     {
         p = put_date_json(p);
         *p++ = 'T';
@@ -141,25 +139,7 @@ public:
         return p;
     }
 
-    std::string to_json() const
-    {
-        util::text t = json_text();
-        return std::string(t.data(), t.size());
-    }
-
-    util::string json() const
-    {
-        util::string result;
-        result.reserve_ex(32);
-
-        char* p = result.data();
-        result.increase(static_cast<std::size_t>(
-            std::distance(p, put_json(p))));
-
-        return result;
-    }
-
-    util::text json_text() const BTDEF_NOEXCEPT
+    util::text to_json() const noexcept
     {
         util::text result;
         char* p = result.data();
@@ -168,80 +148,23 @@ public:
         return result;
     }
 
-    std::string to_str(const char *fmt, std::size_t fmt_len) const
-    {
-        assert(fmt);
-        util::string s = str(fmt, fmt_len);
-        return std::string(s.data(), s.size());
-    }
-
-    template<std::size_t N>
-    std::string to_str(std::reference_wrapper<const char[N]> ref) const
-    {
-        return to_str(ref.get(), N - 1);
-    }
-
-    std::string to_str(const char *fmt) const
-    {
-        assert(fmt);
-        return to_str(fmt, std::strlen(fmt));
-    }
-
-    util::string str(const char *fmt, std::size_t fmt_len) const
-    {
-        assert(fmt);
-
-        util::string result;
-        result.reserve_ex(fmt_len + buffer_size);
-        std::size_t count = std::strftime(result.data(),
-            result.capacity() + 1, fmt, &tm_);
-        if (!count && fmt_len)
-            throw std::runtime_error("strftime");
-
-        result.increase(count);
-        return result;
-    }
-
-    template<std::size_t N>
-    std::string str(std::reference_wrapper<const char[N]> ref) const
-    {
-        return str(ref.get(), N - 1);
-    }
-
-    util::string str(const char *fmt) const
-    {
-        assert(fmt);
-        return str(fmt, std::strlen(fmt));
-    }
-
-    util::text text(const char *fmt) const BTDEF_NOEXCEPT
+    util::text text(const char *fmt) const noexcept
     {
         assert(fmt);
 
         util::text result;
         result.resize(std::strftime(result.data(),
-            result.capacity() + 1, fmt, &tm_));
+            util::text::cache_size, fmt, &tm_));
 
         return result;
     }
 
-    std::string to_string() const
-    {
-        util::text t = text();
-        return std::string(t.data(), t.size());
-    }
-
-    util::string string() const
-    {
-        return str("%a, %d %b %Y %H:%M:%S GMT");
-    }
-
-    util::text text() const BTDEF_NOEXCEPT
+    util::text text() const noexcept
     {
         return text("%a, %d %b %Y %H:%M:%S GMT");
     }
 
-    util::text millisecond() const BTDEF_NOEXCEPT
+    util::text millisecond() const noexcept
     {
         using num::detail::itoa3zf;
 
@@ -252,30 +175,9 @@ public:
         return result;
     }
 
-    std::string to_locale() const
-    {
-        util::text t = locale_text();
-        return std::string(t.data(), t.size());
-    }
-
-    util::text locale_text() const BTDEF_NOEXCEPT
+    util::text locale() const noexcept
     {
         return text("%x, %X");
-    }
-
-    util::string locale() const
-    {
-        return str("%x, %X");
-    }
-
-    util::text zone() const BTDEF_NOEXCEPT
-    {
-        return util::text(std::cref("+0000"));
-    }
-
-    util::text zonename() const BTDEF_NOEXCEPT
-    {
-        return util::text(std::cref("GMT"));
     }
 };
 

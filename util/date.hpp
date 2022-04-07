@@ -38,7 +38,7 @@ private:
     time_point_t time_point_{};
 
     template<typename S, typename M>
-    static time_point_t create(S sec, M usec) BTDEF_NOEXCEPT
+    static time_point_t create(S sec, M usec) noexcept
     {
         using std::chrono::time_point;
         using std::chrono::microseconds;
@@ -50,7 +50,7 @@ private:
     }
 
     static inline std::time_t to_time(const std::tm& tm,
-        minuteswest_t minuteswest) BTDEF_NOEXCEPT
+        minuteswest_t minuteswest) noexcept
     {
         static const std::intptr_t mdays[] = {
             0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334
@@ -94,19 +94,19 @@ private:
     }
 
     template<class T>
-    static bool out_of_range(T from, T value, T to) BTDEF_NOEXCEPT
+    static bool out_of_range(T from, T value, T to) noexcept
     {
         return (value < from) || (value > to);
     }
 
     template<class T>
-    static bool eq(T value, T n1) BTDEF_NOEXCEPT
+    static bool eq(T value, T n1) noexcept
     {
         return value == n1;
     }
 
     template<class T, class... A>
-    static bool eq(T value, T n1, A... nn) BTDEF_NOEXCEPT
+    static bool eq(T value, T n1, A... nn) noexcept
     {
         return (value == n1) || eq(value, nn...);
     }
@@ -115,11 +115,11 @@ public:
 
     date() = default;
 
-    explicit date(time_point_t tp) BTDEF_NOEXCEPT
+    explicit date(time_point_t tp) noexcept
         : time_point_(tp)
     {   }
 
-    explicit date(value_t val) BTDEF_NOEXCEPT
+    explicit date(value_t val) noexcept
         : time_point_(create(val / k_msec, (val % k_msec) * k_msec))
     {   }
 
@@ -127,12 +127,12 @@ public:
     для сторонней инициализации
     например для gettimeofday() или evnet::queue::gettimeofday_cached() const
     */
-    explicit date(timeval_t tv) BTDEF_NOEXCEPT
+    explicit date(timeval_t tv) noexcept
         : time_point_(create(tv.tv_sec, tv.tv_usec))
     {   }
 
 #if defined(WIN32) || defined(_WIN32)
-    explicit date(FILETIME ft) BTDEF_NOEXCEPT
+    explicit date(FILETIME ft) noexcept
         : time_point_(time::now(ft))
     {   }
 #endif
@@ -147,25 +147,10 @@ public:
         time_point_ = create(sec, ms * k_msec);
     }
 
-    template<std::size_t N>
-    explicit date(const util::basic_text<char, N>& text)
+    explicit date(const std::basic_string_view<char>& text)
     {
         if (!text.empty())
             *this = parse(text.data());
-    }
-
-    template<class A>
-    explicit date(const util::basic_string<char, A>& str)
-    {
-        if (!str.empty())
-            *this = parse(str.data());
-    }
-
-    template<class T, class A>
-    explicit date(const std::basic_string<char, T, A>& str)
-    {
-        if (!str.empty())
-            *this = parse(str.data());
     }
 
     // ultrafast parser :)
@@ -174,7 +159,7 @@ public:
         *this = parse(ptr);
     }
 
-    date(std::time_t sec, millisecond_t msec) BTDEF_NOEXCEPT
+    date(std::time_t sec, millisecond_t msec) noexcept
         : time_point_(create(sec, k_msec * msec))
     {   }
 
@@ -244,36 +229,36 @@ public:
         return make(tms, msec, minwest);
     }
 
-    static inline date now() BTDEF_NOEXCEPT
+    static inline date now() noexcept
     {
         return date(time::now());
     }
 
-    static inline date from_time_t(std::time_t t) BTDEF_NOEXCEPT
+    static inline date from_time_t(std::time_t t) noexcept
     {
         return date(time::from_time_t(t));
     }
 
     // Gets the time value in milliseconds.
-    value_t time() const BTDEF_NOEXCEPT
+    value_t time() const noexcept
     {
         using std::chrono::milliseconds;
         auto time = time_point_.time_since_epoch();
         return std::chrono::duration_cast<milliseconds>(time).count();
     }
 
-    std::time_t unix_time() const BTDEF_NOEXCEPT
+    std::time_t unix_time() const noexcept
     {
         using std::chrono::system_clock;
         return static_cast<std::time_t>(system_clock::to_time_t(time_point_));
     }
 
-    time_point_t time_point() const BTDEF_NOEXCEPT
+    time_point_t time_point() const noexcept
     {
         return time_point_;
     }
 
-    timeval_t sys_time() const BTDEF_NOEXCEPT
+    timeval_t sys_time() const noexcept
     {
         auto t = time();
         return {
@@ -282,94 +267,94 @@ public:
         };
     }
 
-    millisecond_t millisecond() const BTDEF_NOEXCEPT
+    millisecond_t millisecond() const noexcept
     {
         return static_cast<millisecond_t>(time() % k_msec);
     }
 
-    bool operator==(date other) const BTDEF_NOEXCEPT
+    bool operator==(date other) const noexcept
     {
         return time_point_ == other.time_point_;
     }
 
-    bool operator<(date other) const BTDEF_NOEXCEPT
+    bool operator<(date other) const noexcept
     {
         return time_point_ < other.time_point_;
     }
 
-    date operator+(value_t ms) const BTDEF_NOEXCEPT
+    date operator+(value_t ms) const noexcept
     {
         return date(time_point_ + std::chrono::milliseconds(ms));
     }
 
     template<class Rep, class Period>
-    date operator+(std::chrono::duration<Rep, Period> d) const BTDEF_NOEXCEPT
+    date operator+(std::chrono::duration<Rep, Period> d) const noexcept
     {
         return date(time_point_ + d);
     }
 
-    date operator-(value_t ms) const BTDEF_NOEXCEPT
+    date operator-(value_t ms) const noexcept
     {
         return date(time_point_ - std::chrono::milliseconds(ms));
     }
 
     template<class Rep, class Period>
-    date operator-(std::chrono::duration<Rep, Period> d) const BTDEF_NOEXCEPT
+    date operator-(std::chrono::duration<Rep, Period> d) const noexcept
     {
         return date(time_point_ - d);
     }
 
-    value_t operator-(date other) const BTDEF_NOEXCEPT
+    value_t operator-(date other) const noexcept
     {
         return diff(*this, other);
     }
 
-    static inline value_t diff(date a, date b) BTDEF_NOEXCEPT
+    static inline value_t diff(date a, date b) noexcept
     {
         return a.time() - b.time();
     }
 
-    static inline double ddiff(date a, date b, double d = 1000.0) BTDEF_NOEXCEPT
+    static inline double ddiff(date a, date b, double d = 1000.0) noexcept
     {
         return diff(a, b) / d;
     }
 
-    static inline value_t diff_abs(date a, date b) BTDEF_NOEXCEPT
+    static inline value_t diff_abs(date a, date b) noexcept
     {
         value_t abs = diff(a, b);
         return (abs < 0) ? -abs : abs;
     }
 
-    static inline double ddiff_abs(date a, date b, double d = 1000.0) BTDEF_NOEXCEPT
+    static inline double ddiff_abs(date a, date b, double d = 1000.0) noexcept
     {
         return diff_abs(a, b) / d;
     }
 
-    date& operator+=(value_t ms) BTDEF_NOEXCEPT
+    date& operator+=(value_t ms) noexcept
     {
         return *this += std::chrono::milliseconds(ms);
     }
 
     template<class Rep, class Period>
-    date& operator+=(std::chrono::duration<Rep, Period> d) BTDEF_NOEXCEPT
+    date& operator+=(std::chrono::duration<Rep, Period> d) noexcept
     {
         time_point_ += d;
         return *this;
     }
 
-    date& operator-=(value_t ms) BTDEF_NOEXCEPT
+    date& operator-=(value_t ms) noexcept
     {
         return *this -= std::chrono::milliseconds(ms);
     }
 
     template<class Rep, class Period>
-    date& operator-=(std::chrono::duration<Rep, Period> d) BTDEF_NOEXCEPT
+    date& operator-=(std::chrono::duration<Rep, Period> d) noexcept
     {
         time_point_ -= d;
         return *this;
     }
 
-    tm::tm_t local_time() const BTDEF_NOEXCEPT
+    tm::tm_t local_time() const noexcept
     {
         std::tm tms;
         value_t val = time();
@@ -383,7 +368,7 @@ public:
             static_cast<millisecond_t>(val % k_msec));
     }
 
-    tm::tm_t utc_time() const BTDEF_NOEXCEPT
+    tm::tm_t utc_time() const noexcept
     {
         std::tm tms;
         value_t val = time();
@@ -397,13 +382,13 @@ public:
             static_cast<millisecond_t>(val % k_msec));
     }
 
-    class local
-        : public tm
+    class local final
+        : tm
     {
 #if defined(WIN32) || defined(_WIN32)
         minuteswest_t minuteswest_ = 0;
 
-        static inline minuteswest_t timezone() BTDEF_NOEXCEPT
+        static inline minuteswest_t timezone() noexcept
         {
             long second;
             _get_timezone(&second);
@@ -411,7 +396,7 @@ public:
         }
 #endif
     public:
-        local(date d) BTDEF_NOEXCEPT
+        local(date d) noexcept
             : tm(d.local_time())
 #if defined(WIN32) || defined(_WIN32)
             , minuteswest_(timezone())
@@ -425,7 +410,7 @@ public:
             return *this;
         }
 
-        minuteswest_t minuteswest() const BTDEF_NOEXCEPT
+        minuteswest_t minuteswest() const noexcept
         {
 #if defined(WIN32) || defined(_WIN32)
             return minuteswest_;
@@ -434,17 +419,17 @@ public:
 #endif
         }
 
-        dstflag_t dstflag() const BTDEF_NOEXCEPT
+        dstflag_t dstflag() const noexcept
         {
             return tm_.tm_isdst;
         }
 
-        minuteswest_t timezone_offset() const BTDEF_NOEXCEPT
+        minuteswest_t timezone_offset() const noexcept
         {
             return (tm_.tm_isdst != 0) ? minuteswest() - 60 : minuteswest();
         }
 
-        char* put_json(char *p, minuteswest_t tz) const BTDEF_NOEXCEPT
+        char* put_json(char *p, minuteswest_t tz) const noexcept
         {
             p = put_date_json(p);
             *p++ = 'T';
@@ -465,13 +450,7 @@ public:
             return p;
         }
 
-        std::string to_json() const
-        {
-            util::text t = json_text();
-            return std::string(t.data(), t.size());
-        }
-
-        util::text json_text() const BTDEF_NOEXCEPT
+        util::text to_json() const noexcept
         {
             minuteswest_t tz = timezone_offset();
             if (tz)
@@ -482,96 +461,47 @@ public:
                     std::distance(p, put_json(p, tz))));
                 return result;
             }
-            return tm::json_text();
+            return tm::to_json();
         }
 
-        util::string json() const
-        {
-            minuteswest_t tz = timezone_offset();
-            if (tz)
-            {
-                util::string result;
-                result.reserve_ex(32);
-
-                char* p = result.data();
-                result.increase(static_cast<std::size_t>(
-                    std::distance(p, put_json(p, tz))));
-                return result;
-            }
-            return tm::json();
-        }
-
-        util::text zone() const BTDEF_NOEXCEPT
+        util::text zone() const noexcept
         {
             return tm::text("%z");
         }
 
-        util::text zonename() const BTDEF_NOEXCEPT
+        util::text zonename() const noexcept
         {
             return tm::text("%Z");
         }
 
-        std::string to_string() const
-        {
-            util::text t = text();
-            return std::string(t.data(), t.size());
-        }
-
-        util::string string() const
-        {
-            static const char fmt[] = "%a %b %d %Y %H:%M:%S GMT%z (%Z)";
-            return tm::str(fmt, sizeof(fmt) - 1);
-        }
-
-        util::text text() const BTDEF_NOEXCEPT
+        util::text text() const noexcept
         {
             return text("%a %b %d %Y %H:%M:%S GMT%z (%Z)");
         }
 
-        util::text text(const char *fmt) const BTDEF_NOEXCEPT
+        util::text text(const char *fmt) const noexcept
         {
             return tm::text(fmt);
         }
 
-        std::string to_date_string() const
-        {
-            util::text t = date_text();
-            return std::string(t.data(), t.size());
-        }
-
-        util::string date_string() const
-        {
-            static const char fmt[] = "%a %b %d %Y";
-            return str(fmt, sizeof(fmt) - 1);
-        }
-
-        util::text date_text() const BTDEF_NOEXCEPT
+        util::text date_text() const noexcept
         {
             return tm::text("%a %b %d %Y");
         }
 
-        std::string to_time_string() const
-        {
-            util::text t = date_text();
-            return std::string(t.data(), t.size());
-        }
-
-        util::string time_string() const
-        {
-            static const char fmt[] = "%H:%M:%S GMT%z (%Z)";
-            return str(fmt, sizeof(fmt) - 1);
-        }
-
-        util::text time_text() const BTDEF_NOEXCEPT
+        util::text time_text() const noexcept
         {
             return tm::text("%H:%M:%S GMT%z (%Z)");
         }
+
+        using tm::data;
+        using tm::msec;
     };
 
 
     explicit date(const local& l)
     {
-        std::tm t = l.data();
+        std::tm t{l.data()};
         time_t sec = std::mktime(&t);
         if (sec == static_cast<time_t>(-1))
             throw std::runtime_error("invalid date");
@@ -579,32 +509,15 @@ public:
         time_point_ = create(sec, l.msec() * k_msec);
     }
 
-    class utc
+    class utc final
         : public tm
     {
     public:
-        explicit utc(date d) BTDEF_NOEXCEPT
+        explicit utc(date d) noexcept
             : tm(d.utc_time())
         {   }
 
-        std::string to_date_json() const
-        {
-            util::text t = date_json_text();
-            return std::string(t.data(), t.size());
-        }
-
-        util::string date_json() const
-        {
-            util::string result;
-            result.reserve_ex(32);
-
-            char* p = result.data();
-            result.increase(static_cast<std::size_t>(
-                std::distance(p, put_date_json(p))));
-            return result;
-        }
-
-        util::text date_json_text() const BTDEF_NOEXCEPT
+        util::text date_json() const noexcept
         {
             util::text result;
             char* p = result.data();
@@ -613,24 +526,7 @@ public:
             return result;
         }
 
-        std::string to_time_json() const
-        {
-            util::text t = time_json_text();
-            return std::string(t.data(), t.size());
-        }
-
-        util::string time_json() const
-        {
-            util::string result;
-            result.reserve_ex(32);
-
-            char* p = result.data();
-            result.increase(static_cast<std::size_t>(
-                std::distance(p, put_time_json(p))));
-            return result;
-        }
-
-        util::text time_json_text() const BTDEF_NOEXCEPT
+        util::text time_json() const noexcept
         {
             util::text result;
             char* p = result.data();
@@ -644,16 +540,6 @@ public:
 
     // Returns a date converted to a string using Greenwich Mean Time(GMT).
     // example : "Fri, 27 Nov 2015 19:16:51 GMT"
-    std::string to_utc_string() const
-    {
-        return utc(*this).to_string();
-    }
-
-    util::string utc_string() const
-    {
-        return utc(*this).string();
-    }
-
     util::text utc_text() const
     {
         return utc(*this).text();
@@ -661,29 +547,9 @@ public:
 
     // Returns a time as a string value.
     // ex: "Sat Nov 28 2015 00:05:36 GMT+0300 (RTZ 2 (зима))" using local time
-    std::string to_string() const
-    {
-        return local(*this).to_string();
-    }
-
-    util::string string() const
-    {
-        return local(*this).string();
-    }
-
     util::text text() const
     {
         return local(*this).text();
-    }
-
-    std::string to_date_string() const
-    {
-        return local(*this).to_date_string();
-    }
-
-    util::string date_string() const
-    {
-        return local(*this).date_string();
     }
 
     util::text date_text() const
@@ -691,86 +557,27 @@ public:
         return local(*this).date_text();
     }
 
-    std::string to_time_string() const
-    {
-        return local(*this).to_time_string();
-    }
-
-    util::string time_string() const
-    {
-        return local(*this).time_string();
-    }
-
     util::text time_text() const
     {
         return local(*this).time_text();
     }
 
-    std::string to_json() const BTDEF_NOEXCEPT
+    util::text to_json() const noexcept
     {
         return utc(*this).to_json();
     }
 
-    util::string json() const BTDEF_NOEXCEPT
-    {
-        return utc(*this).json();
-    }
-
-    util::text json_text() const BTDEF_NOEXCEPT
-    {
-        return utc(*this).json_text();
-    }
-
-    std::string to_date_json() const
-    {
-        return utc(*this).to_date_json();
-    }
-
-    util::string date_json() const
+    util::text date_json() const
     {
         return utc(*this).date_json();
     }
 
-    util::text date_json_text() const
-    {
-        return utc(*this).date_json_text();
-    }
-
-    std::string to_time_json() const
-    {
-        return utc(*this).to_time_json();
-    }
-
-    util::string time_json() const
+    util::text time_json() const
     {
         return utc(*this).time_json();
     }
 
-    util::text time_json_text() const
-    {
-        return utc(*this).time_json_text();
-    }
-
-    std::string to_millisecond_string() const
-    {
-        using num::detail::itoa3zf;
-        char buffer[3];
-        itoa3zf(static_cast<std::uint32_t>(millisecond()), buffer);
-        return std::string(buffer, sizeof(buffer));
-    }
-
-    util::text millisecond_text() const BTDEF_NOEXCEPT
-    {
-        using num::detail::itoa3zf;
-
-        util::text result;
-        char* p = result.data();
-        result.resize(static_cast<std::size_t>(std::distance(p,
-            itoa3zf(static_cast<std::uint32_t>(millisecond()), p))));
-        return result;
-    }
-
-    util::text zone() const BTDEF_NOEXCEPT
+    util::text zone() const noexcept
     {
         return local(*this).zone();
     }
@@ -780,48 +587,38 @@ public:
         return local(*this).zonename();
     }
 
-    static inline std::string to_log_time()
+    static inline util::text log_time()
     {
         return local(now()).to_json();
-    }
-
-    static inline util::string log_time()
-    {
-        return local(now()).json();
-    }
-
-    static inline util::text log_time_text()
-    {
-        return local(now()).json_text();
     }
 };
 
 } // namespace util
 } // namespace btdef
 
-bool inline operator!=(btdef::util::date a, btdef::util::date b) BTDEF_NOEXCEPT
+bool inline operator!=(btdef::util::date a, btdef::util::date b) noexcept
 {
     return !(a == b);
 }
 
-bool inline operator>(btdef::util::date a, btdef::util::date b) BTDEF_NOEXCEPT
+bool inline operator>(btdef::util::date a, btdef::util::date b) noexcept
 {
     return b < a;
 }
 
-bool inline operator<=(btdef::util::date a, btdef::util::date b) BTDEF_NOEXCEPT
+bool inline operator<=(btdef::util::date a, btdef::util::date b) noexcept
 {
     return !(b < a);
 }
 
-bool inline operator>=(btdef::util::date a, btdef::util::date b) BTDEF_NOEXCEPT
+bool inline operator>=(btdef::util::date a, btdef::util::date b) noexcept
 {
     return !(a < b);
 }
 
 template<typename T, typename P>
 inline std::basic_ostream<T, P>& 
-    operator<<(std::basic_ostream<T, P>& os, btdef::util::date dt) BTDEF_NOEXCEPT
+    operator<<(std::basic_ostream<T, P>& os, btdef::util::date dt) noexcept
 {
     btdef::util::text t = dt.text();
     return os.write(t.data(), t.size());
@@ -830,7 +627,7 @@ inline std::basic_ostream<T, P>&
 template<typename T, typename P>
 inline std::basic_ostream<T, P>& 
     operator<<(std::basic_ostream<T, P>& os,
-        const btdef::util::date::local& loc) BTDEF_NOEXCEPT
+        const btdef::util::date::local& loc) noexcept
 {
     btdef::util::text t = loc.text();
     return os.write(t.data(), t.size());
@@ -839,7 +636,7 @@ inline std::basic_ostream<T, P>&
 template<typename T, typename P>
 inline std::basic_ostream<T, P>& 
     operator<<(std::basic_ostream<T, P>& os,
-        const btdef::util::date::utc& utc) BTDEF_NOEXCEPT
+        const btdef::util::date::utc& utc) noexcept
 {
     btdef::util::text t = utc.text();
     return os.write(t.data(), t.size());

@@ -26,7 +26,7 @@ const uint64_t signmask = 0x8000000000000000U;
 const int expbias = 1023 + 52;
 
 template<typename T>
-static inline T absv(T n) BTDEF_NOEXCEPT
+static inline T absv(T n) noexcept
 {
     return ((n) < 0 ? -(n) : (n));
 }
@@ -84,7 +84,7 @@ static Fp powers_ten[] = {
     { 12648080533535911531U, 1066 }
 };
 
-static inline Fp find_cachedpow10(int exp, int* k) BTDEF_NOEXCEPT
+static inline Fp find_cachedpow10(int exp, int* k) noexcept
 {
     const double one_log_ten = 0.30102999566398114;
 
@@ -120,7 +120,7 @@ static uint64_t tens[] = {
     10U, 1U
 };
 
-static inline uint64_t get_dbits(double d) BTDEF_NOEXCEPT
+static inline uint64_t get_dbits(double d) noexcept
 {
     union {
         double   dbl;
@@ -130,7 +130,7 @@ static inline uint64_t get_dbits(double d) BTDEF_NOEXCEPT
     return dbl_bits.i;
 }
 
-static inline Fp build_fp(double d) BTDEF_NOEXCEPT
+static inline Fp build_fp(double d) noexcept
 {
     uint64_t bits = get_dbits(d);
 
@@ -150,7 +150,7 @@ static inline Fp build_fp(double d) BTDEF_NOEXCEPT
     return fp;
 }
 
-static inline void normalize(Fp* fp) BTDEF_NOEXCEPT
+static inline void normalize(Fp* fp) noexcept
 {
     while ((fp->frac & hiddenbit) == 0) {
         fp->frac <<= 1;
@@ -163,7 +163,7 @@ static inline void normalize(Fp* fp) BTDEF_NOEXCEPT
 }
 
 static inline void get_normalized_boundaries(Fp* fp,
-    Fp* lower, Fp* upper) BTDEF_NOEXCEPT
+    Fp* lower, Fp* upper) noexcept
 {
     upper->frac = (fp->frac << 1) + 1;
     upper->exp = fp->exp - 1;
@@ -189,7 +189,7 @@ static inline void get_normalized_boundaries(Fp* fp,
     lower->exp = upper->exp;
 }
 
-static inline Fp multiply(Fp* a, Fp* b) BTDEF_NOEXCEPT
+static inline Fp multiply(Fp* a, Fp* b) noexcept
 {
     const uint64_t lomask = 0x00000000FFFFFFFF;
 
@@ -211,7 +211,7 @@ static inline Fp multiply(Fp* a, Fp* b) BTDEF_NOEXCEPT
 }
 
 static inline void round_digit(char* digits, int ndigits, uint64_t delta,
-    uint64_t rem, uint64_t kappa, uint64_t frac) BTDEF_NOEXCEPT
+    uint64_t rem, uint64_t kappa, uint64_t frac) noexcept
 {
     while (rem < frac && delta - rem >= kappa &&
         (rem + kappa < frac || frac - rem > rem + kappa - frac)) {
@@ -222,7 +222,7 @@ static inline void round_digit(char* digits, int ndigits, uint64_t delta,
 }
 
 static inline int generate_digits(Fp* fp, Fp* upper,
-    Fp* lower, char* digits, int* K) BTDEF_NOEXCEPT
+    Fp* lower, char* digits, int* K) noexcept
 {
     uint64_t wfrac = upper->frac - fp->frac;
     uint64_t delta = upper->frac - lower->frac;
@@ -283,7 +283,7 @@ static inline int generate_digits(Fp* fp, Fp* upper,
     }
 }
 
-static inline int grisu2(double d, char* digits, int* K) BTDEF_NOEXCEPT
+static inline int grisu2(double d, char* digits, int* K) noexcept
 {
     Fp w = build_fp(d);
 
@@ -308,7 +308,7 @@ static inline int grisu2(double d, char* digits, int* K) BTDEF_NOEXCEPT
 }
 
 static inline int emit_digits(char* digits, int ndigits,
-    char* dest, int K, bool neg) BTDEF_NOEXCEPT
+    char* dest, int K, bool neg) noexcept
 {
     int exp = absv(K + ndigits - 1);
 
@@ -383,7 +383,7 @@ static inline int emit_digits(char* digits, int ndigits,
     return idx;
 }
 
-static inline int filter_special(double fp, char* dest) BTDEF_NOEXCEPT
+static inline int filter_special(double fp, char* dest) noexcept
 {
     if (fp == 0.0) {
         dest[0] = '0';

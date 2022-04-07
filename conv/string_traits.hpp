@@ -22,14 +22,14 @@ struct antout
     constexpr static auto size = 1u + antout<T, N - 1>::size;
 
     static
-    const char* read(const char *ptr, T& res) BTDEF_NOEXCEPT
+    const char* read(const char *ptr, T& res) noexcept
     {
         res = convn(ptr);
         return ptr + size;
     }
 
     static
-    const char* read(const char *ptr, T i, T& res) BTDEF_NOEXCEPT
+    const char* read(const char *ptr, T i, T& res) noexcept
     {
         ptr = read(ptr, res);
         res += i;
@@ -37,14 +37,14 @@ struct antout
     }
 
     static
-    T convn(const char *ptr) BTDEF_NOEXCEPT
+    T convn(const char *ptr) noexcept
     {
         auto i = static_cast<T>(*ptr - '0');
         return i * pow + antout<T, N - 1>::convn(++ptr);
     }
 
     static
-    T conv(const char *ptr) BTDEF_NOEXCEPT
+    T conv(const char *ptr) noexcept
     {
         static_assert (std::is_signed<T>::value, "type not signed");
 
@@ -62,14 +62,14 @@ struct antout<T, 1>
     constexpr static auto pow = T{1};
 
     static
-    const char* read(const char *ptr, T& res) BTDEF_NOEXCEPT
+    const char* read(const char *ptr, T& res) noexcept
     {
         res = convn(ptr);
         return ptr + size;
     }
 
     static
-    const char* read(const char *ptr, T i, T& res) BTDEF_NOEXCEPT
+    const char* read(const char *ptr, T i, T& res) noexcept
     {
         ptr = read(ptr, res);
         res += i;
@@ -77,13 +77,13 @@ struct antout<T, 1>
     }
 
     static
-    T convn(const char *ptr) BTDEF_NOEXCEPT
+    T convn(const char *ptr) noexcept
     {
         return static_cast<T>(*ptr) - '0';
     }
 
     static
-    T conv(const char *ptr) BTDEF_NOEXCEPT
+    T conv(const char *ptr) noexcept
     {
         static_assert (std::is_signed<T>::value, "type not signed");
 
@@ -103,7 +103,7 @@ template<>
 struct basic_conv<4>
 {
     static inline
-    std::uint32_t convn(const char *ptr, std::size_t n) BTDEF_NOEXCEPT
+    std::uint32_t convn(const char *ptr, std::size_t n) noexcept
     {
         switch (n)
         {
@@ -122,7 +122,7 @@ struct basic_conv<4>
     }
 
     static inline
-    std::int32_t conv(const char *ptr, std::size_t n) BTDEF_NOEXCEPT
+    std::int32_t conv(const char *ptr, std::size_t n) noexcept
     {
         switch (n)
         {
@@ -145,7 +145,7 @@ template<>
 struct basic_conv<8>
 {
     static inline
-    std::uint64_t convn(const char *ptr, std::size_t n) BTDEF_NOEXCEPT
+    std::uint64_t convn(const char *ptr, std::size_t n) noexcept
     {
         switch (n)
         {
@@ -173,7 +173,7 @@ struct basic_conv<8>
     }
 
     static inline
-    std::int64_t conv(const char *ptr, std::size_t n) BTDEF_NOEXCEPT
+    std::int64_t conv(const char *ptr, std::size_t n) noexcept
     {
         switch (n)
         {
@@ -205,38 +205,38 @@ struct basic_conv<8>
 } // namespace detail
 
 static inline
-std::intptr_t antoi(const char *ptr, std::size_t n) BTDEF_NOEXCEPT
+std::intptr_t antoi(const char *ptr, std::size_t n) noexcept
 {
     return detail::basic_conv<sizeof(std::intptr_t)>::conv(ptr, n);
 }
 
 static inline
-std::size_t antoin(const char *ptr, std::size_t n) BTDEF_NOEXCEPT
+std::size_t antoin(const char *ptr, std::size_t n) noexcept
 {
     return detail::basic_conv<sizeof(std::size_t)>::convn(ptr, n);
 }
 
 static inline
-std::int64_t antou(const char *ptr, std::size_t n) BTDEF_NOEXCEPT
+std::int64_t antou(const char *ptr, std::size_t n) noexcept
 {
     return detail::basic_conv<sizeof(std::int64_t)>::conv(ptr, n);
 }
 
 static inline
-std::uint64_t antoun(const char *ptr, std::size_t n) BTDEF_NOEXCEPT
+std::uint64_t antoun(const char *ptr, std::size_t n) noexcept
 {
     return detail::basic_conv<sizeof(std::uint64_t)>::convn(ptr, n);
 }
 
 template<std::size_t N, typename T>
-const char* antoutp(const char *ptr, T& res) BTDEF_NOEXCEPT
+const char* antoutp(const char *ptr, T& res) noexcept
 {
     return detail::antout<T, N>::read(ptr, res);
 }
 
 // i - init value
 template<std::size_t N, typename T>
-const char* antoutp(const char *ptr, T i, T& res) BTDEF_NOEXCEPT
+const char* antoutp(const char *ptr, T i, T& res) noexcept
 {
     return detail::antout<T, N>::read(ptr, i, res);
 }

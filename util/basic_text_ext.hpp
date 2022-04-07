@@ -5,6 +5,18 @@
 
 #include <string>
 
+namespace btdef {
+namespace util {
+
+template<class C, std::size_t N>
+static auto str(const basic_text<C, N>& val) noexcept
+{
+    return std::basic_string<C>(val.data(), val.size());
+}
+
+} // namespace util
+} // namespace btdef
+
 namespace std {
 
 template<size_t N>

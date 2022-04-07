@@ -33,7 +33,7 @@ typedef timeval timeval_t;
 #define UTIL_U64(x) x##ULL
 #endif
 
-static inline ULONGLONG to_quad_100ns(FILETIME ft) BTDEF_NOEXCEPT
+static inline ULONGLONG to_quad_100ns(FILETIME ft) noexcept
 {
     ULARGE_INTEGER li;
     li.LowPart = ft.dwLowDateTime;
@@ -41,7 +41,7 @@ static inline ULONGLONG to_quad_100ns(FILETIME ft) BTDEF_NOEXCEPT
     return li.QuadPart;
 }
 
-static inline time_point_t to_time_point_from_100ns(ULONGLONG ns100) BTDEF_NOEXCEPT
+static inline time_point_t to_time_point_from_100ns(ULONGLONG ns100) noexcept
 {
     using std::chrono::time_point;
     using std::chrono::nanoseconds;
@@ -50,7 +50,7 @@ static inline time_point_t to_time_point_from_100ns(ULONGLONG ns100) BTDEF_NOEXC
         time_point<system_clock, nanoseconds>(nanoseconds(ns100 * 100)));
 }
 
-static inline time_point_t now(FILETIME ft) BTDEF_NOEXCEPT
+static inline time_point_t now(FILETIME ft) noexcept
 {
     constexpr static auto delta = UTIL_U64(116444736000000000);
     auto time = to_quad_100ns(ft);
@@ -59,35 +59,35 @@ static inline time_point_t now(FILETIME ft) BTDEF_NOEXCEPT
 }
 #endif
 
-static inline time_point_t from_time_t(std::time_t t) BTDEF_NOEXCEPT
+static inline time_point_t from_time_t(std::time_t t) noexcept
 {
     return std::chrono::system_clock::from_time_t(t);
 }
 
-static inline time_point_t now() BTDEF_NOEXCEPT
+static inline time_point_t now() noexcept
 {
     return std::chrono::system_clock::now();
 }
 
-static inline steady_point_t steady() BTDEF_NOEXCEPT
+static inline steady_point_t steady() noexcept
 {
     return std::chrono::steady_clock::now();
 }
 
-static inline std::tm create_tm() BTDEF_NOEXCEPT
+static inline std::tm create_tm() noexcept
 {
     std::tm result;
     std::memset(&result, 0, sizeof(result));
     return result;
 }
 
-static inline std::tm empty_tm() BTDEF_NOEXCEPT
+static inline std::tm empty_tm() noexcept
 {
     static std::tm empty = create_tm();
     return empty;
 }
 
-static inline std::tm empty_tm_dst() BTDEF_NOEXCEPT
+static inline std::tm empty_tm_dst() noexcept
 {
     std::tm tmdst = create_tm();
     // вообще выглядит не очень

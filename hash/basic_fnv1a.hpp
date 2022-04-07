@@ -20,7 +20,7 @@ struct basic_fnv1a<4>
     typedef std::uint32_t value_t;
     constexpr static auto salt = value_t{ 0x811c9dc5 };
 
-    constexpr value_t operator()(const char *ptr) const BTDEF_NOEXCEPT
+    constexpr value_t operator()(const char *ptr) const noexcept
     {
         value_t hval = salt;
         while (*ptr != '\0')
@@ -32,7 +32,7 @@ struct basic_fnv1a<4>
         return hval;
     }
 
-    value_t calc(value_t hval, const char c) const BTDEF_NOEXCEPT
+    value_t calc(value_t hval, const char c) const noexcept
     {
         hval ^= static_cast<value_t>(c);
         hval += (hval << 1) + (hval << 4) +
@@ -40,7 +40,7 @@ struct basic_fnv1a<4>
         return hval;
     }
 
-    value_t operator()(std::size_t& len, const char *ptr) const BTDEF_NOEXCEPT
+    value_t operator()(std::size_t& len, const char *ptr) const noexcept
     {
         auto hval = salt;
         const char *p = ptr;
@@ -54,7 +54,7 @@ struct basic_fnv1a<4>
         return hval;
     }
 
-    constexpr value_t operator()(const char* p, const char* e) const BTDEF_NOEXCEPT
+    constexpr value_t operator()(const char* p, const char* e) const noexcept
     {
         auto hval = salt;
         while (p < e)
@@ -67,14 +67,14 @@ struct basic_fnv1a<4>
     }
 
     constexpr value_t operator()(const void *ptr,
-        std::size_t len) const BTDEF_NOEXCEPT
+        std::size_t len) const noexcept
     {
         auto p = static_cast<const char*>(ptr);
         return this->operator()(p, p + len);
     }
 
     template<class T>
-    constexpr value_t operator()(const T& text) const BTDEF_NOEXCEPT
+    constexpr value_t operator()(const T& text) const noexcept
     {
         return this->operator()(text.begin(), text.end());
     }
@@ -87,7 +87,7 @@ struct basic_fnv1a<8>
     typedef std::uint64_t value_t;
     constexpr static auto salt = value_t{ 0xcbf29ce484222325ull };
 
-    constexpr value_t operator()(const char *ptr) const BTDEF_NOEXCEPT
+    constexpr value_t operator()(const char *ptr) const noexcept
     {
         auto hval = salt;
         while (*ptr != '\0')
@@ -99,7 +99,7 @@ struct basic_fnv1a<8>
         return hval;
     }
 
-    value_t calc(value_t hval, const char c) const BTDEF_NOEXCEPT
+    value_t calc(value_t hval, const char c) const noexcept
     {
         hval ^= static_cast<value_t>(c);
         hval += (hval << 1) + (hval << 4) + (hval << 5) +
@@ -107,7 +107,7 @@ struct basic_fnv1a<8>
         return hval;
     }
 
-    value_t operator()(std::size_t& len, const char *ptr) const BTDEF_NOEXCEPT
+    value_t operator()(std::size_t& len, const char *ptr) const noexcept
     {
         auto hval = salt;
         const char *p = ptr;
@@ -121,7 +121,7 @@ struct basic_fnv1a<8>
         return hval;
     }
 
-    constexpr value_t operator()(const char *p, const char *e) const BTDEF_NOEXCEPT
+    constexpr value_t operator()(const char *p, const char *e) const noexcept
     {
         auto hval = salt;
         while (p < e)
@@ -134,14 +134,14 @@ struct basic_fnv1a<8>
     }
 
     constexpr value_t operator()(const void *ptr,
-        std::size_t len) const BTDEF_NOEXCEPT
+        std::size_t len) const noexcept
     {
         auto p = static_cast<const char*>(ptr);
         return this->operator()(p, p + len);
     }
 
     template<class T>
-    constexpr value_t operator()(const T& text) const BTDEF_NOEXCEPT
+    constexpr value_t operator()(const T& text) const noexcept
     {
         return this->operator()(text.begin(), text.end());
     }

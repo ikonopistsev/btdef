@@ -2,7 +2,6 @@
 
 #include "btdef/config.hpp"
 #include "btdef/util/util.hpp"
-#include "btdef/config.hpp"
 
 #include <cstring>
 
@@ -14,24 +13,25 @@
 namespace btdef {
 namespace util {
 
-template<class C, std::size_t L>
+template<class, std::size_t>
 class basic_text;
 
 template<std::size_t L>
 class basic_text<char, L>
 {
 public:
-    typedef char value_type;
-    typedef value_type* pointer;
-    typedef const value_type* const_pointer;
-    typedef value_type& reference;
-    typedef const value_type& const_reference;
-    typedef value_type* iterator;
-    typedef const value_type* const_iterator;
-    typedef std::size_t size_type;
-    typedef std::ptrdiff_t difference_type;
-    typedef std::reverse_iterator<iterator> reverse_iterator;
-    typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+    using value_type = char;
+    using pointer = value_type*;
+    using const_pointer = const value_type*;
+    using reference = value_type&;
+    using const_reference = const value_type&;
+    using iterator =  value_type*;
+    using const_iterator = const value_type*;
+    using size_type = std::size_t;
+    using difference_type = std::ptrdiff_t;
+    using reverse_iterator = std::reverse_iterator<iterator>;
+    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+    using sv_type = std::basic_string_view<value_type>;
 
     enum {
         cache_size = BTDEF_ALLOCATOR_ALIGN(L),
@@ -42,22 +42,56 @@ private:
     mutable value_type data_[cache_size];
     size_type size_{ };
 
+    static sv_type to_string_view(sv_type text) noexcept
+    {
+        return text;
+    }
+
+    struct sv_wrap
+    {
+        sv_type text_;
+        explicit sv_wrap(sv_type text) noexcept
+            : text_{text}
+        {   }
+    };
+
+    explicit basic_text(sv_wrap svw) noexcept
+        : basic_text{svw.text_.data(), svw.text_.size()}
+    {   }
+
 public:
     basic_text() = default;
+    basic_text(const basic_text&) = default;
+    basic_text& operator=(const basic_text&) = default;
 
     basic_text(const_pointer value, size_type len) noexcept
     {
         assign(value, len);
     }
 
+    template<std::size_t M>
+    basic_text(const basic_text<char, M>& other) noexcept
+    {
+        static_assert(M < L);
+        assign(other);
+    }
+
+    template<std::size_t M>
+    basic_text& operator=(const basic_text<char, M>& other) noexcept
+    {
+        static_assert(M < L);
+        assign(other);
+        return *this;
+    }
+
+    template<typename T>
+    explicit basic_text(const T& str) noexcept
+        : basic_text{sv_wrap{to_string_view(str)}}
+    {   }
+
     basic_text(size_type len, value_type value) noexcept
     {
         assign(len, value);
-    }
-
-    basic_text(const basic_text& other) noexcept
-    {
-        assign(other);
     }
 
     basic_text(const_pointer value) noexcept
@@ -65,26 +99,21 @@ public:
         assign(value);
     }
 
-    template<size_type N>
-    basic_text(std::reference_wrapper<const value_type[N]> ref) noexcept
-    {
-        static_assert(N < cache_size, "too big string");
-        assign(ref.get(), N - 1);
-    }
-
-    template<template<class...> class basic_other_string, class ...O>
-    basic_text(const basic_other_string<value_type, O...>& other) noexcept
-    {
-        assign(other.data(), other.size());
-    }
-
     size_type assign(const basic_text& other) noexcept
     {
-        auto size = other.size();
-        size_ = size;
-        if (size)
-            std::memcpy(data_, other.data(), size);
-        return size;
+        size_ = other.size();
+        if (size_)
+            std::memcpy(data_, other.data(), size_);
+        return size_;
+    }
+
+    template<std::size_t M>
+    size_type assign(const basic_text<char, M>& other) noexcept
+    {
+         size_ = other.size();
+         if (size_)
+            std::memcpy(data_, other.data(), size_);
+         return size_;
     }
 
     size_type assign(const_pointer value, size_type len) noexcept
@@ -115,17 +144,11 @@ public:
         return assign(value, std::strlen(value));
     }
 
-    template<value_type N>
-    size_type assign(std::reference_wrapper<const value_type[N]> ref) noexcept
+    template<class T>
+    size_type assign(const T& other) noexcept
     {
-        static_assert(N < cache_size, "too big string");
-        return assign(ref.get(), N - 1);
-    }
-
-    template<template<class...> class basic_other_string, class ...O>
-    size_type assign(const basic_other_string<value_type, O...>& other) noexcept
-    {
-        return assign(other.begin(), other.size());
+        sv_wrap wr{to_string_view(other)};
+        return assign(wr.text_.data(), wr.text_.size());
     }
 
     size_type assign(size_type n, char value) noexcept
@@ -139,43 +162,22 @@ public:
         return 0;
     }
 
-    size_type operator=(const basic_text& other) noexcept
+    template<class T>
+    bool starts_with(const T& other) const noexcept
     {
-        return assign(other.data(), other.size());
+        sv_wrap wr{to_string_view(other)};
+        auto size = wr.text_.size();
+        return (size_ >= size) &&
+            (std::memcmp(data_, wr.text_.data(), size) == 0);
     }
 
-    size_type operator=(const_pointer value) noexcept
+    template<class T>
+    bool ends_with(const T& other) const noexcept
     {
-        return assign(value);
-    }
-
-    template<template<class...> class basic_other_string, class ...O>
-    size_type operator=(const basic_other_string<value_type, O...>& o) noexcept
-    {
-        return assign(o.data(), o.size());
-    }
-
-    template<std::size_t N>
-    size_type operator=(std::reference_wrapper<const value_type[N]> r) noexcept
-    {
-        return assign(r.get(), N - 1);
-    }
-
-    template<template<class...> class basic_other_string, class ...O>
-    bool starts_with(const basic_other_string<value_type, O...>& o)
-        const noexcept
-    {
-        return (size_ >= o.size()) &&
-            (std::memcmp(data_, o.data(), o.size()) == 0);
-    }
-
-    template<template<class...> class basic_other_string, class ...O>
-    bool ends_with(const basic_other_string<value_type, O...>& o)
-        const noexcept
-    {
-        size_type sz = o.size();
+        sv_wrap wr{to_string_view(other)};
+        auto sz = wr.text_.size();
         return (size_ >= sz) &&
-           (std::memcmp(data_ + (size_ - sz), o.data(), sz) == 0);
+           (std::memcmp(data_ + (size_ - sz), wr.text_.data(), sz) == 0);
     }
 
     reference operator[](size_type i) noexcept
@@ -186,6 +188,17 @@ public:
     const_reference operator[](size_type i) const noexcept
     {
         return data_[i];
+    }
+
+    basic_text& operator=(const_pointer value) noexcept
+    {
+        assign(value);
+        return *this;
+    }
+
+    operator sv_type() const noexcept
+    {
+        return sv_type{data(), size()};
     }
 
     size_type size() const noexcept
@@ -351,15 +364,11 @@ public:
         return 0;
     }
 
-    size_type append(const basic_text& other) noexcept
-    {
-        return append(other.begin(), other.size());
-    }
-
     template<class T>
     size_type append(const T& other) noexcept
     {
-        return append(other.begin(), other.size());
+        sv_wrap wr{to_string_view(other)};
+        return append(wr.text_.data(), wr.text_.size());
     }
 
     size_type append(value_type value) noexcept
@@ -386,42 +395,10 @@ public:
         return 0;
     }
 
-    size_type append(const_pointer value) noexcept
-    {
-        return append(value, std::strlen(value));
-    }
-
-    template<size_type N>
-    size_type append(std::reference_wrapper<const value_type[N]> ref) noexcept
-    {
-        return append(ref.get(), N - 1);
-    }
-
-    size_type operator+=(const basic_text& other) noexcept
-    {
-        return append(other.data(), other.size());
-    }
-
     template<class T>
     size_type operator+=(const T& other) noexcept
     {
-        return append(other.data(), other.size());
-    }
-
-    size_type operator+=(value_type value) noexcept
-    {
-        return append(value);
-    }
-
-    size_type operator+=(const_pointer value) noexcept
-    {
-        return append(value);
-    }
-
-    template<size_type N>
-    size_type operator+=(std::reference_wrapper<const value_type[N]> r) noexcept
-    {
-        return append(r.get(), N - 1);
+        return append(other);
     }
 
     void swap(basic_text& other) noexcept
@@ -447,6 +424,7 @@ template<class C, std::size_t N1, std::size_t N2>
 bool operator==(const btdef::util::basic_text<C, N1>& lhs,
     const btdef::util::basic_text<C, N2>& rhs) noexcept
 {
+    using btdef::util::sv;
     return sv(lhs) == sv(rhs);
 }
 

@@ -21,11 +21,10 @@ class tm
 {
 public:
     typedef unsigned short millisecond_t;
-    typedef std::pair<std::tm, millisecond_t> tm_t;
 
 protected:
-    std::tm tm_;
-    millisecond_t millisecond_;
+    std::tm tm_{};
+    millisecond_t millisecond_{};
 
     enum {
         buffer_size = 64,
@@ -33,20 +32,20 @@ protected:
         md = 1
     };
 
-    tm() noexcept
-        : tm_(time::empty_tm())
-        , millisecond_(0)
-    {   }
-
 public:
+    tm() = default;
+    tm(const tm&) = default;
+    tm& operator=(const tm&) = default;
+
     tm(const std::tm& stdtm, millisecond_t ms) noexcept
-        : tm_(stdtm)
-        , millisecond_(ms)
+        : tm_{stdtm}
+        , millisecond_{ms}
     {  }
 
-    tm(const tm_t& val) noexcept
-        : tm_(val.first)
-        , millisecond_(val.second)
+    template<class T1, class T2>
+    tm(const std::pair<T1, T2>& p) noexcept
+        : tm_{p.first}
+        , millisecond_{p.second}
     {   }
 
     std::intptr_t year() const noexcept
@@ -171,7 +170,7 @@ public:
         util::text result;
         char* p = result.data();
         result.resize(static_cast<std::size_t>(
-            std::distance(p, itoa3zf(millisecond_,p))));
+            std::distance(p, itoa3zf(millisecond_, p))));
         return result;
     }
 

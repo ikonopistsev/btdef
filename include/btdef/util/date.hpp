@@ -167,7 +167,7 @@ public:
     {
         assert(ptr);
 
-        std::tm tms = time::empty_tm();
+        std::tm tms{};
         millisecond_t msec = 0;
         minuteswest_t minwest = 0;
 
@@ -354,7 +354,7 @@ public:
         return *this;
     }
 
-    tm::tm_t local_time() const noexcept
+    auto local_time() const noexcept
     {
         std::tm tms;
         value_t val = time();
@@ -368,7 +368,7 @@ public:
             static_cast<millisecond_t>(val % k_msec));
     }
 
-    tm::tm_t utc_time() const noexcept
+    auto utc_time() const noexcept
     {
         std::tm tms;
         value_t val = time();

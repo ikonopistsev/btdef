@@ -7,8 +7,6 @@ namespace time {
 
 using btdef::util::time::now;
 using btdef::util::time::steady;
-using btdef::util::time::create_tm;
-using btdef::util::time::empty_tm;
 using btdef::util::time::empty_tm_dst;
 
 } // namespace time

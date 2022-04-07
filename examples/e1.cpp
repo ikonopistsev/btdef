@@ -10,6 +10,8 @@ int main()
     vv.resize(1, 'v');
     auto t = btdef::date::now();
     auto text = t.to_json();
+
+    btdef::date d{text};
     std::string s{text};
     std::cout << t << ' ' << s << std::endl;
 

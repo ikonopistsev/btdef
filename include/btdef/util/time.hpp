@@ -74,22 +74,9 @@ static inline steady_point_t steady() noexcept
     return std::chrono::steady_clock::now();
 }
 
-static inline std::tm create_tm() noexcept
-{
-    std::tm result;
-    std::memset(&result, 0, sizeof(result));
-    return result;
-}
-
-static inline std::tm empty_tm() noexcept
-{
-    static std::tm empty = create_tm();
-    return empty;
-}
-
 static inline std::tm empty_tm_dst() noexcept
 {
-    std::tm tmdst = create_tm();
+    std::tm tmdst{};
     // вообще выглядит не очень
     // но реальность она такая
     // для mktime, на момент генерации таймстампа,

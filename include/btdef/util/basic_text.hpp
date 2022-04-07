@@ -69,23 +69,8 @@ public:
         assign(value, len);
     }
 
-    template<std::size_t M>
-    basic_text(const basic_text<char, M>& other) noexcept
-    {
-        static_assert(M < L);
-        assign(other);
-    }
-
-    template<std::size_t M>
-    basic_text& operator=(const basic_text<char, M>& other) noexcept
-    {
-        static_assert(M < L);
-        assign(other);
-        return *this;
-    }
-
     template<typename T>
-    explicit basic_text(const T& str) noexcept
+    basic_text(const T& str) noexcept
         : basic_text{sv_wrap{to_string_view(str)}}
     {   }
 

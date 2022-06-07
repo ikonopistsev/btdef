@@ -1,6 +1,5 @@
 #pragma once
 
-#include "btdef/util/text.hpp"
 #include "btdef/conv/to_text.hpp"
 #include "btdef/conv/to_hex_text.hpp"
 

@@ -496,6 +496,7 @@ public:
 
         using tm::data;
         using tm::msec;
+        using tm::wday;
     };
 
 

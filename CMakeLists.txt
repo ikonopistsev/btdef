@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.19)
 
 project(btdef VERSION 1.1.0 LANGUAGES CXX)
 

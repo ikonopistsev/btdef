@@ -7,3 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(e1 e1.cpp)
 target_link_libraries(e1 btdef)
+
+add_executable(main6 main6.cpp)
+target_link_libraries(main6 btdef)

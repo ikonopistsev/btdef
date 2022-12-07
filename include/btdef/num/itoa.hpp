@@ -316,9 +316,8 @@ static inline char* itoa(std::uint64_t value, char* ptr) noexcept
             *ptr++ = carr[d3 + 1];
         if (value >= kTen9)
             *ptr++ = carr[d4];
-        if (value >= kTen8)
-            *ptr++ = carr[d4 + 1];
-
+        
+        *ptr++ = carr[d4 + 1];
         *ptr++ = carr[d5];
         *ptr++ = carr[d5 + 1];
         *ptr++ = carr[d6];

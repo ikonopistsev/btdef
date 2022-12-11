@@ -12,11 +12,5 @@ namespace util {
 
 typedef basic_text<char, BTDEF_UTIL_TEXT_SIZE> text;
 
-template <std::size_t N>
-static text make_text(char const (&str)[N]) noexcept
-{
-    return text(std::cref(str));
-}
-
 } // namespace util
 } // namespace btdef

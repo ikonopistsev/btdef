@@ -642,6 +642,19 @@ btdef::util::basic_text<C, N> operator+(const btdef::util::basic_text<C, N>& lhs
     return res;
 }
 
-//bool operator> (const X& lhs, const X& rhs){ return rhs < lhs; }
-//bool operator<=(const X& lhs, const X& rhs){ return !(lhs > rhs); }
-//bool operator>=(const X& lhs, const X& rhs){ return !(lhs < rhs); }
+template<class C, std::size_t N, class S>
+btdef::util::basic_text<C, N> operator+(std::basic_string_view<C> lhs, 
+    const btdef::util::basic_text<C, N>& rhs)
+{
+    btdef::util::basic_text<C, N> res{lhs};
+    return res += rhs;
+}
+
+template<class C, std::size_t N, class S>
+btdef::util::basic_text<C, N> operator+(const btdef::util::basic_text<C, N>& lhs, 
+    std::basic_string_view<C> rhs)
+{
+    btdef::util::basic_text<C, N> res{lhs};
+    return res += rhs;
+}
+
